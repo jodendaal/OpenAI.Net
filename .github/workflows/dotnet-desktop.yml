@@ -84,7 +84,7 @@ jobs:
 
     # Execute all unit tests in the solution
     - name: Execute unit tests
-      run: dotnet test src/OpenAI.Net.Tests/OpenAI.Net.Tests.csproj --configuration Release /p:CollectCoverage=true 
+      run: dotnet test src/OpenAI.Net.Tests/OpenAI.Net.Tests.csproj --configuration Release /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
       
     # Install Stryker
     - name: Install Stryker
