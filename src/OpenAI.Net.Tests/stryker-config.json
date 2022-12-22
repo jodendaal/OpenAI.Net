@@ -6,7 +6,12 @@
       "low": 100,
       "break": 100
     },
-    "dashboard-url": "https://dev-dashboard.stryker-mutator.io",
-    "project-info": { "name": "github.com/jodendaal/OpenAI.Net" }
+    "dashboard": {
+      "project": "github.com/jodendaal/OpenAI.Net",
+      "version": "main",
+      "module": "OpenAI.Net",
+      "baseUrl": "https://dashboard.stryker-mutator.io/api/reports",
+      "reportType": "full"
+    }
   }
 }
