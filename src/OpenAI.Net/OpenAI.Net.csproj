@@ -4,6 +4,12 @@
     <TargetFramework>net6.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <PackageId>TimSoft.$(AssemblyName)</PackageId>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Title>OpenAI.Net</Title>
+    <Description>A OpenAI API client library</Description>
+    <PackageProjectUrl>https://github.com/jodendaal/OpenAI.Net</PackageProjectUrl>
+    <Authors>justim.odendaal</Authors>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
