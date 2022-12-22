@@ -81,8 +81,13 @@ jobs:
     - name: Execute unit tests
       run: dotnet test src/OpenAI.Net.Tests/OpenAI.Net.Tests.csproj --configuration Release
       
+    # Install Stryker
+    - name: Install Stryker
+      run: dotnet custom tool install dotnet-stryker --tool-path src/OpenAI.Net.Tests
+      working-directory: src/OpenAI.Net.Tests
+      
     # Stryker
-    - name: Execute unit tests
+    - name: Run Stryker
       run: dotnet stryker
       working-directory: src/OpenAI.Net.Tests
 
