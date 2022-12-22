@@ -4,7 +4,7 @@ namespace OpenAI.Net.Models.OperationResult
 {
     public class HttpOperationResult<T> : OperationResult<T>
     {
-        public HttpOperationResult(T result, HttpStatusCode httpStatusCode) : base(result)
+        public HttpOperationResult(T? result, HttpStatusCode httpStatusCode) : base(result)
         {
             StatusCode = httpStatusCode;
         }

@@ -3,7 +3,7 @@
     public class OperationResult<T>
     {
         public OperationResult() { }
-        public OperationResult(T result)
+        public OperationResult(T? result)
         {
             Result = result;
         }
@@ -13,7 +13,7 @@
             Exception = exception;
             ErrorMessage = errorMessaage ?? exception.Message;
         }
-        public T Result { get; set; }
+        public T? Result { get; set; }
         public string ErrorMessage { get; set; }
         public Exception Exception { get; set; }
         public bool IsSuccess => Exception == null;
