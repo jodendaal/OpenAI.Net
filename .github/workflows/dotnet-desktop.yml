@@ -77,9 +77,14 @@ jobs:
     - name: Setup MSBuild.exe
       uses: microsoft/setup-msbuild@v1.0.2
 
+    # Install coverlet
+    - name: Install Coverlet
+      run: dotnet tool install coverlet.console --tool-path src/OpenAI.Net.Tests
+      working-directory: src/OpenAI.Net.Tests
+
     # Execute all unit tests in the solution
     - name: Execute unit tests
-      run: dotnet test src/OpenAI.Net.Tests/OpenAI.Net.Tests.csproj --configuration Release
+      run: dotnet test src/OpenAI.Net.Tests/OpenAI.Net.Tests.csproj --configuration Release /p:CollectCoverage=true 
       
     # Install Stryker
     - name: Install Stryker
@@ -90,6 +95,7 @@ jobs:
     - name: Run Stryker
       run: src/OpenAI.Net.Tests/dotnet-stryker
       working-directory: src/OpenAI.Net.Tests
+
 
 
     # Build
