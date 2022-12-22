@@ -88,8 +88,9 @@ jobs:
       
     # Stryker
     - name: Run Stryker
-      run: dotnet-stryker
+      run: src/OpenAI.Net.Tests/dotnet-stryker
       working-directory: src/OpenAI.Net.Tests
+
 
     # Build
     - name: Build
