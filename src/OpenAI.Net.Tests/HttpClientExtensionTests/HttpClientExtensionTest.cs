@@ -4,6 +4,7 @@ using System.Net;
 using OpenAI.Net.Extensions;
 using OpenAI.Net.Models.Responses;
 using OpenAI.Net.Tests.TestModels;
+using OpenAI.Net.Models.Responses.Common;
 
 namespace OpenAI.Net.Tests.HttpClientTests
 {

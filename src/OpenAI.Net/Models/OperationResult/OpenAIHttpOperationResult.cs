@@ -1,4 +1,4 @@
-﻿using OpenAI.Net.Models.Responses;
+﻿using OpenAI.Net.Models.Responses.Common;
 using System.Net;
 using System.Text.Json;
 

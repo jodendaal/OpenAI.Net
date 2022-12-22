@@ -2,6 +2,7 @@
 using OpenAI.Net.Models.OperationResult;
 using OpenAI.Net.Models.Requests;
 using OpenAI.Net.Models.Responses;
+using OpenAI.Net.Models.Responses.Common;
 using System.Text.Json;
 
 namespace OpenAI.Net

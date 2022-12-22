@@ -1,4 +1,4 @@
-﻿namespace OpenAI.Net.Models.Common
+﻿namespace OpenAI.Net.Models.Responses.Common
 {
     public class Usage
     {

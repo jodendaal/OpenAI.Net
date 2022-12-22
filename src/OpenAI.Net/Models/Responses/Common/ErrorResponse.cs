@@ -1,10 +1,10 @@
-﻿namespace OpenAI.Net.Models.Responses
+﻿namespace OpenAI.Net.Models.Responses.Common
 {
-    public  class ErrorResponse
+    public class ErrorResponse
     {
         public Error Error { get; set; }
     }
-    
+
     public class Error
     {
         public string Message { get; set; }

@@ -1,4 +1,4 @@
-﻿using OpenAI.Net.Models.Common;
+﻿using OpenAI.Net.Models.Responses.Common;
 
 namespace OpenAI.Net.Models.Responses
 {
