@@ -83,7 +83,7 @@ jobs:
       
     # Install Stryker
     - name: Install Stryker
-      run: dotnet custom tool install dotnet-stryker --tool-path src/OpenAI.Net.Tests
+      run: dotnet tool install dotnet-stryker --tool-path src/OpenAI.Net.Tests
       working-directory: src/OpenAI.Net.Tests
       
     # Stryker
