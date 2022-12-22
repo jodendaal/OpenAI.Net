@@ -1,5 +1,10 @@
 {
   "stryker-config": {
-    "project": "OpenAI.Net.csproj"
+    "project": "OpenAI.Net.csproj",
+    "thresholds": {
+      "high": 100,
+      "low": 60,
+      "break": 100
+    }
   }
 }

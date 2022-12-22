@@ -16,14 +16,8 @@ namespace OpenAI.Net.Extensions
                 if (response.IsSuccessStatusCode)
                 {
                     var responseObject = await response.Content.ReadFromJsonAsync<T>();
-                    if (responseObject != null)
-                    {
-                        return new OpenAIHttpOperationResult<T, TError>(responseObject, response.StatusCode);
-                    }
-                    else
-                    {
-                        return new OpenAIHttpOperationResult<T, TError>(new Exception(response.StatusCode.ToString(), new Exception("Failed to deserialize response")), response.StatusCode);
-                    }
+                    return new OpenAIHttpOperationResult<T, TError>(responseObject, response.StatusCode);
+                   
                 }
 
                 var errorResponse = await response.Content.ReadAsStringAsync();
