@@ -79,11 +79,11 @@ jobs:
 
     # Execute all unit tests in the solution
     - name: Execute unit tests
-      run: dotnet test
+      run: dotnet test src/OpenAI.Net.Tests/OpenAI.Net.Tests.csproj 
 
     # Execute all unit tests in the solution
     - name: Execute unit tests
-      run: dotnet build
+      run: dotnet build src/OpenAI.Net.sln 
 
     # Upload the MSIX package: https://github.com/marketplace/actions/upload-a-build-artifact
     - name: Upload build artifacts
