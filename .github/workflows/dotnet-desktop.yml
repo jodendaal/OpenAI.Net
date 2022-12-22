@@ -93,7 +93,7 @@ jobs:
       
     # Stryker
     - name: Run Stryker
-      run: src/OpenAI.Net.Tests/dotnet-stryker --dashboard-api-key ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
+      run: src/OpenAI.Net.Tests/dotnet-stryker --reporter "dashboard" --version "main" --dashboard-api-key ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
       working-directory: src/OpenAI.Net.Tests
 
 
