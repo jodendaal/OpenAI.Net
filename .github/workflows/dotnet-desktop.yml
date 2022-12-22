@@ -79,11 +79,16 @@ jobs:
 
     # Execute all unit tests in the solution
     - name: Execute unit tests
-      run: dotnet test src/OpenAI.Net.Tests/OpenAI.Net.Tests.csproj 
+      run: dotnet test src/OpenAI.Net.Tests/OpenAI.Net.Tests.csproj --configuration Release
+      
+    # Stryker
+    - name: Execute unit tests
+      run: dotnet stryker
+      working-directory: src/OpenAI.Net.Tests
 
     # Build
-    - name: Execute unit tests
-      run: dotnet build --configuration Release src/OpenAI.Net.sln 
+    - name: Build
+      run: dotnet build src/OpenAI.Net.sln --configuration Release 
 
     - name: Publish NuGet
       run: dotnet nuget push src/OpenAI.Net/bin/Release/*.nupkg --skip-duplicate --api-key ${{ secrets.NUGET_APIKEY }} --source https://api.nuget.org/v3/index.json
