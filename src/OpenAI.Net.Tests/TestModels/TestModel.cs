@@ -10,6 +10,13 @@ namespace OpenAI.Net.Tests.TestModels
         public string Name { get; set; }
     }
 
+    internal class TestModelResponse
+    {
+        [Required]
+        public int? Id { get; set; }
+        public string Name { get; set; }
+    }
+
     internal class TestModelInheritence : OperationResult<TestModel>
     {
         public TestModelInheritence(TestModel result) : base(result)

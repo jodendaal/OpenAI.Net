@@ -13,13 +13,13 @@ namespace OpenAI.Net.Models.Requests
         }
 
         /// <summary>
-        /// The input text to use as a starting point for the edit.
+        /// The input text to use as a starting point for the edit. <br/>
         /// <see href="https://beta.openai.com/docs/api-reference/edits/create#edits/create-input" />
         /// </summary>
         public string Input { get; set; }
 
         /// <summary>
-        /// The instruction that tells the model how to edit the prompt.
+        /// The instruction that tells the model how to edit the prompt. <br/>
         /// <see href="https://beta.openai.com/docs/api-reference/edits/create#edits/create-instruction" />
         /// </summary>
         [Required]

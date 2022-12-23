@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenAI.Net", "OpenAI.Net\Op
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenAI.Net.Tests", "OpenAI.Net.Tests\OpenAI.Net.Tests.csproj", "{35D5C48B-BBB6-4D5E-A1CC-995A7D009874}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenAI.Net.Integration.Tests", "OpenAI.Net.Integration.Tests\OpenAI.Net.Integration.Tests.csproj", "{23E89434-E799-4FD7-BE55-DF1E88422D89}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{35D5C48B-BBB6-4D5E-A1CC-995A7D009874}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{35D5C48B-BBB6-4D5E-A1CC-995A7D009874}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{35D5C48B-BBB6-4D5E-A1CC-995A7D009874}.Release|Any CPU.Build.0 = Release|Any CPU
+		{23E89434-E799-4FD7-BE55-DF1E88422D89}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{23E89434-E799-4FD7-BE55-DF1E88422D89}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{23E89434-E799-4FD7-BE55-DF1E88422D89}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{23E89434-E799-4FD7-BE55-DF1E88422D89}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

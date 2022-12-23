@@ -5,9 +5,20 @@ using System.Net;
 
 namespace OpenAI.Net.Tests.OpenAIHttpClientTests
 {
-    internal class TextEditTests
+    internal class ImageVariationTests
     {
-        const string responseJson = @"{""object"":""edit"",""created"":1671714361,""choices"":[{""text"":""What day of the week is it?\n"",""index"":0}],""usage"":{""prompt_tokens"":25,""completion_tokens"":28,""total_tokens"":53}}";
+        const string responseJson = @"{
+              ""created"": 1589478378,
+              ""data"": [
+                {
+                  ""url"": ""https://...""
+                },
+                {
+                  ""url"": ""https://...""
+                }
+              ]
+            }
+            ";
         const string errorResponseJson = @"{""error"":{""message"":""an error occured"",""type"":""invalid_request_error"",""param"":""prompt"",""code"":""unsupported""}}";
         [SetUp]
         public void Setup()
@@ -16,7 +27,7 @@ namespace OpenAI.Net.Tests.OpenAIHttpClientTests
         
         [TestCase(true, HttpStatusCode.OK, responseJson,null, Description = "Successfull Request")]
         [TestCase(false, HttpStatusCode.BadRequest, errorResponseJson, "an error occured", Description = "Failed Request")]
-        public async Task Test_TextCompletion(bool isSuccess,HttpStatusCode responseStatusCode,string responseJson,string errorMessage)
+        public async Task Test_ImageVariation(bool isSuccess,HttpStatusCode responseStatusCode,string responseJson,string errorMessage)
         {
             var res = new HttpResponseMessage { StatusCode = responseStatusCode, Content = new StringContent(responseJson) };
             var handlerMock = new Mock<HttpMessageHandler>();
@@ -38,13 +49,13 @@ namespace OpenAI.Net.Tests.OpenAIHttpClientTests
             var httpClient = new HttpClient(handlerMock.Object) { BaseAddress = new Uri("https://api.openai.com") };
 
             var openAIHttpClient = new OpenAIHttpClient(httpClient);
-
-            var request = new TextEditRequest("text-davinci-edit-001", "Fix the spelling mistakes", "What day of the wek is it?");
-            var response = await openAIHttpClient.TextEdit(request);
+            var image = new byte[] { 1 };
+            var request = new ImageVariationRequest(new Models.FileContentInfo(new byte[] { 1 }, "image.png")) { N = 2, Size = "1024x1024" };
+            var response = await openAIHttpClient.ImageVariation(request);
 
             Assert.That(response.IsSuccess, Is.EqualTo(isSuccess));
             Assert.That(response.Result != null, Is.EqualTo(isSuccess));
-            Assert.That(response.Result?.Choices?.Count() == 1, Is.EqualTo(isSuccess));
+            Assert.That(response.Result?.Data?.Count() == 2, Is.EqualTo(isSuccess));
             Assert.That(response.StatusCode, Is.EqualTo(responseStatusCode));
             Assert.That(response.Exception == null, Is.EqualTo(isSuccess));
             Assert.That(response.ErrorMessage == null, Is.EqualTo(isSuccess));
@@ -54,9 +65,7 @@ namespace OpenAI.Net.Tests.OpenAIHttpClientTests
             Assert.That(response.ErrorResponse?.Error?.Code == null, Is.EqualTo(isSuccess));
             Assert.That(response.ErrorResponse?.Error?.Param == null, Is.EqualTo(isSuccess));
             Assert.NotNull(jsonRequest);
-            Assert.That(jsonRequest.Contains("best_of"), Is.EqualTo(false),"Serialzation options are incorrect, null values should not be serialised");
-            Assert.That(jsonRequest.Contains("model",StringComparison.OrdinalIgnoreCase), Is.EqualTo(true), "Serialzation options are incorrect, camel case should be used");
-            Assert.That(path, Is.EqualTo("/v1/edits"));
+            Assert.That(path, Is.EqualTo("/v1/images/variations"));
         }
     }
 }

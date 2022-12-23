@@ -19,7 +19,7 @@ namespace OpenAI.Net.Models.Requests
         public string Model { get; set; }
 
         /// <summary>
-        /// The prompt(s) to generate completions for, encoded as a string, array of strings, array of tokens, or array of token arrays.
+        /// The prompt(s) to generate completions for, encoded as a string, array of strings, array of tokens, or array of token arrays. <br/>
         /// Note that<|endoftext|> is the document separator that the model sees during training, so if a prompt is not specified the model will generate as if from the beginning of a new document.<br/>
         /// <see href="https://beta.openai.com/docs/api-reference/completions/create#completions/create-prompt" />
         /// </summary>
@@ -86,7 +86,7 @@ namespace OpenAI.Net.Models.Requests
         /// Echo back the prompt in addition to the completion <br/>
         /// <see href="https://beta.openai.com/docs/api-reference/completions/create#completions/create-echo" />
         /// </summary>
-        public bool Echo { get; set; } 
+        public bool? Echo { get; set; } 
 
         /// <summary>
         /// Up to 4 sequences where the API will stop generating further tokens. <br/>
