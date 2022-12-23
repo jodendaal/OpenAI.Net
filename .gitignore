@@ -348,3 +348,5 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+/src/OpenAI.Net.Tests/coverageresults
+/src/OpenAI.Net.Tests/coverage.json
