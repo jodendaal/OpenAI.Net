@@ -1,6 +1,5 @@
 ﻿using Moq.Protected;
 using Moq;
-using OpenAI.Net.Models.Requests;
 using System.Net;
 
 namespace OpenAI.Net.Tests.OpenAIHttpClientTests

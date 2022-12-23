@@ -1,4 +1,3 @@
-using OpenAI.Net.Models;
 using OpenAI.Net.Models.OperationResult;
 using OpenAI.Net.Tests.TestModels;
 

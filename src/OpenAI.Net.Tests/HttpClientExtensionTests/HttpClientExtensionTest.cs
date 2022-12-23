@@ -2,11 +2,9 @@
 using Moq;
 using System.Net;
 using OpenAI.Net.Extensions;
-using OpenAI.Net.Models.Responses;
 using OpenAI.Net.Tests.TestModels;
 using OpenAI.Net.Models.Responses.Common;
 using OpenAI.Net.Models.Requests;
-using System;
 using OpenAI.Net.Models;
 
 namespace OpenAI.Net.Tests.HttpClientTests

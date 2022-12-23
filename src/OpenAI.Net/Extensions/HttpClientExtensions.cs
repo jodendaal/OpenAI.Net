@@ -4,8 +4,6 @@ using System.Text.Json;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 using System.Reflection;
-using System;
-using System.IO;
 using OpenAI.Net.Models;
 
 namespace OpenAI.Net.Extensions
