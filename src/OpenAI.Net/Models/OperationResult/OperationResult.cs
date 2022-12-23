@@ -2,7 +2,6 @@
 {
     public class OperationResult<T>
     {
-        public OperationResult() { }
         public OperationResult(T? result)
         {
             Result = result;
