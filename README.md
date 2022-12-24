@@ -2,3 +2,103 @@
 
 # OpenAI.Net
 OpenAI library for .NET
+
+C# .NET library for use with the OpenAI API. 
+
+
+
+## Getting started
+
+Install package [Nuget package](https://www.nuget.org/packages/TimSoft.OpenAI.Net/)
+
+```powershell
+Install-Package TimSoft.OpenAI.Net
+```
+
+Register services using the extension method
+
+```csharp
+ services.AddOpenAIServices(apiKey);
+ OR
+ services.AddOpenAIServices(apiKey, apiUrl);
+ OR
+ services.AddOpenAIServices(apiKey, apiUrl, organizationId);
+```
+N.B We recommened using environment variables, configuration files or secret file for storing the API key securely. See [here](https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-7.0&tabs=windows) for further details.
+
+Inject the service where you need it.
+
+e.g
+
+```csharp
+    public class MyAwsomeService 
+    {
+        private readonly IOpenAIService _openAIService;
+        private readonly ILogger<MyAwsomeService> _logger;
+
+        public MyAwsomeService(IOpenAIService openAIService,ILogger<MyAwsomeService> logger)
+        {
+            _openAIService = openAIService;
+            _logger = logger;
+        }
+
+        public async Task<TextCompletionResponse> Search()
+        {
+            var request = new TextCompletionRequest("text-davinci-003", "Say this is a test");
+            var response = await _openAIService.TextCompletion.Get(request);
+            if (response.IsSuccess)
+            {
+                return response.Result;
+            }
+            else
+            {
+                _logger.LogError(response.Exception, response.ErrorMessage, response.ErrorResponse);
+            }
+
+            return new TextCompletionResponse();
+        }
+    }
+
+
+```
+
+### Full support of all current API's
+-   [x] [Models](https://beta.openai.com/docs/api-reference/models)
+    -   [x] [List Models](https://beta.openai.com/docs/api-reference/models/list)
+    -   [x] [Retrieve model](https://beta.openai.com/docs/api-reference/models/retrieve)
+-   [x] [Completions](https://beta.openai.com/docs/api-reference/completions)
+    -   [x] [Create completion](https://beta.openai.com/docs/api-reference/completions/create) 
+    - [x] [Create completion with streaming](https://beta.openai.com/docs/api-reference/completions#completions/create-stream) 
+-   [x] [Edits](https://beta.openai.com/docs/api-reference/edits) 
+    -   [x] [Create edit](https://beta.openai.com/docs/api-reference/edits/create)
+-   [x] [Images](https://beta.openai.com/docs/api-reference/images)
+    -   [x] [Create image](https://beta.openai.com/docs/api-reference/images/create) 
+    -   [x] [Create image edit](https://beta.openai.com/docs/api-reference/images/)
+    -   [x] [Create image variation](https://beta.openai.com/docs/api-reference/images/create-variation)
+-   [x] [Embeddings](https://beta.openai.com/docs/api-reference/embeddings)
+    -   [x] [Create embeddings](https://beta.openai.com/docs/api-reference/embeddings/create)
+-   [x] [Files](https://beta.openai.com/docs/api-reference/files)
+    -   [x] [List files](https://beta.openai.com/docs/api-reference/files/list) 
+    -   [x] [Upload file](https://beta.openai.com/docs/api-reference/files/upload) 
+    -   [x] [Delete file](https://beta.openai.com/docs/api-reference/files/delete) 
+    -   [x] [Retrieve file](https://beta.openai.com/docs/api-reference/files/retrieve) 
+    -   [x] [Retrieve file content](https://beta.openai.com/docs/api-reference/files/retrieve-content) 
+
+-   [x] [Fine-tunes](https://beta.openai.com/docs/api-reference/fine-tunes)
+    -   [x] [Create fine-tune](https://beta.openai.com/docs/api-reference/fine-tunes)
+    -   [x] [List fine-tunes](https://beta.openai.com/docs/api-reference/fine-tunes/list)
+    -   [x] [Retrieve fine-tune](https://beta.openai.com/docs/api-reference/fine-tunes/retrieve)
+    -   [x] [Cancel fine-tune](https://beta.openai.com/docs/api-reference/fine-tunes/cancel)
+    -   [x] [List fine-tune events](https://beta.openai.com/docs/api-reference/fine-tunes/events)
+    -   [x] [Delete fine-tune model](https://beta.openai.com/docs/api-reference/fine-tunes/delete-model)
+-   [x] [Moderations](https://beta.openai.com/docs/api-reference/moderations)
+    -   [x] [Create moderation](https://beta.openai.com/docs/api-reference/moderations/create)
+
+## Testing
+This project has 100% code coverage with Unit tests and 100% pass rate with [Stryker mutation testing](https://stryker-mutator.io/docs/stryker-net/introduction/). 
+
+See latest Stryker report [here](https://dashboard.stryker-mutator.io/reports/github.com/jodendaal/OpenAI.Net/main#mutant).
+
+We also have Integration tests foreach service.
+
+This should provide confidence in the library going forwards.

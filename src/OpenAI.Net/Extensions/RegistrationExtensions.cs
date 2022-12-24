@@ -7,7 +7,7 @@ namespace OpenAI.Net.Extensions
 {
     public static class RegistrationExtensions
     {
-        public static IServiceCollection AddOpenAIServices(this IServiceCollection services,string apiKey,string apiUrl,string? organization = null)
+        public static IServiceCollection AddOpenAIServices(this IServiceCollection services,string apiKey,string apiUrl = "https://api.openai.com/", string? organization = null)
         {
             Action<HttpClient> configureClient = (c) => {
                 c.BaseAddress = new Uri(apiUrl);
