@@ -5,6 +5,7 @@ OpenAI library for .NET
 
 C# .NET library for use with the OpenAI API. 
 
+This is community-maintained library.
 
 
 ## Getting started
@@ -102,3 +103,15 @@ See latest Stryker report [here](https://dashboard.stryker-mutator.io/reports/gi
 We also have Integration tests foreach service.
 
 This should provide confidence in the library going forwards.
+
+## Contributions
+
+Contributions are welcome.
+
+Minimum requirements for any PR's.
+
+- MUST include Unit tests and maintain 100% coverage.
+
+- MUST pass Stryker mutation testing with 100%
+- SHOULD have integration tests
+
