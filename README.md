@@ -21,9 +21,9 @@ Register services using the extension method
 ```csharp
  services.AddOpenAIServices(apiKey);
  OR
- services.AddOpenAIServices(apiKey, apiUrl);
+ services.AddOpenAIServices(apiKey, organizationId);
  OR
- services.AddOpenAIServices(apiKey, apiUrl, organizationId);
+ services.AddOpenAIServices(apiKey, organizationId, apiUrl);
 ```
 N.B We recommened using environment variables, configuration files or secret file for storing the API key securely. See [here](https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-7.0&tabs=windows) for further details.
 

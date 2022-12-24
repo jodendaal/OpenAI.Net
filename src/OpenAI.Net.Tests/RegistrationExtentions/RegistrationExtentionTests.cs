@@ -14,7 +14,7 @@ namespace OpenAI.Net.Tests.RegistrationExtentions
             var organizationId = "OrgId";
 
             var serviceCollection = new ServiceCollection();
-            serviceCollection.AddOpenAIServices(apiKey, apiUrl, organizationId);
+            serviceCollection.AddOpenAIServices(apiKey,  organizationId, apiUrl);
             var serviceProvider = serviceCollection.BuildServiceProvider();
 
             var openAIService = serviceProvider.GetService<IOpenAIService>();
