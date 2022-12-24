@@ -6,51 +6,63 @@ using OpenAI.Net.Services;
 
 namespace OpenAI.Net.Tests.Services.FineTuneService_Tests
 {
-    internal class GetFineTuneEventsTests
+    internal class FineTuningService_Cancel
     {
         const string responseJson = @"{
-  ""object"": ""list"",
-  ""data"": [
+
+  ""id"": ""ft-AF1WoRqd3aJAHsqc9NY7iL8F"",
+  ""object"": ""fine-tune"",
+  ""model"": ""curie"",
+  ""created_at"": 1614807352,
+  ""events"": [
     {
       ""object"": ""fine-tune-event"",
       ""created_at"": 1614807352,
       ""level"": ""info"",
       ""message"": ""Job enqueued. Waiting for jobs ahead to complete. Queue number: 0.""
-    },
-    {
-      ""object"": ""fine-tune-event"",
-      ""created_at"": 1614807356,
-      ""level"": ""info"",
-      ""message"": ""Job started.""
-    },
-    {
-      ""object"": ""fine-tune-event"",
-      ""created_at"": 1614807861,
-      ""level"": ""info"",
-      ""message"": ""Uploaded snapshot: curie:ft-acmeco-2021-03-03-21-44-20.""
-    },
-    {
-      ""object"": ""fine-tune-event"",
-      ""created_at"": 1614807864,
-      ""level"": ""info"",
-      ""message"": ""Uploaded result files: file-QQm6ZpqdNwAaVC3aSz5sWwLT.""
-    },
-    {
-      ""object"": ""fine-tune-event"",
-      ""created_at"": 1614807864,
-      ""level"": ""info"",
-      ""message"": ""Job succeeded.""
     }
-  ]
+  ],
+  ""fine_tuned_model"": null,
+  ""hyperparams"": {
+    ""batch_size"": 4,
+    ""learning_rate_multiplier"": 0.1,
+    ""n_epochs"": 4,
+    ""prompt_loss_weight"": 0.1
+  },
+  ""organization_id"": ""org-..."",
+  ""result_files"": [{
+                                        ""object"": ""file"",
+                                        ""id"": ""file-GB1kRstIY1YqJQBZ6rkUVphO"",
+                                        ""purpose"": ""fine-tune"",
+                                        ""filename"": ""@file.png"",
+                                        ""bytes"": 207,
+                                        ""created_at"": 1671818085,
+                                        ""status"": ""processed"",
+                                        ""status_details"": null
+                                    }],
+  ""status"": ""pending"",
+  ""validation_files"": [],
+  ""training_files"": [
+    {
+      ""id"": ""file-XGinujblHPwGLSztz8cPS8XY"",
+      ""object"": ""file"",
+      ""bytes"": 1547276,
+      ""created_at"": 1610062281,
+      ""filename"": ""my-data-train.jsonl"",
+      ""purpose"": ""fine-tune-train""
+    }
+  ],
+  ""updated_at"": 1614807352
 }
+
             ";
 
         const string errorResponseJson = @"{""error"":{""message"":""an error occured"",""type"":""invalid_request_error"",""param"":""prompt"",""code"":""unsupported""}}";
 
 
-        [TestCase(true, HttpStatusCode.OK, responseJson, null, Description = "Successfull Request")]
-        [TestCase(false, HttpStatusCode.BadRequest, errorResponseJson, "an error occured", Description = "Failed Request")]
-        public async Task Test_GetFineTunes(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
+        [TestCase(true, HttpStatusCode.OK, responseJson, null, Description = "Successfull Request",TestName = "Cancel_When_Success")]
+        [TestCase(false, HttpStatusCode.BadRequest, errorResponseJson, "an error occured", Description = "Failed Request", TestName = "Cancel_When_Fail")]
+        public async Task Cancel(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
         {
             var res = new HttpResponseMessage { StatusCode = responseStatusCode, Content = new StringContent(responseJson) };
             var handlerMock = new Mock<HttpMessageHandler>();
@@ -70,14 +82,14 @@ namespace OpenAI.Net.Tests.Services.FineTuneService_Tests
             var httpClient = new HttpClient(handlerMock.Object) { BaseAddress = new Uri("https://api.openai.com") };
 
             var service = new FineTuneService(httpClient);
-            var response = await service.GetEvents("fineTuneId");
+            var response = await service.Cancel("fineTuneId");
 
             Assert.That(response.IsSuccess, Is.EqualTo(isSuccess), $"Success was incorrect {response.ErrorMessage}");
             Assert.That(response.Result != null, Is.EqualTo(isSuccess));
-            Assert.That(response.Result?.Data.Length > 0, Is.EqualTo(isSuccess));
-            Assert.That(response.Result?.Data[0] != null, Is.EqualTo(isSuccess));
+            Assert.That(response.Result?.ResultFiles.Length > 0, Is.EqualTo(isSuccess));
+            Assert.That(response.Result?.ResultFiles[0] != null, Is.EqualTo(isSuccess));
             Assert.That(response.Result?.Object != null, Is.EqualTo(isSuccess));
-            Assert.That(response.Result?.Data[0].Level == "info", Is.EqualTo(isSuccess));
+            Assert.That(response.Result?.ResultFiles?[0].Filename == "@file.png", Is.EqualTo(isSuccess));
             Assert.That(response.StatusCode, Is.EqualTo(responseStatusCode));
             Assert.That(response.Exception == null, Is.EqualTo(isSuccess));
             Assert.That(response.ErrorMessage == null, Is.EqualTo(isSuccess));
@@ -86,7 +98,7 @@ namespace OpenAI.Net.Tests.Services.FineTuneService_Tests
             Assert.That(response.ErrorResponse?.Error?.Type == null, Is.EqualTo(isSuccess));
             Assert.That(response.ErrorResponse?.Error?.Code == null, Is.EqualTo(isSuccess));
             Assert.That(response.ErrorResponse?.Error?.Param == null, Is.EqualTo(isSuccess));
-            Assert.That(path, Is.EqualTo("/v1/fine-tunes/fineTuneId/events"), "Apth is incorrect");
+            Assert.That(path, Is.EqualTo("/v1/fine-tunes/fineTuneId/cancel"), "Apth is incorrect");
         }
     }
 }

@@ -6,7 +6,7 @@ using OpenAI.Net.Services;
 
 namespace OpenAI.Net.Tests.Services.FineTuneService_Tests
 {
-    internal class GetFineTuneTests
+    internal class FineTuningService_GetById
     {
         const string responseJson = @"{
 
@@ -60,9 +60,9 @@ namespace OpenAI.Net.Tests.Services.FineTuneService_Tests
         const string errorResponseJson = @"{""error"":{""message"":""an error occured"",""type"":""invalid_request_error"",""param"":""prompt"",""code"":""unsupported""}}";
 
 
-        [TestCase(true, HttpStatusCode.OK, responseJson, null, Description = "Successfull Request")]
-        [TestCase(false, HttpStatusCode.BadRequest, errorResponseJson, "an error occured", Description = "Failed Request")]
-        public async Task Test_GetFineTune(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
+        [TestCase(true, HttpStatusCode.OK, responseJson, null, Description = "Successfull Request",TestName = "Get_When_Success")]
+        [TestCase(false, HttpStatusCode.BadRequest, errorResponseJson, "an error occured", Description = "Failed Request",TestName = "Get_When_Fail")]
+        public async Task Get(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
         {
             var res = new HttpResponseMessage { StatusCode = responseStatusCode, Content = new StringContent(responseJson) };
             var handlerMock = new Mock<HttpMessageHandler>();

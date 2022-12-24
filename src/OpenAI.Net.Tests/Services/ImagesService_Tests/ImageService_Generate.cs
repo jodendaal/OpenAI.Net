@@ -6,7 +6,7 @@ using OpenAI.Net.Services;
 
 namespace OpenAI.Net.Tests.Services.ImagesService_Tests
 {
-    internal class ImageVariationTests
+    internal class ImageService_Generate
     {
         const string responseJson = @"{
               ""created"": 1589478378,
@@ -26,9 +26,9 @@ namespace OpenAI.Net.Tests.Services.ImagesService_Tests
         {
         }
 
-        [TestCase(true, HttpStatusCode.OK, responseJson, null, Description = "Successfull Request")]
-        [TestCase(false, HttpStatusCode.BadRequest, errorResponseJson, "an error occured", Description = "Failed Request")]
-        public async Task Test_ImageVariation(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
+        [TestCase(true, HttpStatusCode.OK, responseJson, null, Description = "Successfull Request", TestName = "Generate_When_Success")]
+        [TestCase(false, HttpStatusCode.BadRequest, errorResponseJson, "an error occured", Description = "Failed Request", TestName = "Generate_When_Fail")]
+        public async Task Generate(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
         {
             var res = new HttpResponseMessage { StatusCode = responseStatusCode, Content = new StringContent(responseJson) };
             var handlerMock = new Mock<HttpMessageHandler>();
@@ -50,9 +50,9 @@ namespace OpenAI.Net.Tests.Services.ImagesService_Tests
             var httpClient = new HttpClient(handlerMock.Object) { BaseAddress = new Uri("https://api.openai.com") };
 
             var service = new ImageService(httpClient);
-            var image = new byte[] { 1 };
-            var request = new ImageVariationRequest(new Models.FileContentInfo(new byte[] { 1 }, "image.png")) { N = 2, Size = "1024x1024" };
-            var response = await service.Variation(request);
+
+            var request = new ImageGenerationRequest("A cute baby sea otter") { N = 2, Size = "1024x1024" };
+            var response = await service.Genearate(request);
 
             Assert.That(response.IsSuccess, Is.EqualTo(isSuccess));
             Assert.That(response.Result != null, Is.EqualTo(isSuccess));
@@ -66,7 +66,7 @@ namespace OpenAI.Net.Tests.Services.ImagesService_Tests
             Assert.That(response.ErrorResponse?.Error?.Code == null, Is.EqualTo(isSuccess));
             Assert.That(response.ErrorResponse?.Error?.Param == null, Is.EqualTo(isSuccess));
             Assert.NotNull(jsonRequest);
-            Assert.That(path, Is.EqualTo("/v1/images/variations"));
+            Assert.That(path, Is.EqualTo("/v1/images/generations"));
         }
     }
 }

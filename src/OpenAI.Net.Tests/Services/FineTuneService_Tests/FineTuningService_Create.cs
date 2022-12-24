@@ -6,12 +6,9 @@ using OpenAI.Net.Services;
 
 namespace OpenAI.Net.Tests.Services.FineTuneService_Tests
 {
-    internal class GetFineTunesTests
+    internal class FineTuningService_Create
     {
         const string responseJson = @"{
-""object"":""list"",
-""data"": [
-{
   ""id"": ""ft-AF1WoRqd3aJAHsqc9NY7iL8F"",
   ""object"": ""fine-tune"",
   ""model"": ""curie"",
@@ -55,16 +52,15 @@ namespace OpenAI.Net.Tests.Services.FineTuneService_Tests
     }
   ],
   ""updated_at"": 1614807352
-}]
 }
             ";
 
         const string errorResponseJson = @"{""error"":{""message"":""an error occured"",""type"":""invalid_request_error"",""param"":""prompt"",""code"":""unsupported""}}";
 
 
-        [TestCase(true, HttpStatusCode.OK, responseJson, null, Description = "Successfull Request")]
-        [TestCase(false, HttpStatusCode.BadRequest, errorResponseJson, "an error occured", Description = "Failed Request")]
-        public async Task Test_GetFineTunes(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
+        [TestCase(true, HttpStatusCode.OK, responseJson, null, Description = "Successfull Request",TestName = "Create_When_Success")]
+        [TestCase(false, HttpStatusCode.BadRequest, errorResponseJson, "an error occured", Description = "Failed Request",TestName = "Create_When_Fail")]
+        public async Task Create(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
         {
             var res = new HttpResponseMessage { StatusCode = responseStatusCode, Content = new StringContent(responseJson) };
             var handlerMock = new Mock<HttpMessageHandler>();
@@ -84,14 +80,29 @@ namespace OpenAI.Net.Tests.Services.FineTuneService_Tests
             var httpClient = new HttpClient(handlerMock.Object) { BaseAddress = new Uri("https://api.openai.com") };
 
             var service = new FineTuneService(httpClient);
-            var response = await service.Get();
+            var request = new CreateFineTuneRequest("myfile.jsonl")
+            {
+                ClassificationPositiveClass = "",
+                Model = "",
+                BatchSize = 1,
+                ClassificationBetas = "",
+                ClassificationNoOfClasses = 1,
+                LearningRateMultiplier = 1,
+                NoOfEpochs = 1,
+                ValidationFile = "test",
+                PromptLossWeight = 1,
+                ComputeClassificationMetrics = 1,
+                Suffix = "test"
+            };
+            var response = await service.Create(request);
 
+            Assert.That(request.TrainingFile, Is.EqualTo("myfile.jsonl"));
             Assert.That(response.IsSuccess, Is.EqualTo(isSuccess), $"Success was incorrect {response.ErrorMessage}");
             Assert.That(response.Result != null, Is.EqualTo(isSuccess));
-            Assert.That(response.Result?.Data.Length > 0, Is.EqualTo(isSuccess));
-            Assert.That(response.Result?.Data[0] != null, Is.EqualTo(isSuccess));
+            Assert.That(response.Result?.ResultFiles.Length > 0, Is.EqualTo(isSuccess));
+            Assert.That(response.Result?.Id != null, Is.EqualTo(isSuccess));
             Assert.That(response.Result?.Object != null, Is.EqualTo(isSuccess));
-            Assert.That(response.Result?.Data[0].Status == "pending", Is.EqualTo(isSuccess));
+            Assert.That(response.Result?.Status == "pending", Is.EqualTo(isSuccess));
             Assert.That(response.StatusCode, Is.EqualTo(responseStatusCode));
             Assert.That(response.Exception == null, Is.EqualTo(isSuccess));
             Assert.That(response.ErrorMessage == null, Is.EqualTo(isSuccess));

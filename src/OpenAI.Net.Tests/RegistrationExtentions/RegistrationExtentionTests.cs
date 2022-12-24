@@ -7,7 +7,7 @@ namespace OpenAI.Net.Tests.RegistrationExtentions
     public class RegistrationExtentionTests
     {
         [Test]
-        public void AddOpenAIServices()
+        public void ServiceCollection_AddOpenAIServices()
         {
             var apiUrl = "https://api.openai.com/";
             var apiKey = "ApiKey";

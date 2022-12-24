@@ -7,7 +7,7 @@ using OpenAI.Net.Services;
 
 namespace OpenAI.Net.Tests.Services.FilesService_Tests
 {
-    internal class RetrieveFileContentTest
+    internal class FileService_GetContent
     {
         const string responseJson = @"
                                     {
@@ -24,9 +24,9 @@ namespace OpenAI.Net.Tests.Services.FilesService_Tests
         const string errorResponseJson = @"{""error"":{""message"":""an error occured"",""type"":""invalid_request_error"",""param"":""prompt"",""code"":""unsupported""}}";
 
 
-        [TestCase(true, HttpStatusCode.OK, responseJson, null, Description = "Successfull Request")]
-        [TestCase(false, HttpStatusCode.BadRequest, errorResponseJson, "an error occured", Description = "Failed Request")]
-        public async Task Test_GetFiles(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
+        [TestCase(true, HttpStatusCode.OK, responseJson, null, Description = "Successfull Request",TestName = "GetContent_When_Success")]
+        [TestCase(false, HttpStatusCode.BadRequest, errorResponseJson, "an error occured", Description = "Failed Request", TestName = "GetContent_When_Fail")]
+        public async Task GetContent(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
         {
             var imageEditRequest = new ImageEditRequest("a baby fish", new Models.FileContentInfo(new byte[] { 1 }, "image.png"));
             var formDataContent = imageEditRequest.ToMultipartFormDataContent();

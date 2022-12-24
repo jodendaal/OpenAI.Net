@@ -1,38 +1,33 @@
 ﻿using Moq.Protected;
 using Moq;
-using OpenAI.Net.Models.Requests;
 using System.Net;
 using OpenAI.Net.Services;
 
-namespace OpenAI.Net.Tests.Services.ImagesService_Tests
+namespace OpenAI.Net.Tests.Services.FilesService_Tests
 {
-    internal class ImageEditTests
+    internal class FileService_GetById
     {
-        const string responseJson = @"{
-              ""created"": 1589478378,
-              ""data"": [
-                {
-                  ""url"": ""https://...""
-                },
-                {
-                  ""url"": ""https://...""
-                }
-              ]
-            }
-            ";
-        const string errorResponseJson = @"{""error"":{""message"":""an error occured"",""type"":""invalid_request_error"",""param"":""prompt"",""code"":""unsupported""}}";
-        [SetUp]
-        public void Setup()
-        {
-        }
+        const string responseJson = @"
+                                    {
+                                        ""object"": ""file"",
+                                        ""id"": ""file-GB1kRstIY1YqJQBZ6rkUVphO"",
+                                        ""purpose"": ""fine-tune"",
+                                        ""filename"": ""@file.png"",
+                                        ""bytes"": 207,
+                                        ""created_at"": 1671818085,
+                                        ""status"": ""processed"",
+                                        ""status_details"": null
+                                    }";
 
-        [TestCase(true, HttpStatusCode.OK, responseJson, null, Description = "Successfull Request")]
-        [TestCase(false, HttpStatusCode.BadRequest, errorResponseJson, "an error occured", Description = "Failed Request")]
-        public async Task Test_ImageEdit(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
+        const string errorResponseJson = @"{""error"":{""message"":""an error occured"",""type"":""invalid_request_error"",""param"":""prompt"",""code"":""unsupported""}}";
+
+
+        [TestCase(true, HttpStatusCode.OK, responseJson, null, Description = "Successfull Request", TestName = "GetById_When_Success")]
+        [TestCase(false, HttpStatusCode.BadRequest, errorResponseJson, "an error occured", Description = "GetById_When_Fail")]
+        public async Task GetById(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
         {
             var res = new HttpResponseMessage { StatusCode = responseStatusCode, Content = new StringContent(responseJson) };
             var handlerMock = new Mock<HttpMessageHandler>();
-            string jsonRequest = null;
             string path = null;
             handlerMock
                .Protected()
@@ -43,20 +38,17 @@ namespace OpenAI.Net.Tests.Services.ImagesService_Tests
                .ReturnsAsync(() => res)
                .Callback<HttpRequestMessage, CancellationToken>((r, c) =>
                {
-                   jsonRequest = r.Content.ReadAsStringAsync().Result;
                    path = r.RequestUri.AbsolutePath;
                });
 
             var httpClient = new HttpClient(handlerMock.Object) { BaseAddress = new Uri("https://api.openai.com") };
 
-            var service = new ImageService(httpClient);
-            var image = new Models.FileContentInfo(new byte[] { 1 }, "image.png");
-            var request = new ImageEditRequest("A cute baby sea otter", image) { N = 2, Size = "1024x1024", Mask = new Models.FileContentInfo(new byte[] { 1 }, "image.png") };
-            var response = await service.Edit(request);
+            var service = new FilesService(httpClient);
+            var response = await service.Get("1");
 
             Assert.That(response.IsSuccess, Is.EqualTo(isSuccess));
             Assert.That(response.Result != null, Is.EqualTo(isSuccess));
-            Assert.That(response.Result?.Data?.Count() == 2, Is.EqualTo(isSuccess));
+            Assert.That(response.Result?.Bytes == 207, Is.EqualTo(isSuccess));
             Assert.That(response.StatusCode, Is.EqualTo(responseStatusCode));
             Assert.That(response.Exception == null, Is.EqualTo(isSuccess));
             Assert.That(response.ErrorMessage == null, Is.EqualTo(isSuccess));
@@ -65,8 +57,7 @@ namespace OpenAI.Net.Tests.Services.ImagesService_Tests
             Assert.That(response.ErrorResponse?.Error?.Type == null, Is.EqualTo(isSuccess));
             Assert.That(response.ErrorResponse?.Error?.Code == null, Is.EqualTo(isSuccess));
             Assert.That(response.ErrorResponse?.Error?.Param == null, Is.EqualTo(isSuccess));
-            Assert.NotNull(jsonRequest);
-            Assert.That(path, Is.EqualTo("/v1/images/edits"));
+            Assert.That(path, Is.EqualTo("/v1/files/1"), "Apth is incorrect");
         }
     }
 }

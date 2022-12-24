@@ -6,7 +6,7 @@ using OpenAI.Net.Services;
 
 namespace OpenAI.Net.Tests.Services.EmbeddingsService_Tests
 {
-    internal class CreateEmbeddingsTests
+    internal class EmbeddingsService_Create
     {
         const string responseJson = @"{
   ""object"": ""list"",
