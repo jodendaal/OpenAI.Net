@@ -1,9 +1,6 @@
 ﻿using OpenAI.Net.Models.OperationResult;
 using System.Net.Http.Json;
 using System.Text.Json;
-using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
-using System.Reflection;
 using OpenAI.Net.Models;
 
 namespace OpenAI.Net.Extensions
@@ -24,18 +21,6 @@ namespace OpenAI.Net.Extensions
             {
                 return new OpenAIHttpOperationResult<T, TError>(ex, System.Net.HttpStatusCode.BadRequest);
             }
-        }
-
-        public static MultipartFormDataContent ToMultipartFormDataContent(this object @object)
-        {
-            MultipartFormDataContent formData = new MultipartFormDataContent();
-
-            foreach (var prop in @object.GetType().GetProperties())
-            {
-               formData.AddField(prop, @object);
-            }
-
-            return formData;
         }
 
         public static async Task<OpenAIHttpOperationResult<T, TError>> Delete<T, TError>(this HttpClient httpClient, string? path)
@@ -134,58 +119,6 @@ namespace OpenAI.Net.Extensions
 
             var errorResponse = await response.Content.ReadAsStringAsync();
             return new OpenAIHttpOperationResult<T, TError>(new Exception(response.StatusCode.ToString(), new Exception(errorResponse)), response.StatusCode, errorResponse);
-        }
-
-        public static void AddField(this MultipartFormDataContent formData, PropertyInfo prop,object @object)
-        {
-            var value = prop.GetValue(@object);
-
-            if (value != null)
-            {
-                if (value is FileContentInfo)
-                {
-                    var fileInfo = value as FileContentInfo;
-                    if (fileInfo != null)
-                    {
-                        formData.Add(fileInfo.FileContent.ToHttpContent(), prop.GetPropertyName(), $"@{fileInfo.FileName}");
-                    }
-                }
-                else
-                {
-                    formData.Add(value.ToHttpContent(), prop.GetPropertyName());
-                }
-            }
-        }
-
-        public static string GetPropertyName(this PropertyInfo prop)
-        {
-            var attribute = prop.GetCustomAttribute<JsonPropertyNameAttribute>();
-            if (attribute != null)
-            {
-                return attribute.Name;
-            }
-
-            return prop.Name.ToLowerInvariant();
-        }
-
-        public static HttpContent ToHttpContent(this object value)
-        {
-            if (value is byte[])
-            {
-                return new ByteArrayContent((byte[])value);
-            }
-
-            return new StringContent(value?.ToString() ?? "");
-        }
-
-        public static void Validate(this object @object)
-        {
-            ICollection<ValidationResult> validationErrors = new List<ValidationResult>();
-            Validator.TryValidateObject(@object, new ValidationContext(@object), validationErrors);
-            if (validationErrors.Count > 0)
-            {
-                throw new ArgumentException(string.Join(Environment.NewLine,validationErrors));
-            }
         }
     }
 }

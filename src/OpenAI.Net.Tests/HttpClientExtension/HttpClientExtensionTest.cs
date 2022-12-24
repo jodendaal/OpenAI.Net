@@ -11,7 +11,6 @@ namespace OpenAI.Net.Tests.HttpClientTests
 {
     internal class HttpClientExtensionTest
     {
-        //QQQ Change this to test model 
         const string jsonResponseString = @"{
                 ""id"": ""1"",
                 ""name"": ""test""
@@ -228,7 +227,7 @@ namespace OpenAI.Net.Tests.HttpClientTests
             var stringContent = stringValue.ToHttpContent();
             var stringRead = await stringContent.ReadAsStringAsync();
 
-            var testNull  = HttpClientExtensions.ToHttpContent(null);
+            var testNull  = ObjectExtensions.ToHttpContent(null);
             var testNullRead = await testNull.ReadAsStringAsync();
 
             Assert.NotNull(bytesContent);

@@ -4,7 +4,6 @@ using OpenAI.Net.Models.Responses.Common;
 using OpenAI.Net.Models.Responses;
 using OpenAI.Net.Extensions;
 using OpenAI.Net.Services.Interfaces;
-using System.Net.Http;
 
 namespace OpenAI.Net.Services
 {
