@@ -5,14 +5,13 @@ namespace OpenAI.Net.Integration.Tests
 {
     internal class TextEditTests : BaseTest
     {
-        [TestCase("text-davinci-edit-001",true, HttpStatusCode.OK ,TestName = "Successfull Request")]
-        [TestCase("invalid_model", false, HttpStatusCode.NotFound, TestName = "Failed Request")]
-        public async Task Test_TextEditRequest(string model,bool isSuccess, HttpStatusCode statusCode)
+        [TestCase("text-davinci-edit-001",true, HttpStatusCode.OK ,TestName = "Get - Valid Request")]
+        [TestCase("invalid_model", false, HttpStatusCode.NotFound, TestName = "Get - InValid Request")]
+        public async Task Get(string model,bool isSuccess, HttpStatusCode statusCode)
         {
-            var openAIHttpClient = new OpenAIHttpClient(HttpClient);
             var request = new TextEditRequest(model, "Fix the spelling mistakes", "What day of the wek is it?");
 
-            var response = await openAIHttpClient.TextEdit(request);
+            var response = await OpenAIService.TextEdit.Get(request);
 
             Assert.That(response.IsSuccess, Is.EqualTo(isSuccess), "Request failed");
             Assert.That(response.StatusCode, Is.EqualTo(statusCode));

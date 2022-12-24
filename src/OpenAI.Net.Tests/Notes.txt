@@ -1,5 +1,7 @@
 ﻿
 
+dotnet stryker -o
+
 dotnet tool install -g dotnet-reportgenerator-globaltool
 
 dotnet test --collect:"XPlat Code Coverage"

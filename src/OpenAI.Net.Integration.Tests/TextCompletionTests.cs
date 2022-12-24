@@ -11,7 +11,6 @@ namespace OpenAI.Net.Integration.Tests
         [TestCase("invalid_model", false, HttpStatusCode.NotFound,false, TestName = "Failed Request")]
         public async Task Test_ReturnsOkResponseWithResponseContent(string model,bool isSuccess, HttpStatusCode statusCode, bool? echo)
         {
-            var openAIHttpClient = new OpenAIHttpClient(HttpClient);
             var request = new TextCompletionRequest(model, "Say this is a test");
            
             if (echo.HasValue)
@@ -19,7 +18,7 @@ namespace OpenAI.Net.Integration.Tests
                 request.Echo = echo.Value;
             }
 
-            var response = await openAIHttpClient.TextCompletion(request);
+            var response = await OpenAIService.TextCompletion.Get(request);
 
             Assert.That(response.IsSuccess, Is.EqualTo(isSuccess), "Request failed");
             Assert.That(response.StatusCode, Is.EqualTo(statusCode));
@@ -49,12 +48,11 @@ namespace OpenAI.Net.Integration.Tests
                                     ###
                                     Q: when does timtim have his birthday and how old will he be?";
 
-            var openAIHttpClient = new OpenAIHttpClient(HttpClient);
             var request = new TextCompletionRequest("text-davinci-003", multipleQuestions) { MaxTokens = 1024, N = null};
 
-            await foreach(var t in openAIHttpClient.TextCompletionStream(request))
+            await foreach(var t in OpenAIService.TextCompletion.GetStream(request))
             {
-                Console.WriteLine(t.Result.Choices[0].Text);
+                Console.WriteLine(t?.Result?.Choices[0].Text);
             }
         }
     }

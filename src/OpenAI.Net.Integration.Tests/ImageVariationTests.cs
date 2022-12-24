@@ -10,11 +10,10 @@ namespace OpenAI.Net.Integration.Tests
         [TestCase(false, HttpStatusCode.BadRequest, "32x32")]
         public async Task Test_ImageVariation(bool isSuccess,HttpStatusCode statusCode, string size)
         {
-            var openAIHttpClient = new OpenAIHttpClient(HttpClient);
             var image = FileContentInfo.Load(@"Images\BabyOtter.png");
             var request = new ImageVariationRequest(image) { N = 1, Size = size};
 
-            var response = await openAIHttpClient.ImageVariation(request);
+            var response = await OpenAIService.Images.Variation(request);
 
             Assert.That(response.IsSuccess, Is.EqualTo(isSuccess), "Request failed");
             Assert.That(response.StatusCode, Is.EqualTo(statusCode));

@@ -10,10 +10,9 @@ namespace OpenAI.Net.Integration.Tests
         //[TestCase("invalid_model", false, HttpStatusCode.NotFound, TestName = "Failed Request")]
         public async Task Test_ImageGeneration(string prompt,int noOfImages,bool isSuccess, HttpStatusCode statusCode,string size)
         {
-            var openAIHttpClient = new OpenAIHttpClient(HttpClient);
             var request = new ImageGenerationRequest(prompt) { N=noOfImages,Size= size };
 
-            var response = await openAIHttpClient.ImageGeneration(request);
+            var response = await OpenAIService.Images.Genearate(request);
 
             Assert.That(response.IsSuccess, Is.EqualTo(isSuccess), "Request failed");
             Assert.That(response.StatusCode, Is.EqualTo(statusCode));

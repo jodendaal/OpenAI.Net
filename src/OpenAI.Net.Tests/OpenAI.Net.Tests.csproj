@@ -17,6 +17,22 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="coverageresults\**" />
+    <Compile Remove="StrykerOutput\**" />
+    <Compile Remove="TestResults\**" />
+    <EmbeddedResource Remove="coverageresults\**" />
+    <EmbeddedResource Remove="StrykerOutput\**" />
+    <EmbeddedResource Remove="TestResults\**" />
+    <None Remove="coverageresults\**" />
+    <None Remove="StrykerOutput\**" />
+    <None Remove="TestResults\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="coverage.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="coverlet.msbuild" Version="3.2.0">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>

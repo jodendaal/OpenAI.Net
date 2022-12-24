@@ -10,11 +10,11 @@ namespace OpenAI.Net.Integration.Tests
         [TestCase(false, HttpStatusCode.BadRequest, "32x32")]
         public async Task Test_ImageEdit(bool isSuccess,HttpStatusCode statusCode, string size)
         {
-            var openAIHttpClient = new OpenAIHttpClient(HttpClient);
+            
             var image = FileContentInfo.Load(@"Images\RGBAImage.png");
             var request = new ImageEditRequest("A cute baby sea otter with hat", image) { N = 1, Size = size};
 
-             var response = await openAIHttpClient.ImageEdit(request);
+             var response = await OpenAIService.Images.Edit(request);
 
             Assert.That(response.IsSuccess, Is.EqualTo(isSuccess), "Request failed");
             Assert.That(response.StatusCode, Is.EqualTo(statusCode));
@@ -27,12 +27,12 @@ namespace OpenAI.Net.Integration.Tests
         [TestCase(false, HttpStatusCode.BadRequest, "32x32")]
         public async Task Test_ImageEditWithMask(bool isSuccess, HttpStatusCode statusCode, string size)
         {
-            var openAIHttpClient = new OpenAIHttpClient(HttpClient);
+            
             var image = FileContentInfo.Load(@"Images\BabyCat.png");
             var mask = FileContentInfo.Load(@"Images\RGBAImage.png");
             var request = new ImageEditRequest("A cute baby sea otter with hat", image) { N = 1, Size = size, Mask = mask };
 
-            var response = await openAIHttpClient.ImageEdit(request);
+            var response = await OpenAIService.Images.Edit(request);
 
             Assert.That(response.IsSuccess, Is.EqualTo(isSuccess), "Request failed");
             Assert.That(response.StatusCode, Is.EqualTo(statusCode));

@@ -1,11 +1,14 @@
 ﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using OpenAI.Net.Extensions;
 
 namespace OpenAI.Net.Integration.Tests
 {
     public class BaseTest
     {
         public TestConfig Config { get; private set; }
-        public static HttpClient? HttpClient { get; private set; }
+        private IServiceProvider _serviceProvider;
+
         public BaseTest()
         {
             var configuration = new ConfigurationBuilder()
@@ -14,14 +17,23 @@ namespace OpenAI.Net.Integration.Tests
 
             Config = new TestConfig(configuration);
 
-            if(HttpClient == null) 
+            var serviceCollection = new ServiceCollection();
+            serviceCollection.AddOpenAIServices(Config.Apikey, Config.ApiUrl);
+            _serviceProvider  =serviceCollection.BuildServiceProvider();
+        }
+
+        public IOpenAIService OpenAIService
+        {
+            get
             {
-                HttpClient = new HttpClient();
-                HttpClient.BaseAddress = new Uri(Config.ApiUrl);
-                HttpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", Config.Apikey);
+                return _serviceProvider.GetRequiredService<IOpenAIService>();
             }
         }
     }
+
+   
+
+
 
     public class TestConfig
     {

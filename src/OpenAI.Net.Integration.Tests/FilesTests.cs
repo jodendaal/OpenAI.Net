@@ -7,58 +7,57 @@ namespace OpenAI.Net.Integration.Tests
     internal class FilesTests : BaseTest
     {
         [Test]
-        public async Task Test_ListFiles()
+        public async Task GetAll()
         {
-            var openAIHttpClient = new OpenAIHttpClient(HttpClient);
-           var response = await openAIHttpClient.GetFiles();
+           var response = await OpenAIService.Files.Get();
 
             Assert.That(response.IsSuccess, Is.EqualTo(true), "Request failed");
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
         }
 
         [Test]
-        public async Task Test_UploadFile()
+        public async Task Upload()
         {
-            var openAIHttpClient = new OpenAIHttpClient(HttpClient);
             var file = FileContentInfo.Load(@"Data\trainingData.jsonl");
-            var response = await openAIHttpClient.UploadFile(new UploadFileRequest(file, "fine-tune"));
+            var response = await OpenAIService.Files.Upload(new UploadFileRequest(file, "fine-tune"));
 
             Assert.That(response.IsSuccess, Is.EqualTo(true), "Request failed");
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
         }
 
         [Test]
-        public async Task Test_DeleteFile()
+        public async Task Delete()
         {
-            var openAIHttpClient = new OpenAIHttpClient(HttpClient);
             var file = FileContentInfo.Load(@"Data\trainingData.jsonl");
-            var response = await openAIHttpClient.UploadFile(new UploadFileRequest(file, "fine-tune"));
+            var response = await OpenAIService.Files.Upload(new UploadFileRequest(file, "fine-tune"));
 
             Assert.That(response.IsSuccess, Is.EqualTo(true), $"Request failed {response.ErrorMessage}");
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
-
-            var deleteResponse = await openAIHttpClient.DeleteFile(response?.Result?.Id);
+            await Task.Delay(2000);
+            var deleteResponse = await OpenAIService.Files.Delete(response?.Result?.Id);
 
             Assert.That(deleteResponse.IsSuccess, Is.EqualTo(true), $"Request failed {response.ErrorMessage}");
             Assert.That(deleteResponse.StatusCode, Is.EqualTo(HttpStatusCode.OK));
         }
 
         [Test]
-        public async Task Test_RetrieveFile()
+        public async Task GetById()
         {
-            var openAIHttpClient = new OpenAIHttpClient(HttpClient);
             var file = FileContentInfo.Load(@"Data\trainingData.jsonl");
-            var response = await openAIHttpClient.UploadFile(new UploadFileRequest(file, "fine-tune"));
+            var response = await OpenAIService.Files.Upload(new UploadFileRequest(file, "fine-tune"));
 
             Assert.That(response.IsSuccess, Is.EqualTo(true), "Request failed");
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
 
-            var retrieveFileResponse = await openAIHttpClient.RetrieveFile(response?.Result?.Id);
+            await Task.Delay(2000);
+
+            var retrieveFileResponse = await OpenAIService.Files.Get(response?.Result?.Id);
             Assert.That(retrieveFileResponse.IsSuccess, Is.EqualTo(true), "Request failed");
             Assert.That(retrieveFileResponse.StatusCode, Is.EqualTo(HttpStatusCode.OK));
             Assert.That(response.Result.Id, Is.EqualTo(retrieveFileResponse?.Result?.Id));
 
-            var deleteResponse = await openAIHttpClient.DeleteFile(response?.Result?.Id);
+            await Task.Delay(2000);
+            var deleteResponse = await OpenAIService.Files.Delete(response?.Result?.Id);
 
             Assert.That(deleteResponse.IsSuccess, Is.EqualTo(true), "Request failed");
             Assert.That(deleteResponse.StatusCode, Is.EqualTo(HttpStatusCode.OK));
@@ -66,24 +65,24 @@ namespace OpenAI.Net.Integration.Tests
         }
 
         [Test]
-        public async Task Test_RetrieveFileContent()
+        public async Task Remove()
         {
-            var openAIHttpClient = new OpenAIHttpClient(HttpClient);
+            
             var file = FileContentInfo.Load(@"Data\trainingData.jsonl");
-            var response = await openAIHttpClient.UploadFile(new UploadFileRequest(file, "fine-tune"));
+            var response = await OpenAIService.Files.Upload(new UploadFileRequest(file, "fine-tune"));
 
             Assert.That(response.IsSuccess, Is.EqualTo(true), "Request failed");
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
 
-            await Task.Delay(1000);
+            await Task.Delay(2000);
 
-            var retrieveFileResponse = await openAIHttpClient.RetrieveFileContent(response?.Result?.Id);
+            var retrieveFileResponse = await OpenAIService.Files.GetContent(response?.Result?.Id);
             Assert.That(retrieveFileResponse.IsSuccess, Is.EqualTo(true), "Request failed");
             Assert.That(retrieveFileResponse.StatusCode, Is.EqualTo(HttpStatusCode.OK));
 
-            await Task.Delay(1000);
+            await Task.Delay(2000);
 
-            var deleteResponse = await openAIHttpClient.DeleteFile(response?.Result?.Id);
+            var deleteResponse = await OpenAIService.Files.Delete(response?.Result?.Id);
 
             Assert.That(deleteResponse.IsSuccess, Is.EqualTo(true), "Request failed");
             Assert.That(deleteResponse.StatusCode, Is.EqualTo(HttpStatusCode.OK));
