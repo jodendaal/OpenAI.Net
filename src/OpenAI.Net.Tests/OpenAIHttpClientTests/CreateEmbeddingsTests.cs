@@ -1,16 +1,32 @@
 ﻿using Moq.Protected;
 using Moq;
 using System.Net;
+using OpenAI.Net.Models.Requests;
 
 namespace OpenAI.Net.Tests.OpenAIHttpClientTests
 {
-    internal class DeleteFilesTests
+    internal class CreateEmbeddingsTests
     {
         const string responseJson = @"{
-                                        ""object"": ""file"",
-                                        ""id"": ""file-GB1kRstIY1YqJQBZ6rkUVphO"",
-                                        ""deleted"":true
-                                    }
+  ""object"": ""list"",
+  ""data"": [
+    {
+      ""object"": ""embedding"",
+      ""embedding"": [
+        0.0023064255,
+        -0.009327292,
+        -0.0028842222
+      ],
+      ""index"": 0
+    }
+  ],
+  ""model"": ""text-embedding-ada-002"",
+  ""usage"": {
+    ""prompt_tokens"": 8,
+    ""total_tokens"": 8
+  }
+}
+
             ";
 
         const string errorResponseJson = @"{""error"":{""message"":""an error occured"",""type"":""invalid_request_error"",""param"":""prompt"",""code"":""unsupported""}}";
@@ -18,7 +34,7 @@ namespace OpenAI.Net.Tests.OpenAIHttpClientTests
         
         [TestCase(true, HttpStatusCode.OK, responseJson,null, Description = "Successfull Request")]
         [TestCase(false, HttpStatusCode.BadRequest, errorResponseJson, "an error occured", Description = "Failed Request")]
-        public async Task Test_DeleteFile(bool isSuccess,HttpStatusCode responseStatusCode,string responseJson,string errorMessage)
+        public async Task Test_CreateFineTune(bool isSuccess,HttpStatusCode responseStatusCode,string responseJson,string errorMessage)
         {
             var res = new HttpResponseMessage { StatusCode = responseStatusCode, Content = new StringContent(responseJson) };
             var handlerMock = new Mock<HttpMessageHandler>();
@@ -38,14 +54,15 @@ namespace OpenAI.Net.Tests.OpenAIHttpClientTests
             var httpClient = new HttpClient(handlerMock.Object) { BaseAddress = new Uri("https://api.openai.com") };
 
             var openAIHttpClient = new OpenAIHttpClient(httpClient);
-            var response = await openAIHttpClient.DeleteFile("1");
+            var request = new CreateEmbeddingsRequest("The food was delicious and the waiter...", "text-embedding-ada-002") { User ="test" };
+            var response = await openAIHttpClient.CreateEmbeddings(request);
 
-            Assert.That(response.IsSuccess, Is.EqualTo(isSuccess));
+            Assert.That(response.IsSuccess, Is.EqualTo(isSuccess), $"Success was incorrect {response.ErrorMessage}");
             Assert.That(response.Result != null, Is.EqualTo(isSuccess));
-            Assert.That(response.Result?.Deleted == true, Is.EqualTo(isSuccess));
-            Assert.That(response.Result?.Id != null, Is.EqualTo(isSuccess));
+            Assert.That(response.Result?.Data?.Length > 0, Is.EqualTo(isSuccess));
+            Assert.That(response.Result?.Data?[0]?.Embedding.Length == 3, Is.EqualTo(isSuccess));
             Assert.That(response.Result?.Object != null, Is.EqualTo(isSuccess));
-            Assert.That(response.Result?.Deleted == true, Is.EqualTo(isSuccess));
+            Assert.That(response.Result?.Usage != null, Is.EqualTo(isSuccess));
             Assert.That(response.StatusCode, Is.EqualTo(responseStatusCode));
             Assert.That(response.Exception == null, Is.EqualTo(isSuccess));
             Assert.That(response.ErrorMessage == null, Is.EqualTo(isSuccess));
@@ -54,7 +71,7 @@ namespace OpenAI.Net.Tests.OpenAIHttpClientTests
             Assert.That(response.ErrorResponse?.Error?.Type == null, Is.EqualTo(isSuccess));
             Assert.That(response.ErrorResponse?.Error?.Code == null, Is.EqualTo(isSuccess));
             Assert.That(response.ErrorResponse?.Error?.Param == null, Is.EqualTo(isSuccess));
-            Assert.That(path, Is.EqualTo("/v1/files/1"),"Apth is incorrect");
+            Assert.That(path, Is.EqualTo("/v1/embeddings"),"Path is incorrect");
         }
     }
 }

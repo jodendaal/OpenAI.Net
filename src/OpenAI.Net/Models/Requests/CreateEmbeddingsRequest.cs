@@ -2,8 +2,15 @@
 
 namespace OpenAI.Net.Models.Requests
 {
-    public class EmbeddingsRequest
+    public class CreateEmbeddingsRequest
     {
+        public CreateEmbeddingsRequest(string input,string model)
+        {
+            Model = model;
+            Input = input;
+        }
+
+
         /// <summary>
         /// ID of the model to use. <br />
         /// You can use the List models API to see all of your available models, or see our Model overview for descriptions of them. <br />

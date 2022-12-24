@@ -1,16 +1,47 @@
 ﻿using Moq.Protected;
 using Moq;
 using System.Net;
+using OpenAI.Net.Models.Requests;
 
 namespace OpenAI.Net.Tests.OpenAIHttpClientTests
 {
-    internal class DeleteFilesTests
+    internal class GetFineTuneEventsTests
     {
         const string responseJson = @"{
-                                        ""object"": ""file"",
-                                        ""id"": ""file-GB1kRstIY1YqJQBZ6rkUVphO"",
-                                        ""deleted"":true
-                                    }
+  ""object"": ""list"",
+  ""data"": [
+    {
+      ""object"": ""fine-tune-event"",
+      ""created_at"": 1614807352,
+      ""level"": ""info"",
+      ""message"": ""Job enqueued. Waiting for jobs ahead to complete. Queue number: 0.""
+    },
+    {
+      ""object"": ""fine-tune-event"",
+      ""created_at"": 1614807356,
+      ""level"": ""info"",
+      ""message"": ""Job started.""
+    },
+    {
+      ""object"": ""fine-tune-event"",
+      ""created_at"": 1614807861,
+      ""level"": ""info"",
+      ""message"": ""Uploaded snapshot: curie:ft-acmeco-2021-03-03-21-44-20.""
+    },
+    {
+      ""object"": ""fine-tune-event"",
+      ""created_at"": 1614807864,
+      ""level"": ""info"",
+      ""message"": ""Uploaded result files: file-QQm6ZpqdNwAaVC3aSz5sWwLT.""
+    },
+    {
+      ""object"": ""fine-tune-event"",
+      ""created_at"": 1614807864,
+      ""level"": ""info"",
+      ""message"": ""Job succeeded.""
+    }
+  ]
+}
             ";
 
         const string errorResponseJson = @"{""error"":{""message"":""an error occured"",""type"":""invalid_request_error"",""param"":""prompt"",""code"":""unsupported""}}";
@@ -18,7 +49,7 @@ namespace OpenAI.Net.Tests.OpenAIHttpClientTests
         
         [TestCase(true, HttpStatusCode.OK, responseJson,null, Description = "Successfull Request")]
         [TestCase(false, HttpStatusCode.BadRequest, errorResponseJson, "an error occured", Description = "Failed Request")]
-        public async Task Test_DeleteFile(bool isSuccess,HttpStatusCode responseStatusCode,string responseJson,string errorMessage)
+        public async Task Test_GetFineTunes(bool isSuccess,HttpStatusCode responseStatusCode,string responseJson,string errorMessage)
         {
             var res = new HttpResponseMessage { StatusCode = responseStatusCode, Content = new StringContent(responseJson) };
             var handlerMock = new Mock<HttpMessageHandler>();
@@ -38,14 +69,14 @@ namespace OpenAI.Net.Tests.OpenAIHttpClientTests
             var httpClient = new HttpClient(handlerMock.Object) { BaseAddress = new Uri("https://api.openai.com") };
 
             var openAIHttpClient = new OpenAIHttpClient(httpClient);
-            var response = await openAIHttpClient.DeleteFile("1");
+            var response = await openAIHttpClient.GetFineTuneEvents("fineTuneId");
 
-            Assert.That(response.IsSuccess, Is.EqualTo(isSuccess));
+            Assert.That(response.IsSuccess, Is.EqualTo(isSuccess), $"Success was incorrect {response.ErrorMessage}");
             Assert.That(response.Result != null, Is.EqualTo(isSuccess));
-            Assert.That(response.Result?.Deleted == true, Is.EqualTo(isSuccess));
-            Assert.That(response.Result?.Id != null, Is.EqualTo(isSuccess));
+            Assert.That(response.Result?.Data.Length > 0, Is.EqualTo(isSuccess));
+            Assert.That(response.Result?.Data[0] != null, Is.EqualTo(isSuccess));
             Assert.That(response.Result?.Object != null, Is.EqualTo(isSuccess));
-            Assert.That(response.Result?.Deleted == true, Is.EqualTo(isSuccess));
+            Assert.That(response.Result?.Data[0].Level == "info", Is.EqualTo(isSuccess));
             Assert.That(response.StatusCode, Is.EqualTo(responseStatusCode));
             Assert.That(response.Exception == null, Is.EqualTo(isSuccess));
             Assert.That(response.ErrorMessage == null, Is.EqualTo(isSuccess));
@@ -54,7 +85,7 @@ namespace OpenAI.Net.Tests.OpenAIHttpClientTests
             Assert.That(response.ErrorResponse?.Error?.Type == null, Is.EqualTo(isSuccess));
             Assert.That(response.ErrorResponse?.Error?.Code == null, Is.EqualTo(isSuccess));
             Assert.That(response.ErrorResponse?.Error?.Param == null, Is.EqualTo(isSuccess));
-            Assert.That(path, Is.EqualTo("/v1/files/1"),"Apth is incorrect");
+            Assert.That(path, Is.EqualTo("/v1/fine-tunes/fineTuneId/events"),"Apth is incorrect");
         }
     }
 }

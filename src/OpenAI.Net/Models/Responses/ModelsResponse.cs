@@ -2,7 +2,7 @@
 
 namespace OpenAI.Net.Models.Responses
 {
-    internal class ModelsResponse
+    public class ModelsResponse
     {
         public string @Object { get; set; }
         public ModelInfo[] Data { get; set; }

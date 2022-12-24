@@ -62,6 +62,7 @@ namespace OpenAI.Net.Integration.Tests
 
             Assert.That(deleteResponse.IsSuccess, Is.EqualTo(true), "Request failed");
             Assert.That(deleteResponse.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+            Assert.That(deleteResponse.Result?.Deleted, Is.EqualTo(true));
         }
 
         [Test]

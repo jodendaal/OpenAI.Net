@@ -1,16 +1,59 @@
 ﻿using Moq.Protected;
 using Moq;
 using System.Net;
+using OpenAI.Net.Models.Requests;
 
 namespace OpenAI.Net.Tests.OpenAIHttpClientTests
 {
-    internal class DeleteFilesTests
+    internal class GetFineTuneTests
     {
         const string responseJson = @"{
+
+  ""id"": ""ft-AF1WoRqd3aJAHsqc9NY7iL8F"",
+  ""object"": ""fine-tune"",
+  ""model"": ""curie"",
+  ""created_at"": 1614807352,
+  ""events"": [
+    {
+      ""object"": ""fine-tune-event"",
+      ""created_at"": 1614807352,
+      ""level"": ""info"",
+      ""message"": ""Job enqueued. Waiting for jobs ahead to complete. Queue number: 0.""
+    }
+  ],
+  ""fine_tuned_model"": null,
+  ""hyperparams"": {
+    ""batch_size"": 4,
+    ""learning_rate_multiplier"": 0.1,
+    ""n_epochs"": 4,
+    ""prompt_loss_weight"": 0.1
+  },
+  ""organization_id"": ""org-..."",
+  ""result_files"": [{
                                         ""object"": ""file"",
                                         ""id"": ""file-GB1kRstIY1YqJQBZ6rkUVphO"",
-                                        ""deleted"":true
-                                    }
+                                        ""purpose"": ""fine-tune"",
+                                        ""filename"": ""@file.png"",
+                                        ""bytes"": 207,
+                                        ""created_at"": 1671818085,
+                                        ""status"": ""processed"",
+                                        ""status_details"": null
+                                    }],
+  ""status"": ""pending"",
+  ""validation_files"": [],
+  ""training_files"": [
+    {
+      ""id"": ""file-XGinujblHPwGLSztz8cPS8XY"",
+      ""object"": ""file"",
+      ""bytes"": 1547276,
+      ""created_at"": 1610062281,
+      ""filename"": ""my-data-train.jsonl"",
+      ""purpose"": ""fine-tune-train""
+    }
+  ],
+  ""updated_at"": 1614807352
+}
+
             ";
 
         const string errorResponseJson = @"{""error"":{""message"":""an error occured"",""type"":""invalid_request_error"",""param"":""prompt"",""code"":""unsupported""}}";
@@ -18,7 +61,7 @@ namespace OpenAI.Net.Tests.OpenAIHttpClientTests
         
         [TestCase(true, HttpStatusCode.OK, responseJson,null, Description = "Successfull Request")]
         [TestCase(false, HttpStatusCode.BadRequest, errorResponseJson, "an error occured", Description = "Failed Request")]
-        public async Task Test_DeleteFile(bool isSuccess,HttpStatusCode responseStatusCode,string responseJson,string errorMessage)
+        public async Task Test_GetFineTune(bool isSuccess,HttpStatusCode responseStatusCode,string responseJson,string errorMessage)
         {
             var res = new HttpResponseMessage { StatusCode = responseStatusCode, Content = new StringContent(responseJson) };
             var handlerMock = new Mock<HttpMessageHandler>();
@@ -38,14 +81,14 @@ namespace OpenAI.Net.Tests.OpenAIHttpClientTests
             var httpClient = new HttpClient(handlerMock.Object) { BaseAddress = new Uri("https://api.openai.com") };
 
             var openAIHttpClient = new OpenAIHttpClient(httpClient);
-            var response = await openAIHttpClient.DeleteFile("1");
+            var response = await openAIHttpClient.GetFineTune("fineTuneId");
 
-            Assert.That(response.IsSuccess, Is.EqualTo(isSuccess));
+            Assert.That(response.IsSuccess, Is.EqualTo(isSuccess), $"Success was incorrect {response.ErrorMessage}");
             Assert.That(response.Result != null, Is.EqualTo(isSuccess));
-            Assert.That(response.Result?.Deleted == true, Is.EqualTo(isSuccess));
-            Assert.That(response.Result?.Id != null, Is.EqualTo(isSuccess));
+            Assert.That(response.Result?.ResultFiles.Length > 0, Is.EqualTo(isSuccess));
+            Assert.That(response.Result?.ResultFiles[0] != null, Is.EqualTo(isSuccess));
             Assert.That(response.Result?.Object != null, Is.EqualTo(isSuccess));
-            Assert.That(response.Result?.Deleted == true, Is.EqualTo(isSuccess));
+            Assert.That(response.Result?.ResultFiles?[0].Filename == "@file.png", Is.EqualTo(isSuccess));
             Assert.That(response.StatusCode, Is.EqualTo(responseStatusCode));
             Assert.That(response.Exception == null, Is.EqualTo(isSuccess));
             Assert.That(response.ErrorMessage == null, Is.EqualTo(isSuccess));
@@ -54,7 +97,7 @@ namespace OpenAI.Net.Tests.OpenAIHttpClientTests
             Assert.That(response.ErrorResponse?.Error?.Type == null, Is.EqualTo(isSuccess));
             Assert.That(response.ErrorResponse?.Error?.Code == null, Is.EqualTo(isSuccess));
             Assert.That(response.ErrorResponse?.Error?.Param == null, Is.EqualTo(isSuccess));
-            Assert.That(path, Is.EqualTo("/v1/files/1"),"Apth is incorrect");
+            Assert.That(path, Is.EqualTo("/v1/fine-tunes/fineTuneId"),"Apth is incorrect");
         }
     }
 }
