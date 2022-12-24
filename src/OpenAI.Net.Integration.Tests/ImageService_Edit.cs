@@ -23,7 +23,7 @@ namespace OpenAI.Net.Integration.Tests
             Assert.That(response.ErrorResponse?.Error?.Message?.Contains("is not one of ['256x256', '512x512', '1024x1024']"), isSuccess ? Is.EqualTo(null) : Is.EqualTo(true), "Error message not returned");
         }
 
-        [TestCase(true, HttpStatusCode.OK, "256x256",TestName = "EditWithMask_When_Success"))]
+        [TestCase(true, HttpStatusCode.OK, "256x256",TestName = "EditWithMask_When_Success")]
         [TestCase(false, HttpStatusCode.BadRequest, "32x32", TestName = "EditWithMask_When_Invalid_Size_Fail")]
         public async Task EditWithMask(bool isSuccess, HttpStatusCode statusCode, string size)
         {
