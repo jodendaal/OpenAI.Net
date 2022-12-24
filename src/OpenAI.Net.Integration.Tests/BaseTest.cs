@@ -18,7 +18,7 @@ namespace OpenAI.Net.Integration.Tests
             Config = new TestConfig(configuration);
 
             var serviceCollection = new ServiceCollection();
-            serviceCollection.AddOpenAIServices(Config.Apikey, Config.ApiUrl);
+            serviceCollection.AddOpenAIServices(Config.Apikey);
             _serviceProvider  =serviceCollection.BuildServiceProvider();
         }
 
