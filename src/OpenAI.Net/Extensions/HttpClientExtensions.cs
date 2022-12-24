@@ -114,11 +114,8 @@ namespace OpenAI.Net.Extensions
                 {
                     if (line.StartsWith("data: "))
                         line = line.Substring("data: ".Length);
-                    if (line == "[DONE]")
-                    {
-                        yield break;
-                    }
-                    else if (!string.IsNullOrWhiteSpace(line))
+
+                    if (!string.IsNullOrWhiteSpace(line) && line != "[DONE]")
                     {
                         var t = JsonSerializer.Deserialize<T>(line.Trim(), jsonSerializerOptions);
                         yield return new OpenAIHttpOperationResult<T, TError>(t, response.StatusCode);

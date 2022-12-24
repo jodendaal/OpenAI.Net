@@ -70,7 +70,7 @@ namespace OpenAI.Net.Models.Requests
         /// If set, tokens will be sent as data-only <a href="https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#Event_stream_format">server-sent</a> events as they become available, with the stream terminated by a data: [DONE] message.  <br/>
         /// <see href="https://beta.openai.com/docs/api-reference/completions/create#completions/create-stream" />
         /// </summary>
-        internal bool Stream { get; set; }
+        public bool Stream { get; internal set; }
 
         /// <summary>
         /// Include the log probabilities on the logprobs most likely tokens, as well the chosen tokens. <br/>

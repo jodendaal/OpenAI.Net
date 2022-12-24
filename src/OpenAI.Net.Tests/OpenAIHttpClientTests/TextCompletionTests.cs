@@ -2,6 +2,7 @@
 using Moq;
 using OpenAI.Net.Models.Requests;
 using System.Net;
+using System.Reflection;
 
 namespace OpenAI.Net.Tests.OpenAIHttpClientTests
 {
@@ -76,11 +77,21 @@ namespace OpenAI.Net.Tests.OpenAIHttpClientTests
         }
 
 
-        [TestCase(true, HttpStatusCode.OK, responseJson, null, Description = "Successfull Request")]
-        [TestCase(false, HttpStatusCode.BadRequest, errorResponseJson, "an error occured", Description = "Failed Request")]
-        public async Task Test_TextCompletionStream(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
+        [TestCase(true, HttpStatusCode.OK, $"{responseJson}", null, false, Description = "Successfull Request")]
+        [TestCase(true, HttpStatusCode.OK, $"{responseJson}", null, true,2, Description = "Successfull Request Multiline")]
+        [TestCase(false, HttpStatusCode.BadRequest, errorResponseJson, "an error occured",false,0, Description = "Failed Request")]
+        [TestCase(false, HttpStatusCode.BadRequest, errorResponseJson, "an error occured", false, 0, null,Description = "Failed Request Validation")]
+        public async Task Test_TextCompletionStream(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage,bool useMultiLineData,int expectedItemCount = 1,string modelName = "text-davinci-003")
         {
             responseJson = responseJson.Replace("\r\n", "").Replace("\n", "");
+
+            if (useMultiLineData)
+            {
+                var text = responseJson;
+                text = $"data: {responseJson}\r\n{responseJson}\r\n[DONE]";
+
+                responseJson = text;
+            }
 
             var res = new HttpResponseMessage { StatusCode = responseStatusCode, Content = new StringContent(responseJson) };
             var handlerMock = new Mock<HttpMessageHandler>();
@@ -103,24 +114,47 @@ namespace OpenAI.Net.Tests.OpenAIHttpClientTests
 
             var openAIHttpClient = new OpenAIHttpClient(httpClient);
 
-            var request = new TextCompletionRequest("text-davinci-003", "Say this is a test");
-            await foreach (var response in openAIHttpClient.TextCompletionStream(request))
+            var request = new TextCompletionRequest(modelName, "Say this is a test");
+            var itemCount = 0;
+            var exceptionoccured = false;
+            try
             {
-                Assert.That(response.IsSuccess, Is.EqualTo(isSuccess));
-                Assert.That(response.Result != null, Is.EqualTo(isSuccess));
-                Assert.That(response.Result?.Choices?.Count() == 1, Is.EqualTo(isSuccess));
-                Assert.That(response.StatusCode, Is.EqualTo(responseStatusCode));
-                Assert.That(response.Exception == null, Is.EqualTo(isSuccess));
-                Assert.That(response.ErrorMessage == null, Is.EqualTo(isSuccess));
-                Assert.That(response.ErrorResponse == null, Is.EqualTo(isSuccess));
-                Assert.That(response.ErrorResponse?.Error?.Message, Is.EqualTo(errorMessage));
-                Assert.NotNull(jsonRequest);
-                Assert.That(jsonRequest.Contains("best_of"), Is.EqualTo(false), "Serialzation options are incorrect, null values should not be serialised");
-                Assert.That(jsonRequest.Contains("model", StringComparison.OrdinalIgnoreCase), Is.EqualTo(true), "Serialzation options are incorrect, camel case should be used");
-              
+                await foreach (var response in openAIHttpClient.TextCompletionStream(request))
+                {
+                    Assert.That(response.IsSuccess, Is.EqualTo(isSuccess));
+                    Assert.That(response.Result != null, Is.EqualTo(isSuccess));
+                    Assert.That(response.Result?.Choices?.Count() == 1, Is.EqualTo(isSuccess));
+                    Assert.That(response.StatusCode, Is.EqualTo(responseStatusCode));
+                    Assert.That(response.Exception == null, Is.EqualTo(isSuccess));
+                    Assert.That(response.ErrorMessage == null, Is.EqualTo(isSuccess));
+                    Assert.That(response.ErrorResponse == null, Is.EqualTo(isSuccess));
+                    Assert.That(response.ErrorResponse?.Error?.Message, Is.EqualTo(errorMessage));
+                   
+                   
+                    itemCount++;
+                }
+            }
+            catch(Exception ex)
+            {
+                exceptionoccured = true;
+                Assert.That(isSuccess, Is.EqualTo(false));
+                Assert.That(ex.Message, Is.EqualTo("The Model field is required."));
             }
 
-            Assert.That(path, Is.EqualTo("/v1/completions"));
+            Assert.That((exceptionoccured && modelName ==null) || !exceptionoccured && modelName != null, Is.EqualTo(true));
+            Assert.That(request.Stream, Is.EqualTo(true));
+            Assert.That(itemCount, Is.EqualTo(expectedItemCount));
+         
+        
+            if(modelName != null)
+            {
+                Assert.NotNull(jsonRequest);
+
+                Assert.That(jsonRequest.Contains("best_of"), Is.EqualTo(false), "Serialzation options are incorrect, null values should not be serialised");
+                Assert.That(jsonRequest.Contains("model", StringComparison.OrdinalIgnoreCase), Is.EqualTo(true), "Serialzation options are incorrect, camel case should be used");
+                Assert.That(path, Is.EqualTo("/v1/completions"));
+            }
+           
         }
     }
 }
