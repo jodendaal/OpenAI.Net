@@ -4,11 +4,11 @@ using System.Net;
 
 namespace OpenAI.Net.Integration.Tests
 {
-    internal class ImageEditTests : BaseTest
+    internal class ImageService_Edit : BaseTest
     {
-        [TestCase(true, HttpStatusCode.OK, "256x256")]
-        [TestCase(false, HttpStatusCode.BadRequest, "32x32")]
-        public async Task Test_ImageEdit(bool isSuccess,HttpStatusCode statusCode, string size)
+        [TestCase(true, HttpStatusCode.OK, "256x256", TestName = "Edit_When_Success")]
+        [TestCase(false, HttpStatusCode.BadRequest, "32x32", TestName = "Edit_When_Invalid_Size_Fail")]
+        public async Task Edit(bool isSuccess,HttpStatusCode statusCode, string size)
         {
             
             var image = FileContentInfo.Load(@"Images\RGBAImage.png");
@@ -23,9 +23,9 @@ namespace OpenAI.Net.Integration.Tests
             Assert.That(response.ErrorResponse?.Error?.Message?.Contains("is not one of ['256x256', '512x512', '1024x1024']"), isSuccess ? Is.EqualTo(null) : Is.EqualTo(true), "Error message not returned");
         }
 
-        [TestCase(true, HttpStatusCode.OK, "256x256")]
-        [TestCase(false, HttpStatusCode.BadRequest, "32x32")]
-        public async Task Test_ImageEditWithMask(bool isSuccess, HttpStatusCode statusCode, string size)
+        [TestCase(true, HttpStatusCode.OK, "256x256",TestName = "EditWithMask_When_Success"))]
+        [TestCase(false, HttpStatusCode.BadRequest, "32x32", TestName = "EditWithMask_When_Invalid_Size_Fail")]
+        public async Task EditWithMask(bool isSuccess, HttpStatusCode statusCode, string size)
         {
             
             var image = FileContentInfo.Load(@"Images\BabyCat.png");

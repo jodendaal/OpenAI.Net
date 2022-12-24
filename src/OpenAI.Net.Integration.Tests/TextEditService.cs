@@ -3,10 +3,10 @@ using System.Net;
 
 namespace OpenAI.Net.Integration.Tests
 {
-    internal class TextEditTests : BaseTest
+    internal class TextEditService : BaseTest
     {
-        [TestCase("text-davinci-edit-001",true, HttpStatusCode.OK ,TestName = "Get - Valid Request")]
-        [TestCase("invalid_model", false, HttpStatusCode.NotFound, TestName = "Get - InValid Request")]
+        [TestCase("text-davinci-edit-001",true, HttpStatusCode.OK ,TestName = "Get_When_Success")]
+        [TestCase("invalid_model", false, HttpStatusCode.NotFound, TestName = "Get_When_Fail")]
         public async Task Get(string model,bool isSuccess, HttpStatusCode statusCode)
         {
             var request = new TextEditRequest(model, "Fix the spelling mistakes", "What day of the wek is it?");

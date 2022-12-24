@@ -3,11 +3,11 @@ using System.Net;
 
 namespace OpenAI.Net.Integration.Tests
 {
-    internal class ModelsTests : BaseTest
+    internal class ModelsService : BaseTest
     {
-        [TestCase("text-davinci-edit-001",true, HttpStatusCode.OK,TestName = "GetByModel - Test Valid Request")]
-        [TestCase("invalid_model", false, HttpStatusCode.NotFound,TestName = "GetByModel - Test InValid Request")]
-        public async Task GetByModel(string model,bool isSuccess, HttpStatusCode statusCode)
+        [TestCase("text-davinci-edit-001",true, HttpStatusCode.OK,TestName = "GetById_When_Success")]
+        [TestCase("invalid_model", false, HttpStatusCode.NotFound,TestName = "GetById_When_Invalid_Model_Fail")]
+        public async Task GetById(string model,bool isSuccess, HttpStatusCode statusCode)
         {
             
 

@@ -4,7 +4,7 @@ using System.Net;
 
 namespace OpenAI.Net.Integration.Tests
 {
-    internal class FilesTests : BaseTest
+    internal class FileService : BaseTest
     {
         [Test]
         public async Task GetAll()

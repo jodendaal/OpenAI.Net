@@ -6,7 +6,6 @@ using OpenAI.Net.Services;
 
 namespace OpenAI.Net.Tests.Services.FilesService_Tests
 {
-    [TestFixture(TestName = "FileService")]
     internal class FileService_Upload
     {
         const string responseJson = @"{

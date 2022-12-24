@@ -4,11 +4,11 @@ using System.Net;
 
 namespace OpenAI.Net.Integration.Tests
 {
-    internal class ImageVariationTests : BaseTest
+    internal class ImageService_Variation : BaseTest
     {
-        [TestCase(true, HttpStatusCode.OK, "256x256")]
-        [TestCase(false, HttpStatusCode.BadRequest, "32x32")]
-        public async Task Test_ImageVariation(bool isSuccess,HttpStatusCode statusCode, string size)
+        [TestCase(true, HttpStatusCode.OK, "256x256",TestName = "Variation_When_Success")]
+        [TestCase(false, HttpStatusCode.BadRequest, "32x32", TestName = "Variation_When_Invalid_Size_Fail")]
+        public async Task Variation(bool isSuccess,HttpStatusCode statusCode, string size)
         {
             var image = FileContentInfo.Load(@"Images\BabyOtter.png");
             var request = new ImageVariationRequest(image) { N = 1, Size = size};

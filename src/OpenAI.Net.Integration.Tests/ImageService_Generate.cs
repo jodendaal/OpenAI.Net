@@ -3,12 +3,12 @@ using System.Net;
 
 namespace OpenAI.Net.Integration.Tests
 {
-    internal class ImageGenerationTests : BaseTest
+    internal class ImageService_Generate : BaseTest
     {
-        [TestCase("A cute baby sea otter", 1,true, HttpStatusCode.OK , "256x256", TestName = "Successfull Request")]
-        [TestCase("A cute baby sea otter", 1, false, HttpStatusCode.BadRequest, "32x32", TestName = "Failed Request")]
+        [TestCase("A cute baby sea otter", 1,true, HttpStatusCode.OK , "256x256", TestName = "Generate_When_Success")]
+        [TestCase("A cute baby sea otter", 1, false, HttpStatusCode.BadRequest, "32x32", TestName = "Generate_When_Invalid_Size_Fail")]
         //[TestCase("invalid_model", false, HttpStatusCode.NotFound, TestName = "Failed Request")]
-        public async Task Test_ImageGeneration(string prompt,int noOfImages,bool isSuccess, HttpStatusCode statusCode,string size)
+        public async Task Generate(string prompt,int noOfImages,bool isSuccess, HttpStatusCode statusCode,string size)
         {
             var request = new ImageGenerationRequest(prompt) { N=noOfImages,Size= size };
 
