@@ -1,12 +1,4 @@
-﻿using OpenAI.Net.Extensions;
-using OpenAI.Net.Models;
-using OpenAI.Net.Models.OperationResult;
-using OpenAI.Net.Models.Requests;
-using OpenAI.Net.Models.Responses;
-using OpenAI.Net.Models.Responses.Common;
-using OpenAI.Net.Services.Interfaces;
-using System.Reflection;
-using System.Text.Json;
+﻿using OpenAI.Net.Services.Interfaces;
 
 namespace OpenAI.Net
 {
@@ -22,7 +14,15 @@ namespace OpenAI.Net
         public IModerationService Moderation { get; }
         public IEmbeddingsService Embeddings { get; }
 
-        public OpenAIService(IModelsService modelsService, ITextCompletionService textCompletionService, ITextEditService textEditService,IImageService imageService, IFilesService filesService,IFineTuneService fineTuneService,IModerationService moderationService, IEmbeddingsService embeddings)
+        public OpenAIService(
+            IModelsService modelsService, 
+            ITextCompletionService textCompletionService,
+            ITextEditService textEditService,
+            IImageService imageService,
+            IFilesService filesService,
+            IFineTuneService fineTuneService,
+            IModerationService moderationService, 
+            IEmbeddingsService embeddings)
         {
             Models = modelsService;
             TextCompletion = textCompletionService;
