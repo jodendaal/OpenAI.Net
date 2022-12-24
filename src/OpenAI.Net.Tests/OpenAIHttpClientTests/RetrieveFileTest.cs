@@ -21,8 +21,8 @@ namespace OpenAI.Net.Tests.OpenAIHttpClientTests
         const string errorResponseJson = @"{""error"":{""message"":""an error occured"",""type"":""invalid_request_error"",""param"":""prompt"",""code"":""unsupported""}}";
      
         
-        [TestCase(true, HttpStatusCode.OK, responseJson,null, Description = "Successfull Request")]
-        [TestCase(false, HttpStatusCode.BadRequest, errorResponseJson, "an error occured", Description = "Failed Request")]
+        [TestCase(true, HttpStatusCode.OK, responseJson,null, Description = "Successfull Request",TestName ="Result object is populated")]
+        [TestCase(false, HttpStatusCode.BadRequest, errorResponseJson, "an error occured", Description = "Execption handling works")]
         public async Task Test_GetFiles(bool isSuccess,HttpStatusCode responseStatusCode,string responseJson,string errorMessage)
         {
             var res = new HttpResponseMessage { StatusCode = responseStatusCode, Content = new StringContent(responseJson) };

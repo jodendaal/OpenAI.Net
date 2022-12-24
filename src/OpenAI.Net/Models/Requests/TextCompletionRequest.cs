@@ -45,7 +45,7 @@ namespace OpenAI.Net.Models.Requests
         /// We generally recommend altering this or top_p but not both. <br/>
         /// <see href="https://beta.openai.com/docs/api-reference/completions/create#completions/create-temperature" />
         /// </summary>
-        public int Temperature { get; set; } = 1;
+        public double Temperature { get; set; } = 1;
 
         /// <summary>
         /// An alternative to sampling with temperature, called nucleus sampling, where the model considers the results of the tokens with top_p probability mass. <br/>
@@ -54,7 +54,7 @@ namespace OpenAI.Net.Models.Requests
         /// <see href="https://beta.openai.com/docs/api-reference/completions/create#completions/create-top_p" />
         /// </summary>
         [JsonPropertyName("top_p")]
-        public int TopP { get; set; } = 1;
+        public double TopP { get; set; } = 1;
 
         /// <summary>
         /// How many completions to generate for each prompt. <br/>
@@ -62,7 +62,7 @@ namespace OpenAI.Net.Models.Requests
         /// Use carefully and ensure that you have reasonable settings for max_tokens and stop. <br/>
         /// <see href="https://beta.openai.com/docs/api-reference/completions/create#completions/create-n" />
         /// </summary>
-        public int N { get; set; } = 1;
+        public int? N { get; set; } = 1;
 
 
         /// <summary>
@@ -70,7 +70,7 @@ namespace OpenAI.Net.Models.Requests
         /// If set, tokens will be sent as data-only <a href="https://developer.mozilla.org/en-US/docs/Web/API/Server-sent_events/Using_server-sent_events#Event_stream_format">server-sent</a> events as they become available, with the stream terminated by a data: [DONE] message.  <br/>
         /// <see href="https://beta.openai.com/docs/api-reference/completions/create#completions/create-stream" />
         /// </summary>
-        public bool Stream { get; set; }
+        internal bool Stream { get; set; }
 
         /// <summary>
         /// Include the log probabilities on the logprobs most likely tokens, as well the chosen tokens. <br/>
@@ -102,7 +102,7 @@ namespace OpenAI.Net.Models.Requests
         /// <see href="https://beta.openai.com/docs/api-reference/completions/create#completions/create-frequency_penalty" />
         /// </summary>
         [JsonPropertyName("frequency_penalty")]
-        public float FrequencyPenalty { get; set; } = 0;
+        public double FrequencyPenalty { get; set; } = 0;
 
         /// <summary>
         /// Generates best_of completions server-side and returns the "best" (the one with the highest log probability per token). <br/>

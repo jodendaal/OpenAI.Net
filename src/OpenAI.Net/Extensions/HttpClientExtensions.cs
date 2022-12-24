@@ -100,6 +100,33 @@ namespace OpenAI.Net.Extensions
             }
         }
 
+        public static async IAsyncEnumerable<OpenAIHttpOperationResult<T, TError>> OperationPostStreamResult<T, TError>(this HttpClient httpClient, string? path, Object @object, JsonSerializerOptions? jsonSerializerOptions = null)
+        {
+            @object.Validate();
+            var response = await httpClient.PostAsJsonAsync(path, @object, jsonSerializerOptions);
+            
+            if (response.IsSuccessStatusCode)
+            {
+                var responseStream = await response.Content.ReadAsStreamAsync();
+                using var reader = new StreamReader(responseStream);
+                string? line = null;
+                while ((line = await reader.ReadLineAsync()) != null)
+                {
+                    if (line.StartsWith("data: "))
+                        line = line.Substring("data: ".Length);
+                    if (line == "[DONE]")
+                    {
+                        yield break;
+                    }
+                    else if (!string.IsNullOrWhiteSpace(line))
+                    {
+                        var t = JsonSerializer.Deserialize<T>(line.Trim(), jsonSerializerOptions);
+                        yield return new OpenAIHttpOperationResult<T, TError>(t, response.StatusCode);
+                    }
+                }
+            }
+        }
+
         public static async Task<OpenAIHttpOperationResult<T, TError>> HandleResponse<T, TError>(this HttpResponseMessage response)
         {
             if (response.IsSuccessStatusCode)
@@ -111,8 +138,6 @@ namespace OpenAI.Net.Extensions
             var errorResponse = await response.Content.ReadAsStringAsync();
             return new OpenAIHttpOperationResult<T, TError>(new Exception(response.StatusCode.ToString(), new Exception(errorResponse)), response.StatusCode, errorResponse);
         }
-
-  
 
         public static void AddField(this MultipartFormDataContent formData, PropertyInfo prop,object @object)
         {

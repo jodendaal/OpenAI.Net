@@ -1,5 +1,6 @@
 ﻿using OpenAI.Net.Models.Requests;
 using System.Net;
+using System.Reflection;
 
 namespace OpenAI.Net.Integration.Tests
 {
@@ -12,6 +13,7 @@ namespace OpenAI.Net.Integration.Tests
         {
             var openAIHttpClient = new OpenAIHttpClient(HttpClient);
             var request = new TextCompletionRequest(model, "Say this is a test");
+           
             if (echo.HasValue)
             {
                 request.Echo = echo.Value;
@@ -29,6 +31,30 @@ namespace OpenAI.Net.Integration.Tests
             else if(isSuccess)
             {
                 Assert.That(request.Echo, Is.EqualTo(null), "Echo default should be null/not set");
+            }
+        }
+
+        [Test]
+        public async Task Test_TextCompletionStream()
+        {
+            var multipleQuestions =
+                                    @"Q: my name is?
+                                    A: timtim	
+                                    ###
+                                    Q: what is my date of birth
+                                    A: 29 march 1980
+                                    ###
+                                    Q: what is the current year?
+                                    A: 2022
+                                    ###
+                                    Q: when does timtim have his birthday and how old will he be?";
+
+            var openAIHttpClient = new OpenAIHttpClient(HttpClient);
+            var request = new TextCompletionRequest("text-davinci-003", multipleQuestions) { MaxTokens = 1024, N = null};
+
+            await foreach(var t in openAIHttpClient.TextCompletionStream(request))
+            {
+                Console.WriteLine(t.Result.Choices[0].Text);
             }
         }
     }
