@@ -46,7 +46,7 @@ namespace OpenAI.Net.Tests.Services.FilesService_Tests
 
             var service = new FilesService(httpClient);
             var image = new Models.FileContentInfo(new byte[] { 1 }, "image.png");
-            var request = new UploadFileRequest(image);
+            var request = new FileUploadRequest(image);
             var response = await service.Upload(request);
 
             Assert.That(response.IsSuccess, Is.EqualTo(isSuccess));

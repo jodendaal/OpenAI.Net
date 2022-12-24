@@ -61,7 +61,7 @@ namespace OpenAI.Net.Tests.Services.ModerationService_Tests
             var httpClient = new HttpClient(handlerMock.Object) { BaseAddress = new Uri("https://api.openai.com") };
 
             var service = new ModerationService(httpClient);
-            var request = new CreateModerationRequest("input text") { Model = "test" };
+            var request = new ModerationRequest("input text") { Model = "test" };
             var response = await service.Create(request);
 
             Assert.That(response.IsSuccess, Is.EqualTo(isSuccess), $"Success was incorrect {response.ErrorMessage}");

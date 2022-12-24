@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace OpenAI.Net.Models.Responses
 {
-    public class GetFineTuneEventsResponse
+    public class FineTuneGetResponse
     {
         public string Object { get; set; }
-        public Event[] Data { get; set; }
+        public FineTuneResponse[] Data { get; set; }
     }
 }

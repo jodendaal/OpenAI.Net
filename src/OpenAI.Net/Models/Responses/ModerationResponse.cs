@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OpenAI.Net.Models.Responses
 {
-    public class CreateModerationResponse
+    public class ModerationResponse
     {
         public string Id { get; set; }
         public string Model { get; set; }

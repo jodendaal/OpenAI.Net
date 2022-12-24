@@ -2,16 +2,16 @@
 
 namespace OpenAI.Net.Models.Responses
 {
-    public class CreateEmbeddingsResponse 
+    public class EmbeddingsResponse 
     {
-        public EmbeddingsResponse[] Data { get; set; }
+        public EmbeddingInfo[] Data { get; set; }
         public string @Object { get; set; }
 
         public string Model { get; set; }
         public Usage Usage { get; set; }
     }
 
-    public class EmbeddingsResponse
+    public class EmbeddingInfo
     {
         public int? Index { get; set; }
 

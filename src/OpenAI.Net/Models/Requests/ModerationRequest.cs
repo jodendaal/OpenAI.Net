@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace OpenAI.Net.Models.Requests
 {
-    public class CreateModerationRequest
+    public class ModerationRequest
     {
-        public CreateModerationRequest(string input)
+        public ModerationRequest(string input)
         {
             Input = input;
         }

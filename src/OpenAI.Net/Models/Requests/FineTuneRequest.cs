@@ -3,9 +3,9 @@ using System.Text.Json.Serialization;
 
 namespace OpenAI.Net.Models.Requests
 {
-    public class CreateFineTuneRequest
+    public class FineTuneRequest
     {
-        public CreateFineTuneRequest(string trainingFile)
+        public FineTuneRequest(string trainingFile)
         {
             TrainingFile = trainingFile;
         }

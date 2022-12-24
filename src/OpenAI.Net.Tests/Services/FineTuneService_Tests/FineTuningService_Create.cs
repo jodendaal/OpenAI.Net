@@ -80,7 +80,7 @@ namespace OpenAI.Net.Tests.Services.FineTuneService_Tests
             var httpClient = new HttpClient(handlerMock.Object) { BaseAddress = new Uri("https://api.openai.com") };
 
             var service = new FineTuneService(httpClient);
-            var request = new CreateFineTuneRequest("myfile.jsonl")
+            var request = new FineTuneRequest("myfile.jsonl")
             {
                 ClassificationPositiveClass = "",
                 Model = "",

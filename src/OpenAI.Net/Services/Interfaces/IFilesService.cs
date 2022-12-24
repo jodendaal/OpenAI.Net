@@ -12,6 +12,6 @@ namespace OpenAI.Net.Services.Interfaces
         Task<OpenAIHttpOperationResult<FileListResponse, ErrorResponse>> Get();
         Task<OpenAIHttpOperationResult<FileInfoResponse, ErrorResponse>> Get(string fileId);
         Task<OpenAIHttpOperationResult<FileContentInfo, ErrorResponse>> GetContent(string fileId);
-        Task<OpenAIHttpOperationResult<FileInfoResponse, ErrorResponse>> Upload(UploadFileRequest request);
+        Task<OpenAIHttpOperationResult<FileInfoResponse, ErrorResponse>> Upload(FileUploadRequest request);
     }
 }

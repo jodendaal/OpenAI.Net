@@ -15,7 +15,7 @@ namespace OpenAI.Net.Services
 
         public Task<OpenAIHttpOperationResult<TextEditResponse, ErrorResponse>> Get(TextEditRequest request)
         {
-            return HttpClient.OperationPostResult<TextEditResponse, ErrorResponse>("v1/edits", request, JsonSerializerOptions);
+            return HttpClient.Post<TextEditResponse, ErrorResponse>("v1/edits", request, JsonSerializerOptions);
         }
     }
 }

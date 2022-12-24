@@ -16,12 +16,12 @@ namespace OpenAI.Net.Services
 
         public Task<OpenAIHttpOperationResult<ModelsResponse, ErrorResponse>> Get()
         {
-            return HttpClient.OperationGetResult<ModelsResponse, ErrorResponse>($"v1/models");
+            return HttpClient.Get<ModelsResponse, ErrorResponse>($"v1/models");
         }
 
         public Task<OpenAIHttpOperationResult<ModelInfo, ErrorResponse>> Get(string model)
         {
-            return HttpClient.OperationGetResult<ModelInfo, ErrorResponse>($"v1/models/{model}");
+            return HttpClient.Get<ModelInfo, ErrorResponse>($"v1/models/{model}");
         }
     }
 }

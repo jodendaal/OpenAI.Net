@@ -55,7 +55,7 @@ namespace OpenAI.Net.Tests.Services.EmbeddingsService_Tests
             var httpClient = new HttpClient(handlerMock.Object) { BaseAddress = new Uri("https://api.openai.com") };
 
             var service = new EmbeddingsService(httpClient);
-            var request = new CreateEmbeddingsRequest("The food was delicious and the waiter...", "text-embedding-ada-002") { User = "test" };
+            var request = new EmbeddingsRequest("The food was delicious and the waiter...", "text-embedding-ada-002") { User = "test" };
             var response = await service.Create(request);
 
             Assert.That(response.IsSuccess, Is.EqualTo(isSuccess), $"Success was incorrect {response.ErrorMessage}");

@@ -1,4 +1,4 @@
-﻿namespace OpenAI.Net.Models.Responses
+﻿namespace OpenAI.Net.Models.Responses.Common
 {
     public class DeleteResponse
     {

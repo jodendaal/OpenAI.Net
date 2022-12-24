@@ -16,17 +16,17 @@ namespace OpenAI.Net.Services
 
         public Task<OpenAIHttpOperationResult<ImageGenerationResponse, ErrorResponse>> Genearate(ImageGenerationRequest request)
         {
-            return HttpClient.OperationPostResult<ImageGenerationResponse, ErrorResponse>("v1/images/generations", request, JsonSerializerOptions);
+            return HttpClient.Post<ImageGenerationResponse, ErrorResponse>("v1/images/generations", request, JsonSerializerOptions);
         }
 
         public Task<OpenAIHttpOperationResult<ImageGenerationResponse, ErrorResponse>> Edit(ImageEditRequest request)
         {
-            return HttpClient.OperationPostFormResult<ImageGenerationResponse, ErrorResponse>("v1/images/edits", request);
+            return HttpClient.PostForm<ImageGenerationResponse, ErrorResponse>("v1/images/edits", request);
         }
 
         public Task<OpenAIHttpOperationResult<ImageGenerationResponse, ErrorResponse>> Variation(ImageVariationRequest request)
         {
-            return HttpClient.OperationPostFormResult<ImageGenerationResponse, ErrorResponse>("v1/images/variations", request);
+            return HttpClient.PostForm<ImageGenerationResponse, ErrorResponse>("v1/images/variations", request);
         }
     }
 }

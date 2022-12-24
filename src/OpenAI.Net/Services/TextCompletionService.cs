@@ -15,12 +15,12 @@ namespace OpenAI.Net.Services
 
         public Task<OpenAIHttpOperationResult<TextCompletionResponse, ErrorResponse>> Get(TextCompletionRequest request)
         {
-            return HttpClient.OperationPostResult<TextCompletionResponse, ErrorResponse>("v1/completions", request, JsonSerializerOptions);
+            return HttpClient.Post<TextCompletionResponse, ErrorResponse>("v1/completions", request, JsonSerializerOptions);
         }
         public IAsyncEnumerable<OpenAIHttpOperationResult<TextCompletionResponse, ErrorResponse>> GetStream(TextCompletionRequest request)
         {
             request.Stream = true;
-            return HttpClient.OperationPostStreamResult<TextCompletionResponse, ErrorResponse>("v1/completions", request, JsonSerializerOptions);
+            return HttpClient.PostStream<TextCompletionResponse, ErrorResponse>("v1/completions", request, JsonSerializerOptions);
         }
     }
 }

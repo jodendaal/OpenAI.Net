@@ -10,7 +10,7 @@ namespace OpenAI.Net.Extensions
 {
     public static class HttpClientExtensions
     {
-        public static async Task<OpenAIHttpOperationResult<T, TError>> OperationPostFormResult<T, TError>(this HttpClient httpClient, string? path, Object @object)
+        public static async Task<OpenAIHttpOperationResult<T, TError>> PostForm<T, TError>(this HttpClient httpClient, string? path, Object @object)
         {
             try
             {
@@ -38,7 +38,7 @@ namespace OpenAI.Net.Extensions
             return formData;
         }
 
-        public static async Task<OpenAIHttpOperationResult<T, TError>> OperationDeleteResult<T, TError>(this HttpClient httpClient, string? path)
+        public static async Task<OpenAIHttpOperationResult<T, TError>> Delete<T, TError>(this HttpClient httpClient, string? path)
         {
             try
             {
@@ -51,7 +51,7 @@ namespace OpenAI.Net.Extensions
             }
         }
 
-        public static async Task<OpenAIHttpOperationResult<T, TError>> OperationGetResult<T, TError>(this HttpClient httpClient, string? path)
+        public static async Task<OpenAIHttpOperationResult<T, TError>> Get<T, TError>(this HttpClient httpClient, string? path)
         {
             try
             {
@@ -64,7 +64,7 @@ namespace OpenAI.Net.Extensions
             }
         }
 
-        public static async Task<OpenAIHttpOperationResult<FileContentInfo,TError>> OperationGetFileResult<TError>(this HttpClient httpClient, string? path)
+        public static async Task<OpenAIHttpOperationResult<FileContentInfo,TError>> GetFile<TError>(this HttpClient httpClient, string? path)
         {
             try
             {
@@ -86,7 +86,7 @@ namespace OpenAI.Net.Extensions
             }
         }
 
-        public static async Task<OpenAIHttpOperationResult<T,TError>> OperationPostResult<T, TError>(this HttpClient httpClient,string? path, Object @object, JsonSerializerOptions? jsonSerializerOptions = null)
+        public static async Task<OpenAIHttpOperationResult<T,TError>> Post<T, TError>(this HttpClient httpClient,string? path, Object @object, JsonSerializerOptions? jsonSerializerOptions = null)
         {
             try
             {
@@ -100,7 +100,7 @@ namespace OpenAI.Net.Extensions
             }
         }
 
-        public static async IAsyncEnumerable<OpenAIHttpOperationResult<T, TError>> OperationPostStreamResult<T, TError>(this HttpClient httpClient, string? path, Object @object, JsonSerializerOptions? jsonSerializerOptions = null)
+        public static async IAsyncEnumerable<OpenAIHttpOperationResult<T, TError>> PostStream<T, TError>(this HttpClient httpClient, string? path, Object @object, JsonSerializerOptions? jsonSerializerOptions = null)
         {
             @object.Validate();
             var response = await httpClient.PostAsJsonAsync(path, @object, jsonSerializerOptions);
