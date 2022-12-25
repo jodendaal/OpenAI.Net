@@ -3,6 +3,8 @@ using Moq;
 using System.Net;
 using OpenAI.Net.Models.Requests;
 using OpenAI.Net.Services;
+using OpenAI.Net.Extensions;
+using System.Reflection;
 
 namespace OpenAI.Net.Tests.Services.FineTuneService_Tests
 {
@@ -80,6 +82,37 @@ namespace OpenAI.Net.Tests.Services.FineTuneService_Tests
             var response = await service.Create(request);
 
             Assert.That(request.TrainingFile, Is.EqualTo("myfile.jsonl"));
+            Assert.That(response.Result?.ResultFiles.Length > 0, Is.EqualTo(isSuccess));
+            Assert.That(response.Result?.Id != null, Is.EqualTo(isSuccess));
+            Assert.That(response.Result?.Object != null, Is.EqualTo(isSuccess));
+            Assert.That(response.Result?.Status == "pending", Is.EqualTo(isSuccess));
+            AssertResponse(response, isSuccess, errorMessage, responseStatusCode);
+        }
+
+        [TestCase(true, HttpStatusCode.OK, responseJson, null, Description = "Successfull Request", TestName = "CreateWithExtention_When_Success")]
+        [TestCase(false, HttpStatusCode.BadRequest, ErrorResponseJson, "an error occured", Description = "Failed Request", TestName = "CreateWithExtention_When_Fail")]
+        public async Task CreateWithExtention(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
+        {
+            var httpClient = GetHttpClient(responseStatusCode, responseJson, "/v1/fine-tunes");
+
+            var service = new FineTuneService(httpClient);
+            bool actionInvoked = false;
+            var response = await service.Create("myfile.jsonl", o => {
+                o.ClassificationPositiveClass = "";
+                o.Model = "";
+                o.BatchSize = 1;
+                o.ClassificationBetas = "";
+                o.ClassificationNoOfClasses = 1;
+                o.LearningRateMultiplier = 1;
+                o.NoOfEpochs = 1;
+                o.ValidationFile = "test";
+                o.PromptLossWeight = 1;
+                o.ComputeClassificationMetrics = 1;
+                o.Suffix = "test";
+                actionInvoked = true;
+            });
+
+            Assert.That(actionInvoked);
             Assert.That(response.Result?.ResultFiles.Length > 0, Is.EqualTo(isSuccess));
             Assert.That(response.Result?.Id != null, Is.EqualTo(isSuccess));
             Assert.That(response.Result?.Object != null, Is.EqualTo(isSuccess));

@@ -32,7 +32,7 @@ namespace OpenAI.Net.Tests.HttpClientTests
         [TestCase(HttpStatusCode.OK, true, false, null, "https://api.openai.com/v1/completions", null, null, jsonResponseString, false, Description = "Null Filename is defaulted")]
         public async Task Test_OperationGetFileResult(HttpStatusCode httpStatusCode, bool isSuccess, bool resultIsNull, string fileName, string url, string exceptionMessage, string errorMessage, string jsonResult, bool errorResponseIsSet)
         {
-            var imageEditRequest = new ImageEditRequest("a baby fish", new Models.FileContentInfo(new byte[] { 1 }, fileName));
+            var imageEditRequest = new ImageEditRequest("a baby fish", new Models.FileContentInfo(new byte[] { 1 }, fileName??"FileNameTest"));
             var formDataContent = imageEditRequest.ToMultipartFormDataContent();
             formDataContent.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("form-data");
             if (fileName != null)

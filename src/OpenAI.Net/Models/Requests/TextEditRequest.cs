@@ -39,7 +39,7 @@ namespace OpenAI.Net.Models.Requests
         /// We generally recommend altering this or top_p but not both. <br/>
         /// <see href="https://beta.openai.com/docs/api-reference/edits/create#edits/create-temperature" />
         /// </summary>
-        public int Temperature { get; set; } = 1;
+        public double? Temperature { get; set; }
 
         /// <summary>
         /// An alternative to sampling with temperature, called nucleus sampling, where the model considers the results of the tokens with top_p probability mass. <br/>
@@ -48,7 +48,7 @@ namespace OpenAI.Net.Models.Requests
         /// <see href="https://beta.openai.com/docs/api-reference/edits/create#edits/create-top_p" />
         /// </summary>
         [JsonPropertyName("top_p")]
-        public int TopP { get; set; } = 1;
+        public double? TopP { get; set; }
 
         /// <summary>
         /// How many edits to generate for the input and instruction. <br/>
