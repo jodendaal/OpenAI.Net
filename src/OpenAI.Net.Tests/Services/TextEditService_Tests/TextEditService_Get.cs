@@ -6,17 +6,17 @@ using OpenAI.Net.Services;
 
 namespace OpenAI.Net.Tests.Services.TextEditService_Tests
 {
-    internal class TextEditService_Get
+    internal class TextEditService_Get : BaseServiceTest
     {
         const string responseJson = @"{""object"":""edit"",""created"":1671714361,""choices"":[{""text"":""What day of the week is it?\n"",""index"":0}],""usage"":{""prompt_tokens"":25,""completion_tokens"":28,""total_tokens"":53}}";
-        const string errorResponseJson = @"{""error"":{""message"":""an error occured"",""type"":""invalid_request_error"",""param"":""prompt"",""code"":""unsupported""}}";
+        
         [SetUp]
         public void Setup()
         {
         }
 
         [TestCase(true, HttpStatusCode.OK, responseJson, null, Description = "Successfull Request", TestName = "Get_When_Success")]
-        [TestCase(false, HttpStatusCode.BadRequest, errorResponseJson, "an error occured", Description = "Failed Request",TestName = "Get_When_Fail")]
+        [TestCase(false, HttpStatusCode.BadRequest, ErrorResponseJson, "an error occured", Description = "Failed Request",TestName = "Get_When_Fail")]
         public async Task Get(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
         {
             var res = new HttpResponseMessage { StatusCode = responseStatusCode, Content = new StringContent(responseJson) };

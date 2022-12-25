@@ -7,7 +7,7 @@ using OpenAI.Net.Services;
 
 namespace OpenAI.Net.Tests.Services.FilesService_Tests
 {
-    internal class FileService_GetContent
+    internal class FileService_GetContent : BaseServiceTest
     {
         const string responseJson = @"
                                     {
@@ -21,11 +21,10 @@ namespace OpenAI.Net.Tests.Services.FilesService_Tests
                                         ""status_details"": null
                                     }";
 
-        const string errorResponseJson = @"{""error"":{""message"":""an error occured"",""type"":""invalid_request_error"",""param"":""prompt"",""code"":""unsupported""}}";
 
 
         [TestCase(true, HttpStatusCode.OK, responseJson, null, Description = "Successfull Request",TestName = "GetContent_When_Success")]
-        [TestCase(false, HttpStatusCode.BadRequest, errorResponseJson, "an error occured", Description = "Failed Request", TestName = "GetContent_When_Fail")]
+        [TestCase(false, HttpStatusCode.BadRequest, ErrorResponseJson, "an error occured", Description = "Failed Request", TestName = "GetContent_When_Fail")]
         public async Task GetContent(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
         {
             var imageEditRequest = new ImageEditRequest("a baby fish", new Models.FileContentInfo(new byte[] { 1 }, "image.png"));
@@ -37,38 +36,15 @@ namespace OpenAI.Net.Tests.Services.FilesService_Tests
 
             var res = new HttpResponseMessage { StatusCode = responseStatusCode, Content = isSuccess ? formDataContent : jsonContent };
 
-            var handlerMock = new Mock<HttpMessageHandler>();
-            string path = null;
-            handlerMock
-               .Protected()
-               .Setup<Task<HttpResponseMessage>>(
-                  "SendAsync",
-                  ItExpr.IsAny<HttpRequestMessage>(),
-                  ItExpr.IsAny<CancellationToken>())
-               .ReturnsAsync(() => res)
-               .Callback<HttpRequestMessage, CancellationToken>((r, c) =>
-               {
-                   path = r.RequestUri.AbsolutePath;
-               });
-
-            var httpClient = new HttpClient(handlerMock.Object) { BaseAddress = new Uri("https://api.openai.com") };
+            var httpClient = GetHttpClient(responseStatusCode, res, "/v1/files/1/content");
 
             var service = new FilesService(httpClient);
             var response = await service.GetContent("1");
 
-            Assert.That(response.IsSuccess, Is.EqualTo(isSuccess));
-            Assert.That(response.Result != null, Is.EqualTo(isSuccess));
-            // Assert.That(response.Result?.FileContent.Length > 0, Is.EqualTo(isSuccess));
-            Assert.That(response.StatusCode, Is.EqualTo(responseStatusCode));
-            Assert.That(response.Exception == null, Is.EqualTo(isSuccess));
-            Assert.That(response.ErrorMessage == null, Is.EqualTo(isSuccess));
-            Assert.That(response.ErrorResponse == null, Is.EqualTo(isSuccess));
-            Assert.That(response.ErrorResponse?.Error?.Message, Is.EqualTo(errorMessage));
-            Assert.That(response.ErrorResponse?.Error?.Type == null, Is.EqualTo(isSuccess));
-            Assert.That(response.ErrorResponse?.Error?.Code == null, Is.EqualTo(isSuccess));
-            Assert.That(response.ErrorResponse?.Error?.Param == null, Is.EqualTo(isSuccess));
+         
+            Assert.That(response.Result?.FileContent.Length > 0, Is.EqualTo(isSuccess));
             Assert.That(response.Result?.FileName == "image.png", Is.EqualTo(isSuccess));
-            Assert.That(path, Is.EqualTo("/v1/files/1/content"), "Apth is incorrect");
+            AssertResponse(response, isSuccess, errorMessage, responseStatusCode);
         }
     }
 }
