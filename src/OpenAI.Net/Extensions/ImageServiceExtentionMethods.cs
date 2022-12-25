@@ -9,18 +9,18 @@ namespace OpenAI.Net.Extensions
 {
     public static class ImageServiceExtentionMethods
     {
-        public static Task<OpenAIHttpOperationResult<ImageGenerationResponse, ErrorResponse>> Genearate(this IImageService service, string prompt, int noOfImages = 1 ,string size = "1024x1024",Action<ImageGenerationRequest>? options = null)
+        public static Task<OpenAIHttpOperationResult<ImageGenerationResponse, ErrorResponse>> Generate(this IImageService service, string prompt, int noOfImages = 1 ,string size = "1024x1024",Action<ImageGenerationRequest>? options = null)
         {
             var request = new ImageGenerationRequest(prompt) { Size = size,N=noOfImages };
             options?.Invoke(request);
-            return service.Genearate(request);
+            return service.Generate(request);
         }
 
         public static Task<OpenAIHttpOperationResult<ImageGenerationResponse, ErrorResponse>> Genearate(this IImageService service, string prompt, Action<ImageGenerationRequest>? options = null)
         {
             var request = new ImageGenerationRequest(prompt);
             options?.Invoke(request);
-            return service.Genearate(request);
+            return service.Generate(request);
         }
 
         public static Task<OpenAIHttpOperationResult<ImageGenerationResponse, ErrorResponse>> Edit(this IImageService service, string prompt,string imagePath, Action<ImageEditRequest>? options = null)

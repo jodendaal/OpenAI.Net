@@ -8,7 +8,7 @@ C# .NET library for use with the OpenAI API.
 This is community-maintained library.
 
 
-## Getting started
+# Getting started
 
 Install package [Nuget package](https://www.nuget.org/packages/TimSoft.OpenAI.Net/)
 
@@ -95,7 +95,7 @@ e.g
 -   [x] [Moderations](https://beta.openai.com/docs/api-reference/moderations)
     -   [x] [Create moderation](https://beta.openai.com/docs/api-reference/moderations/create)
 
-## Testing
+# Testing
 This project has 100% code coverage with Unit tests and 100% pass rate with [Stryker mutation testing](https://stryker-mutator.io/docs/stryker-net/introduction/). 
 
 See latest Stryker report [here](https://dashboard.stryker-mutator.io/reports/github.com/jodendaal/OpenAI.Net/main#mutant).
@@ -104,7 +104,7 @@ We also have Integration tests foreach service.
 
 This should provide confidence in the library going forwards.
 
-## Contributions
+# Contributions
 
 Contributions are welcome.
 
@@ -115,3 +115,51 @@ Minimum requirements for any PR's.
 - MUST pass Stryker mutation testing with 100%
 - SHOULD have integration tests
 
+# Examples
+
+### Completion
+
+```csharp
+var response = await OpenAIService.TextCompletion.Get(model, "Say this is a test",(o) => {
+                o.MaxTokens = 1024;
+                o.BestOf = 2;
+            });
+```
+
+### Completion Stream
+```csharp
+await foreach(var response in OpenAIService.TextCompletion.GetStream(request))
+{
+    Console.WriteLine(response?.Result?.Choices[0].Text);
+}
+```
+
+
+### Text Edit
+```csharp
+var response = await service.Get("text-davinci-edit-001", "Fix the spelling mistakes", "What day of the wek is it?", (o =>{
+    o.TopP = 0.1;
+    o.Temperature = 100;
+}));
+```
+
+### Image Edit
+##### Using file paths
+```csharp
+var response = await service.Edit("A cute baby sea otter", @"Images\BabyCat.png", @"Images\Mask.png", o => {
+    o.N = 99;
+});
+```
+
+##### Using file bytes
+
+```csharp
+var response = await service.Edit("A cute baby sea otter",File.ReadAllBytes(@"Images\BabyCat.png"), File.ReadAllBytes(@"Images\BabyCat.png"), o => {
+    o.N = 99;
+});
+```            
+
+### Image Generate
+```csharp
+var response = await service.Generate("A cute baby sea otter",2, "1024x1024");
+```

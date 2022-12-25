@@ -13,7 +13,7 @@ namespace OpenAI.Net.Services
         {
         }
 
-        public Task<OpenAIHttpOperationResult<ImageGenerationResponse, ErrorResponse>> Genearate(ImageGenerationRequest request)
+        public Task<OpenAIHttpOperationResult<ImageGenerationResponse, ErrorResponse>> Generate(ImageGenerationRequest request)
         {
             return HttpClient.Post<ImageGenerationResponse, ErrorResponse>("v1/images/generations", request, JsonSerializerOptions);
         }

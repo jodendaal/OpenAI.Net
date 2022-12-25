@@ -41,7 +41,7 @@ namespace OpenAI.Net.Tests.Services.ImagesService_Tests
             var service = new ImageService(httpClient);
 
             var request = new ImageGenerationRequest("A cute baby sea otter") { N = 2, Size = "1024x1024" };
-            var response = await service.Genearate(request);
+            var response = await service.Generate(request);
            
             Assert.That(response.Result?.Data?.Count() == 2, Is.EqualTo(isSuccess));
            
@@ -63,7 +63,7 @@ namespace OpenAI.Net.Tests.Services.ImagesService_Tests
 
             var service = new ImageService(httpClient);
 
-            var response = await service.Genearate("A cute baby sea otter",2, "1024x1024", o => {
+            var response = await service.Generate("A cute baby sea otter",2, "1024x1024", o => {
                 o.User = "test";
             });
 
