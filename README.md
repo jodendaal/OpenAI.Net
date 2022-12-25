@@ -7,6 +7,8 @@ C# .NET library for use with the OpenAI API.
 
 This is community-maintained library.
 
+This library supports .net core 6.0 and above.
+
 
 # Getting started
 
