@@ -7,6 +7,8 @@ C# .NET library for use with the OpenAI API.
 
 This is community-maintained library.
 
+This library supports .net core 6.0 and above.
+
 
 # Getting started
 
@@ -45,11 +47,11 @@ e.g
 
         public async Task<TextCompletionResponse> Search()
         {
-            var response = await service.TextCompletion.Get(model, "Say this is a test",(o) => {
+            var response = await _openAIService.TextCompletion.Get(model, "Say this is a test",(o) => {
                 o.MaxTokens = 1024;
                 o.BestOf = 2;
             });
-            
+
             if (response.IsSuccess)
             {
                 return response.Result;
