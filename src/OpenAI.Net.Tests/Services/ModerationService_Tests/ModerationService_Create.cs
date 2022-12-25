@@ -3,6 +3,7 @@ using Moq;
 using System.Net;
 using OpenAI.Net.Models.Requests;
 using OpenAI.Net.Services;
+using OpenAI.Net.Extensions;
 
 namespace OpenAI.Net.Tests.Services.ModerationService_Tests
 {
@@ -69,6 +70,43 @@ namespace OpenAI.Net.Tests.Services.ModerationService_Tests
             Assert.That(response.Result?.Results?[0]?.CategoryScores.ViolenceGraphic == 0.036865197122097015, Is.EqualTo(isSuccess));
 
             AssertResponse(response,isSuccess,errorMessage,responseStatusCode);
+        }
+
+        [TestCase(true, HttpStatusCode.OK, responseJson, null, Description = "Successfull Request", TestName = "CreateExtentionMethod_When_Success")]
+        [TestCase(false, HttpStatusCode.BadRequest, ErrorResponseJson, "an error occured", Description = "Failed Request", TestName = "CreateExtentionMethod_When_Fail")]
+        public async Task CreateExtentionMethod(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
+        {
+            var jsonRequest = "";
+            var httpClient = GetHttpClient(responseStatusCode, responseJson, "/v1/moderations", "https://api.openai.com", (request) => {
+                jsonRequest = request.Content.ReadAsStringAsync().Result;
+            });
+
+            var service = new ModerationService(httpClient);
+            var response = await service.Create("input text", "test");
+
+            Assert.That(jsonRequest.Contains(@"""input"":""input text"""));
+            Assert.That(jsonRequest.Contains(@"""model"":""test"""));
+
+            Assert.That(response.Result?.Results.Length > 0, Is.EqualTo(isSuccess));
+            Assert.That(response.Result?.Id != null, Is.EqualTo(isSuccess));
+            Assert.That(response.Result?.Model != null, Is.EqualTo(isSuccess));
+
+            Assert.That(response.Result?.Results?[0]?.Flagged == true, Is.EqualTo(isSuccess));
+            Assert.That(response.Result?.Results?[0]?.Categories.Violence == true, Is.EqualTo(isSuccess)); ;
+            Assert.That(response.Result?.Results?[0]?.Categories.Hate == false, Is.EqualTo(isSuccess)); ;
+            Assert.That(response.Result?.Results?[0]?.Categories.ViolenceGraphic == false, Is.EqualTo(isSuccess));
+            Assert.That(response.Result?.Results?[0]?.Categories.SelfHarm == false, Is.EqualTo(isSuccess));
+            Assert.That(response.Result?.Results?[0]?.Categories.HateThreatening == false, Is.EqualTo(isSuccess));
+            Assert.That(response.Result?.Results?[0]?.Categories.Sexual == false, Is.EqualTo(isSuccess));
+            Assert.That(response.Result?.Results?[0]?.Categories.SexualMinors == false, Is.EqualTo(isSuccess));
+            Assert.That(response.Result?.Results?[0]?.CategoryScores.Hate == 0.22714105248451233, Is.EqualTo(isSuccess));
+            Assert.That(response.Result?.Results?[0]?.CategoryScores.HateThreatening == 0.4132447838783264, Is.EqualTo(isSuccess));
+            Assert.That(response.Result?.Results?[0]?.CategoryScores.SelfHarm == 0.005232391878962517, Is.EqualTo(isSuccess));
+            Assert.That(response.Result?.Results?[0]?.CategoryScores.Sexual == 0.01407341007143259, Is.EqualTo(isSuccess));
+            Assert.That(response.Result?.Results?[0]?.CategoryScores.Violence == 0.9223177433013916, Is.EqualTo(isSuccess));
+            Assert.That(response.Result?.Results?[0]?.CategoryScores.ViolenceGraphic == 0.036865197122097015, Is.EqualTo(isSuccess));
+
+            AssertResponse(response, isSuccess, errorMessage, responseStatusCode);
         }
     }
 }

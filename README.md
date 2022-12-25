@@ -45,8 +45,11 @@ e.g
 
         public async Task<TextCompletionResponse> Search()
         {
-            var request = new TextCompletionRequest("text-davinci-003", "Say this is a test");
-            var response = await _openAIService.TextCompletion.Get(request);
+            var response = await service.TextCompletion.Get(model, "Say this is a test",(o) => {
+                o.MaxTokens = 1024;
+                o.BestOf = 2;
+            });
+            
             if (response.IsSuccess)
             {
                 return response.Result;
@@ -104,6 +107,150 @@ We also have Integration tests foreach service.
 
 This should provide confidence in the library going forwards.
 
+
+
+# Examples
+
+### Completion
+
+```csharp
+var response = await service.TextCompletion.Get(model, "Say this is a test",(o) => {
+                o.MaxTokens = 1024;
+                o.BestOf = 2;
+            });
+```
+
+### Completion Stream
+```csharp
+await foreach(var response in service.TextCompletion.GetStream(request))
+{
+    Console.WriteLine(response?.Result?.Choices[0].Text);
+}
+```
+
+
+### Text Edit
+```csharp
+var response = await service.TextEdit.Get("text-davinci-edit-001", "Fix the spelling mistakes", "What day of the wek is it?", (o =>{
+    o.TopP = 0.1;
+    o.Temperature = 100;
+}));
+```
+
+### Image Edit
+##### Using file paths
+```csharp
+var response = await service.Images.Edit("A cute baby sea otter", @"Images\BabyCat.png", @"Images\Mask.png", o => {
+    o.N = 99;
+});
+```
+
+##### Using file bytes
+
+```csharp
+var response = await service.Images.Edit("A cute baby sea otter",File.ReadAllBytes(@"Images\BabyCat.png"), File.ReadAllBytes(@"Images\BabyCat.png"), o => {
+    o.N = 99;
+});
+```            
+
+### Image Generate
+```csharp
+var response = await service.Images.Generate("A cute baby sea otter",2, "1024x1024");
+```
+
+### Image Variation
+##### Using file paths
+```csharp
+var response = await service.Images.Variation(@"Images\BabyCat.png", o => {
+    o.N = 2;
+    o.Size = "1024x1024";
+});
+```
+##### Using file bytes
+```csharp
+ var response = await service.Images.Variation(File.ReadAllBytes(@"Images\BabyCat.png"), o => {
+                o.N = 2;
+                o.Size = "1024x1024";
+});
+```
+
+### Fine Tune Create
+```csharp
+var response = await service.FineTune.Create("myfile.jsonl", o => {
+    o.BatchSize = 1;
+});
+```
+
+### Fine Tune Get All
+```csharp
+var response = await service.FineTune.Get();
+```
+
+### Fine Tune Get By Id
+```csharp
+var response = await service.FineTune.Get("fineTuneId");
+```
+
+### Fine Tune Get Events
+```csharp
+var response = await service.FineTune.GetEvents("fineTuneId");
+```
+
+### Fine Tune Delete
+```csharp
+var response = await service.FineTune.Delete("modelId");
+```
+
+### Fine Tune Cancel
+```csharp
+var response = await service.FineTune.Cancel("fineTuneId");
+```
+
+### File Upload
+##### Using file path
+```csharp
+var response = await service.Files.Upload(@"Images\BabyCat.png");
+```
+##### Using file bytes
+```csharp
+var response = await service.Files.Upload(bytes, "mymodel.jsonl");
+```
+### File Get Content
+```csharp
+ var response = await service.Files.GetContent("fileId");
+```
+### File Get File Detail
+```csharp
+var response = await service.Files.Get("fileId");
+```
+### File Get File All
+```csharp
+var response = await service.Files.Get();
+```
+### File Delete
+```csharp
+var response = await service.Files.Delete("1");
+```
+### Emdeddings Create
+```csharp
+var response = await service.Embeddings.Create("The food was delicious and the waiter...", "text-embedding-ada-002", "test");
+```
+
+### Models Get All
+```csharp
+var response = await service.Models.Get();
+```
+
+### Models Get By Id
+```csharp
+var response = await service.Get("babbage");
+```
+
+### Moderation Create
+```csharp
+var response = await service.Moderation.Create("input text", "test");
+```
+
 # Contributions
 
 Contributions are welcome.
@@ -114,52 +261,3 @@ Minimum requirements for any PR's.
 
 - MUST pass Stryker mutation testing with 100%
 - SHOULD have integration tests
-
-# Examples
-
-### Completion
-
-```csharp
-var response = await OpenAIService.TextCompletion.Get(model, "Say this is a test",(o) => {
-                o.MaxTokens = 1024;
-                o.BestOf = 2;
-            });
-```
-
-### Completion Stream
-```csharp
-await foreach(var response in OpenAIService.TextCompletion.GetStream(request))
-{
-    Console.WriteLine(response?.Result?.Choices[0].Text);
-}
-```
-
-
-### Text Edit
-```csharp
-var response = await service.Get("text-davinci-edit-001", "Fix the spelling mistakes", "What day of the wek is it?", (o =>{
-    o.TopP = 0.1;
-    o.Temperature = 100;
-}));
-```
-
-### Image Edit
-##### Using file paths
-```csharp
-var response = await service.Edit("A cute baby sea otter", @"Images\BabyCat.png", @"Images\Mask.png", o => {
-    o.N = 99;
-});
-```
-
-##### Using file bytes
-
-```csharp
-var response = await service.Edit("A cute baby sea otter",File.ReadAllBytes(@"Images\BabyCat.png"), File.ReadAllBytes(@"Images\BabyCat.png"), o => {
-    o.N = 99;
-});
-```            
-
-### Image Generate
-```csharp
-var response = await service.Generate("A cute baby sea otter",2, "1024x1024");
-```
