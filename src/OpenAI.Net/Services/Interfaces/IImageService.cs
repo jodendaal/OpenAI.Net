@@ -8,7 +8,7 @@ namespace OpenAI.Net.Services.Interfaces
     public interface IImageService
     {
         Task<OpenAIHttpOperationResult<ImageGenerationResponse, ErrorResponse>> Edit(ImageEditRequest request);
-        Task<OpenAIHttpOperationResult<ImageGenerationResponse, ErrorResponse>> Genearate(ImageGenerationRequest request);
+        Task<OpenAIHttpOperationResult<ImageGenerationResponse, ErrorResponse>> Generate(ImageGenerationRequest request);
         Task<OpenAIHttpOperationResult<ImageGenerationResponse, ErrorResponse>> Variation(ImageVariationRequest request);
     }
 }

@@ -47,8 +47,8 @@ namespace OpenAI.Net.Integration.Tests
             }
 
             var response = await OpenAIService.TextCompletion.Get(model, "Say this is a test",(o) => {
-                o.Echo = true;
-                o.BestOf = 1;
+                o.MaxTokens = 1024;
+                o.BestOf = 2;
             });
           
 

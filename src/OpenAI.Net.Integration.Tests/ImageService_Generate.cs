@@ -12,7 +12,7 @@ namespace OpenAI.Net.Integration.Tests
         {
             var request = new ImageGenerationRequest(prompt) { N=noOfImages,Size= size };
 
-            var response = await OpenAIService.Images.Genearate(request);
+            var response = await OpenAIService.Images.Generate(request);
 
             Assert.That(response.IsSuccess, Is.EqualTo(isSuccess), "Request failed");
             Assert.That(response.StatusCode, Is.EqualTo(statusCode));
