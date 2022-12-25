@@ -89,9 +89,9 @@ namespace OpenAI.Net.Tests.Services.FineTuneService_Tests
             AssertResponse(response, isSuccess, errorMessage, responseStatusCode);
         }
 
-        [TestCase(true, HttpStatusCode.OK, responseJson, null, Description = "Successfull Request", TestName = "CreateWithExtention_When_Success")]
-        [TestCase(false, HttpStatusCode.BadRequest, ErrorResponseJson, "an error occured", Description = "Failed Request", TestName = "CreateWithExtention_When_Fail")]
-        public async Task CreateWithExtention(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
+        [TestCase(true, HttpStatusCode.OK, responseJson, null, Description = "Successfull Request", TestName = "CreateWithExtension_When_Success")]
+        [TestCase(false, HttpStatusCode.BadRequest, ErrorResponseJson, "an error occured", Description = "Failed Request", TestName = "CreateWithExtension_When_Fail")]
+        public async Task CreateWithExtension(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
         {
             var httpClient = GetHttpClient(responseStatusCode, responseJson, "/v1/fine-tunes");
 

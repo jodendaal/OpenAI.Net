@@ -50,9 +50,9 @@ namespace OpenAI.Net.Tests.Services.ImagesService_Tests
             AssertResponse(response, isSuccess, errorMessage, responseStatusCode);
         }
 
-        [TestCase(true, HttpStatusCode.OK, responseJson, null, Description = "Successfull Request", TestName = "GenerateWithExtention_When_Success")]
-        [TestCase(false, HttpStatusCode.BadRequest, ErrorResponseJson, "an error occured", Description = "Failed Request", TestName = "GenerateWithExtention_When_Fail")]
-        public async Task GenerateWithExtention(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
+        [TestCase(true, HttpStatusCode.OK, responseJson, null, Description = "Successfull Request", TestName = "GenerateWithExtension_When_Success")]
+        [TestCase(false, HttpStatusCode.BadRequest, ErrorResponseJson, "an error occured", Description = "Failed Request", TestName = "GenerateWithExtension_When_Fail")]
+        public async Task GenerateWithExtension(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
         {
             string jsonRequest = null;
 
@@ -79,9 +79,9 @@ namespace OpenAI.Net.Tests.Services.ImagesService_Tests
             AssertResponse(response, isSuccess, errorMessage, responseStatusCode);
         }
 
-        [TestCase(true, HttpStatusCode.OK, responseJson, null, Description = "Successfull Request", TestName = "GenerateWithExtentionOptionOnly_When_Success")]
-        [TestCase(false, HttpStatusCode.BadRequest, ErrorResponseJson, "an error occured", Description = "Failed Request", TestName = "GenerateWithExtentionOptionOnly_When_Fail")]
-        public async Task GenerateWithExtentionOptionOnly(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
+        [TestCase(true, HttpStatusCode.OK, responseJson, null, Description = "Successfull Request", TestName = "GenerateWithExtensionOptionOnly_When_Success")]
+        [TestCase(false, HttpStatusCode.BadRequest, ErrorResponseJson, "an error occured", Description = "Failed Request", TestName = "GenerateWithExtensionOptionOnly_When_Fail")]
+        public async Task GenerateWithExtensionOptionOnly(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
         {
             string jsonRequest = null;
 

@@ -47,9 +47,9 @@ namespace OpenAI.Net.Tests.Services.ImagesService_Tests
             AssertResponse(response,isSuccess,errorMessage,responseStatusCode);
         }
 
-        [TestCase(true, HttpStatusCode.OK, responseJson, null, Description = "Successfull Request", TestName = "VariationWithFilePathExtention_When_Success")]
-        [TestCase(false, HttpStatusCode.BadRequest, ErrorResponseJson, "an error occured", Description = "Failed Request", TestName = "VariationWithFilePathExtention_When_Fail")]
-        public async Task VariationWithFilePathExtention(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
+        [TestCase(true, HttpStatusCode.OK, responseJson, null, Description = "Successfull Request", TestName = "VariationWithFilePathExtension_When_Success")]
+        [TestCase(false, HttpStatusCode.BadRequest, ErrorResponseJson, "an error occured", Description = "Failed Request", TestName = "VariationWithFilePathExtension_When_Fail")]
+        public async Task VariationWithFilePathExtension(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
         {
             string formFields = "";
             var httpClient = GetHttpClient(responseStatusCode, responseJson, "/v1/images/variations", "https://api.openai.com", (request) =>
@@ -86,9 +86,9 @@ namespace OpenAI.Net.Tests.Services.ImagesService_Tests
             AssertResponse(response, isSuccess, errorMessage, responseStatusCode);
         }
 
-        [TestCase(true, HttpStatusCode.OK, responseJson, null, Description = "Successfull Request", TestName = "VariationWithBytesExtention_When_Success")]
-        [TestCase(false, HttpStatusCode.BadRequest, ErrorResponseJson, "an error occured", Description = "Failed Request", TestName = "VariationWithBytesExtention_When_Fail")]
-        public async Task VariationWithBytesExtention(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
+        [TestCase(true, HttpStatusCode.OK, responseJson, null, Description = "Successfull Request", TestName = "VariationWithBytesExtension_When_Success")]
+        [TestCase(false, HttpStatusCode.BadRequest, ErrorResponseJson, "an error occured", Description = "Failed Request", TestName = "VariationWithBytesExtension_When_Fail")]
+        public async Task VariationWithBytesExtension(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
         {
            
             Dictionary<string,string> expectedFormValues = new Dictionary<string, string>();

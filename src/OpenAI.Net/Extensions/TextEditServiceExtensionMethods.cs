@@ -6,7 +6,7 @@ using OpenAI.Net.Services.Interfaces;
 
 namespace OpenAI.Net.Extensions
 {
-    public static class TextEditServiceExtentionMethods
+    public static class TextEditServiceExtensionMethods
     {
         public static Task<OpenAIHttpOperationResult<TextEditResponse, ErrorResponse>>Get(this ITextEditService service, string model, string instruction, string input, Action<TextEditRequest>? options = null)
         {
