@@ -50,9 +50,9 @@ namespace OpenAI.Net.Tests.Services.ImagesService_Tests
             AssertResponse(response, isSuccess, errorMessage, responseStatusCode);
         }
 
-        [TestCase(true, HttpStatusCode.OK, responseJson, null, Description = "Successfull Request", TestName = "EditWithExtentionFilePath_When_Success")]
-        [TestCase(false, HttpStatusCode.BadRequest, errorResponseJson, "an error occured", TestName = "EditWithExtentionFilePath_When_Fail")]
-        public async Task EditWithExtentionFilePath(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
+        [TestCase(true, HttpStatusCode.OK, responseJson, null, Description = "Successfull Request", TestName = "EditWithExtensionFilePath_When_Success")]
+        [TestCase(false, HttpStatusCode.BadRequest, errorResponseJson, "an error occured", TestName = "EditWithExtensionFilePath_When_Fail")]
+        public async Task EditWithExtensionFilePath(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
         {
             Dictionary<string, string> expectedFormValues = new Dictionary<string, string>();
             Dictionary<string, string> formDataErrors = new Dictionary<string, string>();
@@ -79,9 +79,9 @@ namespace OpenAI.Net.Tests.Services.ImagesService_Tests
             AssertResponse(response, isSuccess, errorMessage, responseStatusCode);
         }
 
-        [TestCase(true, HttpStatusCode.OK, responseJson, null, Description = "Successfull Request", TestName = "EditWithExtentionFilePathAndMaskPath_When_Success")]
-        [TestCase(false, HttpStatusCode.BadRequest, errorResponseJson, "an error occured", TestName = "EditWithExtentionFilePathAndMaskPath_When_Fail")]
-        public async Task EditWithExtentionFilePathAndMaskPath(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
+        [TestCase(true, HttpStatusCode.OK, responseJson, null, Description = "Successfull Request", TestName = "EditWithExtensionFilePathAndMaskPath_When_Success")]
+        [TestCase(false, HttpStatusCode.BadRequest, errorResponseJson, "an error occured", TestName = "EditWithExtensionFilePathAndMaskPath_When_Fail")]
+        public async Task EditWithExtensionFilePathAndMaskPath(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
         {
             Dictionary<string, string> expectedFormValues = new Dictionary<string, string>();
             Dictionary<string, string> formDataErrors = new Dictionary<string, string>();
@@ -106,9 +106,9 @@ namespace OpenAI.Net.Tests.Services.ImagesService_Tests
             AssertResponse(response, isSuccess, errorMessage, responseStatusCode);
         }
 
-        [TestCase(true, HttpStatusCode.OK, responseJson, null, Description = "Successfull Request", TestName = "EditWithExtentionImageBytesAndMaskBytes_When_Success")]
-        [TestCase(false, HttpStatusCode.BadRequest, errorResponseJson, "an error occured", TestName = "EditWithExtentionImageBytesAndMaskBytes_When_Fail")]
-        public async Task EditWithExtentionImageBytesAndMaskBytes(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
+        [TestCase(true, HttpStatusCode.OK, responseJson, null, Description = "Successfull Request", TestName = "EditWithExtensionImageBytesAndMaskBytes_When_Success")]
+        [TestCase(false, HttpStatusCode.BadRequest, errorResponseJson, "an error occured", TestName = "EditWithExtensionImageBytesAndMaskBytes_When_Fail")]
+        public async Task EditWithExtensionImageBytesAndMaskBytes(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
         {
             Dictionary<string, string> expectedFormValues = new Dictionary<string, string>();
             Dictionary<string, string> formDataErrors = new Dictionary<string, string>();
@@ -134,9 +134,9 @@ namespace OpenAI.Net.Tests.Services.ImagesService_Tests
             AssertResponse(response, isSuccess, errorMessage, responseStatusCode);
         }
 
-        [TestCase(true, HttpStatusCode.OK, responseJson, null, Description = "Successfull Request", TestName = "EditWithExtentionImageBytes_When_Success")]
-        [TestCase(false, HttpStatusCode.BadRequest, errorResponseJson, "an error occured", TestName = "EditWithExtentionImageBytes_When_Fail")]
-        public async Task EditWithExtentionImageBytes(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
+        [TestCase(true, HttpStatusCode.OK, responseJson, null, Description = "Successfull Request", TestName = "EditWithExtensionImageBytes_When_Success")]
+        [TestCase(false, HttpStatusCode.BadRequest, errorResponseJson, "an error occured", TestName = "EditWithExtensionImageBytes_When_Fail")]
+        public async Task EditWithExtensionImageBytes(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
         {
             Dictionary<string, string> expectedFormValues = new Dictionary<string, string>();
             Dictionary<string, string> formDataErrors = new Dictionary<string, string>();

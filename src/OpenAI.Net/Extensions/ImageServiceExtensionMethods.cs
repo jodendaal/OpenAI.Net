@@ -7,7 +7,7 @@ using OpenAI.Net.Services.Interfaces;
 
 namespace OpenAI.Net.Extensions
 {
-    public static class ImageServiceExtentionMethods
+    public static class ImageServiceExtensionMethods
     {
         public static Task<OpenAIHttpOperationResult<ImageGenerationResponse, ErrorResponse>> Generate(this IImageService service, string prompt, int noOfImages = 1 ,string size = "1024x1024",Action<ImageGenerationRequest>? options = null)
         {

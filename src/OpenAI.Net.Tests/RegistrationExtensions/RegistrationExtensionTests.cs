@@ -2,9 +2,9 @@
 using OpenAI.Net.Extensions;
 using OpenAI.Net.Services;
 
-namespace OpenAI.Net.Tests.RegistrationExtentions
+namespace OpenAI.Net.Tests.RegistrationExtensions
 {
-    public class RegistrationExtentionTests
+    public class RegistrationExtensionTests
     {
         [Test]
         public void ServiceCollection_AddOpenAIServices()

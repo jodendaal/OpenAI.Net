@@ -7,7 +7,7 @@ using OpenAI.Net.Services.Interfaces;
 
 namespace OpenAI.Net.Extensions
 {
-    public static class FilesServiceExtentionMethods
+    public static class FilesServiceExtensionMethods
     {
         public static Task<OpenAIHttpOperationResult<FileInfoResponse, ErrorResponse>> Upload(this IFilesService service, string filePath,string purpose = "fine-tune")
         {

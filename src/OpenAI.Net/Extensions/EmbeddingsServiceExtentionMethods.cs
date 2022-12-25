@@ -6,7 +6,7 @@ using OpenAI.Net.Services.Interfaces;
 
 namespace OpenAI.Net.Extensions
 {
-    public static class EmbeddingsServiceExtentionMethods
+    public static class EmbeddingsServiceExtensionMethods
     {
         public static Task<OpenAIHttpOperationResult<EmbeddingsResponse, ErrorResponse>> Create(this IEmbeddingsService service, string input,string model,string? user = null)
         {

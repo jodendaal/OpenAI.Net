@@ -6,7 +6,7 @@ using OpenAI.Net.Services.Interfaces;
 
 namespace OpenAI.Net.Extensions
 {
-    public static class FineTuneServiceExtentionMethods
+    public static class FineTuneServiceExtensionMethods
     {
         public static Task<OpenAIHttpOperationResult<FineTuneResponse, ErrorResponse>> Create(this IFineTuneService service, string trainingFile, Action<FineTuneRequest>? options = null)
         {
