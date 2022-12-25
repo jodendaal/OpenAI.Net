@@ -7,6 +7,6 @@ namespace OpenAI.Net.Services.Interfaces
 {
     public interface IEmbeddingsService
     {
-        Task<OpenAIHttpOperationResult<CreateEmbeddingsResponse, ErrorResponse>> Create(CreateEmbeddingsRequest model);
+        Task<OpenAIHttpOperationResult<EmbeddingsResponse, ErrorResponse>> Create(EmbeddingsRequest model);
     }
 }

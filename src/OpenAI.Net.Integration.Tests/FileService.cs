@@ -19,7 +19,7 @@ namespace OpenAI.Net.Integration.Tests
         public async Task Upload()
         {
             var file = FileContentInfo.Load(@"Data\trainingData.jsonl");
-            var response = await OpenAIService.Files.Upload(new UploadFileRequest(file, "fine-tune"));
+            var response = await OpenAIService.Files.Upload(new FileUploadRequest(file, "fine-tune"));
 
             Assert.That(response.IsSuccess, Is.EqualTo(true), "Request failed");
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
@@ -29,7 +29,7 @@ namespace OpenAI.Net.Integration.Tests
         public async Task Delete()
         {
             var file = FileContentInfo.Load(@"Data\trainingData.jsonl");
-            var response = await OpenAIService.Files.Upload(new UploadFileRequest(file, "fine-tune"));
+            var response = await OpenAIService.Files.Upload(new FileUploadRequest(file, "fine-tune"));
 
             Assert.That(response.IsSuccess, Is.EqualTo(true), $"Request failed {response.ErrorMessage}");
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
@@ -44,7 +44,7 @@ namespace OpenAI.Net.Integration.Tests
         public async Task GetById()
         {
             var file = FileContentInfo.Load(@"Data\trainingData.jsonl");
-            var response = await OpenAIService.Files.Upload(new UploadFileRequest(file, "fine-tune"));
+            var response = await OpenAIService.Files.Upload(new FileUploadRequest(file, "fine-tune"));
 
             Assert.That(response.IsSuccess, Is.EqualTo(true), "Request failed");
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
@@ -69,7 +69,7 @@ namespace OpenAI.Net.Integration.Tests
         {
             
             var file = FileContentInfo.Load(@"Data\trainingData.jsonl");
-            var response = await OpenAIService.Files.Upload(new UploadFileRequest(file, "fine-tune"));
+            var response = await OpenAIService.Files.Upload(new FileUploadRequest(file, "fine-tune"));
 
             Assert.That(response.IsSuccess, Is.EqualTo(true), "Request failed");
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));

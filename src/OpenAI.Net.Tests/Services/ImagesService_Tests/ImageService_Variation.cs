@@ -3,10 +3,11 @@ using Moq;
 using OpenAI.Net.Models.Requests;
 using System.Net;
 using OpenAI.Net.Services;
+using OpenAI.Net.Extensions;
 
 namespace OpenAI.Net.Tests.Services.ImagesService_Tests
 {
-    internal class ImageService_Variation
+    internal class ImageService_Variation : BaseServiceTest
     {
         const string responseJson = @"{
               ""created"": 1589478378,
@@ -20,53 +21,103 @@ namespace OpenAI.Net.Tests.Services.ImagesService_Tests
               ]
             }
             ";
-        const string errorResponseJson = @"{""error"":{""message"":""an error occured"",""type"":""invalid_request_error"",""param"":""prompt"",""code"":""unsupported""}}";
         [SetUp]
         public void Setup()
         {
         }
 
         [TestCase(true, HttpStatusCode.OK, responseJson, null, Description = "Successfull Request", TestName = "Variation_When_Success")]
-        [TestCase(false, HttpStatusCode.BadRequest, errorResponseJson, "an error occured", Description = "Failed Request",TestName = "Variation_When_Fail")]
+        [TestCase(false, HttpStatusCode.BadRequest, ErrorResponseJson, "an error occured", Description = "Failed Request",TestName = "Variation_When_Fail")]
         public async Task Variation(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
         {
-            var res = new HttpResponseMessage { StatusCode = responseStatusCode, Content = new StringContent(responseJson) };
-            var handlerMock = new Mock<HttpMessageHandler>();
             string jsonRequest = null;
-            string path = null;
-            handlerMock
-               .Protected()
-               .Setup<Task<HttpResponseMessage>>(
-                  "SendAsync",
-                  ItExpr.IsAny<HttpRequestMessage>(),
-                  ItExpr.IsAny<CancellationToken>())
-               .ReturnsAsync(() => res)
-               .Callback<HttpRequestMessage, CancellationToken>((r, c) =>
-               {
-                   jsonRequest = r.Content.ReadAsStringAsync().Result;
-                   path = r.RequestUri.AbsolutePath;
-               });
 
-            var httpClient = new HttpClient(handlerMock.Object) { BaseAddress = new Uri("https://api.openai.com") };
+            var httpClient = GetHttpClient(responseStatusCode, responseJson, "/v1/images/variations", "https://api.openai.com", (request) =>
+            {
+                jsonRequest = request.Content.ReadAsStringAsync().Result;
+            });
 
             var service = new ImageService(httpClient);
             var image = new byte[] { 1 };
             var request = new ImageVariationRequest(new Models.FileContentInfo(new byte[] { 1 }, "image.png")) { N = 2, Size = "1024x1024" };
             var response = await service.Variation(request);
 
-            Assert.That(response.IsSuccess, Is.EqualTo(isSuccess));
-            Assert.That(response.Result != null, Is.EqualTo(isSuccess));
             Assert.That(response.Result?.Data?.Count() == 2, Is.EqualTo(isSuccess));
-            Assert.That(response.StatusCode, Is.EqualTo(responseStatusCode));
-            Assert.That(response.Exception == null, Is.EqualTo(isSuccess));
-            Assert.That(response.ErrorMessage == null, Is.EqualTo(isSuccess));
-            Assert.That(response.ErrorResponse == null, Is.EqualTo(isSuccess));
-            Assert.That(response.ErrorResponse?.Error?.Message, Is.EqualTo(errorMessage));
-            Assert.That(response.ErrorResponse?.Error?.Type == null, Is.EqualTo(isSuccess));
-            Assert.That(response.ErrorResponse?.Error?.Code == null, Is.EqualTo(isSuccess));
-            Assert.That(response.ErrorResponse?.Error?.Param == null, Is.EqualTo(isSuccess));
             Assert.NotNull(jsonRequest);
-            Assert.That(path, Is.EqualTo("/v1/images/variations"));
+            AssertResponse(response,isSuccess,errorMessage,responseStatusCode);
+        }
+
+        [TestCase(true, HttpStatusCode.OK, responseJson, null, Description = "Successfull Request", TestName = "VariationWithFilePathExtention_When_Success")]
+        [TestCase(false, HttpStatusCode.BadRequest, ErrorResponseJson, "an error occured", Description = "Failed Request", TestName = "VariationWithFilePathExtention_When_Fail")]
+        public async Task VariationWithFilePathExtention(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
+        {
+            string formFields = "";
+            var httpClient = GetHttpClient(responseStatusCode, responseJson, "/v1/images/variations", "https://api.openai.com", (request) =>
+            {
+                var t = request.Content as MultipartFormDataContent;
+                var en = t.GetEnumerator();
+                while (en.MoveNext()){
+                    var f = en.Current;
+                    formFields += f.Headers.ToString();
+                    if(f.Headers.ToString().Contains("name=size") || f.Headers.ToString().Contains("name=n"))
+                    {
+                        formFields += f.ReadAsStringAsync().Result;
+                    }
+                    //formData = formData +=  f.ReadAsStringAsync().Result;
+                }
+             
+            });
+
+            var service = new ImageService(httpClient);
+            var image = new byte[] { 1 };
+            var response = await service.Variation(@"Images\BabyCat.png", o => {
+                o.N = 2;
+                o.Size = "1024x1024";
+            });
+
+            Assert.NotNull(formFields);
+            Assert.That(formFields.Contains("name=size"));
+            Assert.That(formFields.Contains("name=n"));
+            Assert.That(formFields.Contains("1024x1024"));
+            Assert.That(formFields.Contains("2"));
+
+            Assert.That(response.Result?.Data?.Count() == 2, Is.EqualTo(isSuccess));
+           
+            AssertResponse(response, isSuccess, errorMessage, responseStatusCode);
+        }
+
+        [TestCase(true, HttpStatusCode.OK, responseJson, null, Description = "Successfull Request", TestName = "VariationWithBytesExtention_When_Success")]
+        [TestCase(false, HttpStatusCode.BadRequest, ErrorResponseJson, "an error occured", Description = "Failed Request", TestName = "VariationWithBytesExtention_When_Fail")]
+        public async Task VariationWithBytesExtention(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
+        {
+           
+            Dictionary<string,string> expectedFormValues = new Dictionary<string, string>();
+            Dictionary<string, string> formDataErrors =  new Dictionary<string, string>();
+            expectedFormValues.Add("size", "1024x1024");
+            expectedFormValues.Add("n", "2");
+            expectedFormValues.Add("image", @"""@file""");
+
+            var httpClient = GetHttpClient(responseStatusCode, responseJson, "/v1/images/variations", "https://api.openai.com", (request) =>
+            {
+                var t = request.Content as MultipartFormDataContent;
+                formDataErrors = ValidateFormData(t, expectedFormValues);
+            });
+
+            var service = new ImageService(httpClient);
+            var image = new byte[] { 1 };
+
+            var response = await service.Variation(image, o => {
+                o.N = 2;
+                o.Size = "1024x1024";
+            });
+
+
+            Assert.That(formDataErrors.Count, Is.EqualTo(0), $"FormData not correct {string.Join(",", formDataErrors.Select(i=> $"{i.Key}={i.Value}"))}");
+            
+
+            Assert.That(response.Result?.Data?.Count() == 2, Is.EqualTo(isSuccess));
+
+            AssertResponse(response, isSuccess, errorMessage, responseStatusCode);
         }
     }
 }

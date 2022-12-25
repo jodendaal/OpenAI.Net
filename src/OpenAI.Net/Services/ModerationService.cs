@@ -13,9 +13,9 @@ namespace OpenAI.Net.Services
         {
         }
 
-        public Task<OpenAIHttpOperationResult<CreateModerationResponse, ErrorResponse>> Create(CreateModerationRequest model)
+        public Task<OpenAIHttpOperationResult<ModerationResponse, ErrorResponse>> Create(ModerationRequest model)
         {
-            return HttpClient.OperationPostResult<CreateModerationResponse, ErrorResponse>($"v1/moderations", model, JsonSerializerOptions);
+            return HttpClient.Post<ModerationResponse, ErrorResponse>($"v1/moderations", model, JsonSerializerOptions);
         }
     }
 }

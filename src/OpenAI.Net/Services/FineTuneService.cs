@@ -12,34 +12,34 @@ namespace OpenAI.Net.Services
         public FineTuneService(HttpClient client) : base(client)
         {
         }
-        public Task<OpenAIHttpOperationResult<CreateFineTuneResponse, ErrorResponse>> Create(CreateFineTuneRequest request)
+        public Task<OpenAIHttpOperationResult<FineTuneResponse, ErrorResponse>> Create(FineTuneRequest request)
         {
-            return HttpClient.OperationPostResult<CreateFineTuneResponse, ErrorResponse>($"v1/fine-tunes", request, JsonSerializerOptions);
+            return HttpClient.Post<FineTuneResponse, ErrorResponse>($"v1/fine-tunes", request, JsonSerializerOptions);
         }
 
-        public Task<OpenAIHttpOperationResult<GetFineTuneResponse, ErrorResponse>> Get()
+        public Task<OpenAIHttpOperationResult<FineTuneGetResponse, ErrorResponse>> Get()
         {
-            return HttpClient.OperationGetResult<GetFineTuneResponse, ErrorResponse>($"v1/fine-tunes");
+            return HttpClient.Get<FineTuneGetResponse, ErrorResponse>($"v1/fine-tunes");
         }
 
-        public Task<OpenAIHttpOperationResult<CreateFineTuneResponse, ErrorResponse>> Get(string fineTuneId)
+        public Task<OpenAIHttpOperationResult<FineTuneResponse, ErrorResponse>> Get(string fineTuneId)
         {
-            return HttpClient.OperationGetResult<CreateFineTuneResponse, ErrorResponse>($"v1/fine-tunes/{fineTuneId}");
+            return HttpClient.Get<FineTuneResponse, ErrorResponse>($"v1/fine-tunes/{fineTuneId}");
         }
 
-        public Task<OpenAIHttpOperationResult<CreateFineTuneResponse, ErrorResponse>> Cancel(string fineTuneId)
+        public Task<OpenAIHttpOperationResult<FineTuneResponse, ErrorResponse>> Cancel(string fineTuneId)
         {
-            return HttpClient.OperationGetResult<CreateFineTuneResponse, ErrorResponse>($"v1/fine-tunes/{fineTuneId}/cancel");
+            return HttpClient.Get<FineTuneResponse, ErrorResponse>($"v1/fine-tunes/{fineTuneId}/cancel");
         }
 
-        public Task<OpenAIHttpOperationResult<GetFineTuneEventsResponse, ErrorResponse>> GetEvents(string fineTuneId)
+        public Task<OpenAIHttpOperationResult<FineTuneEventsResponse, ErrorResponse>> GetEvents(string fineTuneId)
         {
-            return HttpClient.OperationGetResult<GetFineTuneEventsResponse, ErrorResponse>($"v1/fine-tunes/{fineTuneId}/events");
+            return HttpClient.Get<FineTuneEventsResponse, ErrorResponse>($"v1/fine-tunes/{fineTuneId}/events");
         }
 
         public Task<OpenAIHttpOperationResult<DeleteResponse, ErrorResponse>> Delete(string model)
         {
-            return HttpClient.OperationDeleteResult<DeleteResponse, ErrorResponse>($"v1/models/{model}");
+            return HttpClient.Delete<DeleteResponse, ErrorResponse>($"v1/models/{model}");
         }
 
     }

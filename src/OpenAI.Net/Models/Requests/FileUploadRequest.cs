@@ -2,9 +2,9 @@
 
 namespace OpenAI.Net.Models.Requests
 {
-    public class UploadFileRequest
+    public class FileUploadRequest
     {
-        public UploadFileRequest(FileContentInfo file,string purpose = "fine-tune") 
+        public FileUploadRequest(FileContentInfo file,string purpose = "fine-tune") 
         {
             File = file;
             Purpose = purpose;

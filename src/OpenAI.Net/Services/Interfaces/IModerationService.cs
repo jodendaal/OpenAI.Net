@@ -7,6 +7,6 @@ namespace OpenAI.Net.Services.Interfaces
 {
     public interface IModerationService
     {
-        Task<OpenAIHttpOperationResult<CreateModerationResponse, ErrorResponse>> Create(CreateModerationRequest model);
+        Task<OpenAIHttpOperationResult<ModerationResponse, ErrorResponse>> Create(ModerationRequest model);
     }
 }

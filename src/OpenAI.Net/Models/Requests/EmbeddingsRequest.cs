@@ -2,9 +2,9 @@
 
 namespace OpenAI.Net.Models.Requests
 {
-    public class CreateEmbeddingsRequest
+    public class EmbeddingsRequest
     {
-        public CreateEmbeddingsRequest(string input,string model)
+        public EmbeddingsRequest(string input,string model)
         {
             Model = model;
             Input = input;

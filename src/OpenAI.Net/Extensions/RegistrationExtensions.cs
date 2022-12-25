@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using OpenAI.Net.Services;
 using OpenAI.Net.Services.Interfaces;
-using System.Net.Http;
 
 namespace OpenAI.Net.Extensions
 {
@@ -15,7 +14,7 @@ namespace OpenAI.Net.Extensions
 
                 if (!string.IsNullOrEmpty(organization))
                 {
-                    c.DefaultRequestHeaders.Add("OpenAI-Organization", $"{organization}"); ;
+                    c.DefaultRequestHeaders.Add("OpenAI-Organization", $"{organization}");
                 }
             };
 

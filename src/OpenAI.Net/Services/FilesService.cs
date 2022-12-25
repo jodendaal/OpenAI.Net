@@ -17,27 +17,27 @@ namespace OpenAI.Net.Services
 
         public Task<OpenAIHttpOperationResult<FileListResponse, ErrorResponse>> Get()
         {
-            return HttpClient.OperationGetResult<FileListResponse, ErrorResponse>("v1/files");
+            return HttpClient.Get<FileListResponse, ErrorResponse>("v1/files");
         }
 
-        public Task<OpenAIHttpOperationResult<FileInfoResponse, ErrorResponse>> Upload(UploadFileRequest request)
+        public Task<OpenAIHttpOperationResult<FileInfoResponse, ErrorResponse>> Upload(FileUploadRequest request)
         {
-            return HttpClient.OperationPostFormResult<FileInfoResponse, ErrorResponse>("v1/files", request);
+            return HttpClient.PostForm<FileInfoResponse, ErrorResponse>("v1/files", request);
         }
 
         public Task<OpenAIHttpOperationResult<DeleteResponse, ErrorResponse>> Delete(string fileId)
         {
-            return HttpClient.OperationDeleteResult<DeleteResponse, ErrorResponse>($"v1/files/{fileId}");
+            return HttpClient.Delete<DeleteResponse, ErrorResponse>($"v1/files/{fileId}");
         }
 
         public Task<OpenAIHttpOperationResult<FileInfoResponse, ErrorResponse>> Get(string fileId)
         {
-            return HttpClient.OperationGetResult<FileInfoResponse, ErrorResponse>($"v1/files/{fileId}");
+            return HttpClient.Get<FileInfoResponse, ErrorResponse>($"v1/files/{fileId}");
         }
 
         public Task<OpenAIHttpOperationResult<FileContentInfo, ErrorResponse>> GetContent(string fileId)
         {
-            return HttpClient.OperationGetFileResult<ErrorResponse>($"v1/files/{fileId}/content");
+            return HttpClient.GetFile<ErrorResponse>($"v1/files/{fileId}/content");
         }
     }
 }

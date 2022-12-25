@@ -13,7 +13,7 @@ This is community-maintained library.
 Install package [Nuget package](https://www.nuget.org/packages/TimSoft.OpenAI.Net/)
 
 ```powershell
-Install-Package TimSoft.OpenAI.Net
+Install-Package OpenAI.Net.Client
 ```
 
 Register services using the extension method

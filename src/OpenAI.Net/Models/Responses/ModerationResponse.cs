@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.Json.Serialization;
-using System.Threading.Tasks;
+﻿using System.Text.Json.Serialization;
 
 namespace OpenAI.Net.Models.Responses
 {
-    public class CreateModerationResponse
+    public class ModerationResponse
     {
         public string Id { get; set; }
         public string Model { get; set; }

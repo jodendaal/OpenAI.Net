@@ -3,10 +3,11 @@ using Moq;
 using OpenAI.Net.Models.Requests;
 using System.Net;
 using OpenAI.Net.Services;
+using OpenAI.Net.Extensions;
 
 namespace OpenAI.Net.Tests.Services.ImagesService_Tests
 {
-    internal class ImageService_Generate
+    internal class ImageService_Generate : BaseServiceTest
     {
         const string responseJson = @"{
               ""created"": 1589478378,
@@ -20,53 +21,93 @@ namespace OpenAI.Net.Tests.Services.ImagesService_Tests
               ]
             }
             ";
-        const string errorResponseJson = @"{""error"":{""message"":""an error occured"",""type"":""invalid_request_error"",""param"":""prompt"",""code"":""unsupported""}}";
+
         [SetUp]
         public void Setup()
         {
         }
 
         [TestCase(true, HttpStatusCode.OK, responseJson, null, Description = "Successfull Request", TestName = "Generate_When_Success")]
-        [TestCase(false, HttpStatusCode.BadRequest, errorResponseJson, "an error occured", Description = "Failed Request", TestName = "Generate_When_Fail")]
+        [TestCase(false, HttpStatusCode.BadRequest, ErrorResponseJson, "an error occured", Description = "Failed Request", TestName = "Generate_When_Fail")]
         public async Task Generate(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
         {
-            var res = new HttpResponseMessage { StatusCode = responseStatusCode, Content = new StringContent(responseJson) };
-            var handlerMock = new Mock<HttpMessageHandler>();
             string jsonRequest = null;
-            string path = null;
-            handlerMock
-               .Protected()
-               .Setup<Task<HttpResponseMessage>>(
-                  "SendAsync",
-                  ItExpr.IsAny<HttpRequestMessage>(),
-                  ItExpr.IsAny<CancellationToken>())
-               .ReturnsAsync(() => res)
-               .Callback<HttpRequestMessage, CancellationToken>((r, c) =>
-               {
-                   jsonRequest = r.Content.ReadAsStringAsync().Result;
-                   path = r.RequestUri.AbsolutePath;
-               });
 
-            var httpClient = new HttpClient(handlerMock.Object) { BaseAddress = new Uri("https://api.openai.com") };
+            var httpClient = GetHttpClient(responseStatusCode, responseJson, "/v1/images/generations", "https://api.openai.com", (request) =>
+            {
+                jsonRequest = request.Content.ReadAsStringAsync().Result;
+            });
 
             var service = new ImageService(httpClient);
 
             var request = new ImageGenerationRequest("A cute baby sea otter") { N = 2, Size = "1024x1024" };
             var response = await service.Genearate(request);
-
-            Assert.That(response.IsSuccess, Is.EqualTo(isSuccess));
-            Assert.That(response.Result != null, Is.EqualTo(isSuccess));
+           
             Assert.That(response.Result?.Data?.Count() == 2, Is.EqualTo(isSuccess));
-            Assert.That(response.StatusCode, Is.EqualTo(responseStatusCode));
-            Assert.That(response.Exception == null, Is.EqualTo(isSuccess));
-            Assert.That(response.ErrorMessage == null, Is.EqualTo(isSuccess));
-            Assert.That(response.ErrorResponse == null, Is.EqualTo(isSuccess));
-            Assert.That(response.ErrorResponse?.Error?.Message, Is.EqualTo(errorMessage));
-            Assert.That(response.ErrorResponse?.Error?.Type == null, Is.EqualTo(isSuccess));
-            Assert.That(response.ErrorResponse?.Error?.Code == null, Is.EqualTo(isSuccess));
-            Assert.That(response.ErrorResponse?.Error?.Param == null, Is.EqualTo(isSuccess));
+           
             Assert.NotNull(jsonRequest);
-            Assert.That(path, Is.EqualTo("/v1/images/generations"));
+
+            AssertResponse(response, isSuccess, errorMessage, responseStatusCode);
+        }
+
+        [TestCase(true, HttpStatusCode.OK, responseJson, null, Description = "Successfull Request", TestName = "GenerateWithExtention_When_Success")]
+        [TestCase(false, HttpStatusCode.BadRequest, ErrorResponseJson, "an error occured", Description = "Failed Request", TestName = "GenerateWithExtention_When_Fail")]
+        public async Task GenerateWithExtention(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
+        {
+            string jsonRequest = null;
+
+            var httpClient = GetHttpClient(responseStatusCode, responseJson, "/v1/images/generations", "https://api.openai.com", (request) =>
+            {
+                jsonRequest = request.Content.ReadAsStringAsync().Result;
+            });
+
+            var service = new ImageService(httpClient);
+
+            var response = await service.Genearate("A cute baby sea otter",2, "1024x1024", o => {
+                o.User = "test";
+            });
+
+            Assert.That(jsonRequest.Contains(@"""user"":""test"""));
+            Assert.That(jsonRequest.Contains(@"""size"":""1024x1024"""));
+            Assert.That(jsonRequest.Contains(@"""n"":2"));
+            Assert.That(jsonRequest.Contains(@"""prompt"":""A cute baby sea otter"""));
+
+            Assert.That(response.Result?.Data?.Count() == 2, Is.EqualTo(isSuccess));
+
+            Assert.NotNull(jsonRequest);
+
+            AssertResponse(response, isSuccess, errorMessage, responseStatusCode);
+        }
+
+        [TestCase(true, HttpStatusCode.OK, responseJson, null, Description = "Successfull Request", TestName = "GenerateWithExtentionOptionOnly_When_Success")]
+        [TestCase(false, HttpStatusCode.BadRequest, ErrorResponseJson, "an error occured", Description = "Failed Request", TestName = "GenerateWithExtentionOptionOnly_When_Fail")]
+        public async Task GenerateWithExtentionOptionOnly(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
+        {
+            string jsonRequest = null;
+
+            var httpClient = GetHttpClient(responseStatusCode, responseJson, "/v1/images/generations", "https://api.openai.com", (request) =>
+            {
+                jsonRequest = request.Content.ReadAsStringAsync().Result;
+            });
+
+            var service = new ImageService(httpClient);
+
+            var response = await service.Genearate("A cute baby sea otter", o => {
+                o.User = "test";
+                o.N = 2;
+                o.Size = "1024x1024";
+            });
+
+            Assert.That(jsonRequest.Contains(@"""user"":""test"""));
+            Assert.That(jsonRequest.Contains(@"""size"":""1024x1024"""));
+            Assert.That(jsonRequest.Contains(@"""n"":2"));
+            Assert.That(jsonRequest.Contains(@"""prompt"":""A cute baby sea otter"""));
+
+            Assert.That(response.Result?.Data?.Count() == 2, Is.EqualTo(isSuccess));
+
+            Assert.NotNull(jsonRequest);
+
+            AssertResponse(response, isSuccess, errorMessage, responseStatusCode);
         }
     }
 }

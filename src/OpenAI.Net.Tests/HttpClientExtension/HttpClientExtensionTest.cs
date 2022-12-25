@@ -11,7 +11,6 @@ namespace OpenAI.Net.Tests.HttpClientTests
 {
     internal class HttpClientExtensionTest
     {
-        //QQQ Change this to test model 
         const string jsonResponseString = @"{
                 ""id"": ""1"",
                 ""name"": ""test""
@@ -33,7 +32,7 @@ namespace OpenAI.Net.Tests.HttpClientTests
         [TestCase(HttpStatusCode.OK, true, false, null, "https://api.openai.com/v1/completions", null, null, jsonResponseString, false, Description = "Null Filename is defaulted")]
         public async Task Test_OperationGetFileResult(HttpStatusCode httpStatusCode, bool isSuccess, bool resultIsNull, string fileName, string url, string exceptionMessage, string errorMessage, string jsonResult, bool errorResponseIsSet)
         {
-            var imageEditRequest = new ImageEditRequest("a baby fish", new Models.FileContentInfo(new byte[] { 1 }, fileName));
+            var imageEditRequest = new ImageEditRequest("a baby fish", new Models.FileContentInfo(new byte[] { 1 }, fileName??"FileNameTest"));
             var formDataContent = imageEditRequest.ToMultipartFormDataContent();
             formDataContent.Headers.ContentDisposition = new System.Net.Http.Headers.ContentDispositionHeaderValue("form-data");
             if (fileName != null)
@@ -56,7 +55,7 @@ namespace OpenAI.Net.Tests.HttpClientTests
                .ReturnsAsync(() => res);
 
             var httpClient = new HttpClient(handlerMock.Object);
-            var response = await httpClient.OperationGetFileResult<ErrorResponse>(url);
+            var response = await httpClient.GetFile<ErrorResponse>(url);
 
             Assert.That(response.IsSuccess, Is.EqualTo(isSuccess), "IsSuccess not set correctly for successfull operation");
             Assert.That(response.Result == null, Is.EqualTo(resultIsNull), "Result object was null");
@@ -88,7 +87,7 @@ namespace OpenAI.Net.Tests.HttpClientTests
                .ReturnsAsync(() => res);
 
             var httpClient = new HttpClient(handlerMock.Object);
-            var response = await httpClient.OperationDeleteResult<TestModelResponse, ErrorResponse>(url);
+            var response = await httpClient.Delete<TestModelResponse, ErrorResponse>(url);
 
             Assert.That(response.IsSuccess, Is.EqualTo(isSuccess), "IsSuccess not set correctly for successfull operation");
             Assert.That(response.Result == null, Is.EqualTo(resultIsNull), "Result object was null");
@@ -119,7 +118,7 @@ namespace OpenAI.Net.Tests.HttpClientTests
                .ReturnsAsync(() => res);
 
             var httpClient = new HttpClient(handlerMock.Object);
-            var response = await httpClient.OperationGetResult<TestModelResponse, ErrorResponse>(url);
+            var response = await httpClient.Get<TestModelResponse, ErrorResponse>(url);
 
             Assert.That(response.IsSuccess, Is.EqualTo(isSuccess), "IsSuccess not set correctly for successfull operation");
             Assert.That(response.Result == null, Is.EqualTo(resultIsNull), "Result object was null");
@@ -153,7 +152,7 @@ namespace OpenAI.Net.Tests.HttpClientTests
 
             var httpClient = new HttpClient(handlerMock.Object) { BaseAddress = new Uri("https://api.openai.com") };
             var model = new TestModel() { Id = requestId };
-            var response = await httpClient.OperationPostResult<TestModelResponse, ErrorResponse>(url, model);
+            var response = await httpClient.Post<TestModelResponse, ErrorResponse>(url, model);
 
             Assert.That(response.IsSuccess, Is.EqualTo(isSuccess), "IsSuccess not set correctly for successfull operation");
             Assert.That(response.Result == null, Is.EqualTo(resultIsNull), "Result object was null");
@@ -187,7 +186,7 @@ namespace OpenAI.Net.Tests.HttpClientTests
             var httpClient = new HttpClient(handlerMock.Object);
             
             var model = new TestModel() { Id = requestId };
-            var response = await httpClient.OperationPostFormResult<TestModelResponse, ErrorResponse>(url, model);
+            var response = await httpClient.PostForm<TestModelResponse, ErrorResponse>(url, model);
 
             Assert.That(response.IsSuccess, Is.EqualTo(isSuccess), "IsSuccess not set correctly for successfull operation");
             Assert.That(response.Result == null, Is.EqualTo(resultIsNull), "Result object was null");
@@ -228,7 +227,7 @@ namespace OpenAI.Net.Tests.HttpClientTests
             var stringContent = stringValue.ToHttpContent();
             var stringRead = await stringContent.ReadAsStringAsync();
 
-            var testNull  = HttpClientExtensions.ToHttpContent(null);
+            var testNull  = ObjectExtensions.ToHttpContent(null);
             var testNullRead = await testNull.ReadAsStringAsync();
 
             Assert.NotNull(bytesContent);
