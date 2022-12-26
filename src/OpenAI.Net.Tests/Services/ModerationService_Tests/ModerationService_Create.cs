@@ -46,7 +46,7 @@ namespace OpenAI.Net.Tests.Services.ModerationService_Tests
             var request = new ModerationRequest("input text") { Model = "test" };
             var response = await service.Create(request);
 
-            Assert.That(request.Input, Is.EqualTo("input text"));
+            Assert.That(request.Input, Is.EqualTo("input text".ToList()));
             Assert.That(response.Result?.Results.Length > 0, Is.EqualTo(isSuccess));
             Assert.That(response.Result?.Id != null, Is.EqualTo(isSuccess));
             Assert.That(response.Result?.Model != null, Is.EqualTo(isSuccess));
@@ -76,7 +76,7 @@ namespace OpenAI.Net.Tests.Services.ModerationService_Tests
             var httpClient = GetHttpClient(responseStatusCode, responseJson, "/v1/moderations");
 
             var service = new ModerationService(httpClient);
-            var request = new ModerationListRequest(new List<string>() { "input text" }) { Model = "test" };
+            var request = new ModerationRequest(new List<string>() { "input text" }) { Model = "test" };
             var response = await service.Create(request);
 
             Assert.That(request.Input.FirstOrDefault(), Is.EqualTo("input text"));
@@ -114,7 +114,7 @@ namespace OpenAI.Net.Tests.Services.ModerationService_Tests
             var service = new ModerationService(httpClient);
             var response = await service.Create("input text", "test");
 
-            Assert.That(jsonRequest.Contains(@"""input"":""input text"""));
+            Assert.That(jsonRequest.Contains(@"""input"":[""input text""]"));
             Assert.That(jsonRequest.Contains(@"""model"":""test"""));
 
             Assert.That(response.Result?.Results.Length > 0, Is.EqualTo(isSuccess));

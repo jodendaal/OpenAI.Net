@@ -17,18 +17,7 @@ namespace OpenAI.Net.Services
             return HttpClient.Post<TextCompletionResponse, ErrorResponse>("v1/completions", request, JsonSerializerOptions);
         }
 
-        public Task<OpenAIHttpOperationResult<TextCompletionResponse, ErrorResponse>> Get(TextCompletionListRequest request)
-        {
-            return HttpClient.Post<TextCompletionResponse, ErrorResponse>("v1/completions", request, JsonSerializerOptions);
-        }
-
         public IAsyncEnumerable<OpenAIHttpOperationResult<TextCompletionResponse, ErrorResponse>> GetStream(TextCompletionRequest request)
-        {
-            request.Stream = true;
-            return HttpClient.PostStream<TextCompletionResponse, ErrorResponse>("v1/completions", request, JsonSerializerOptions);
-        }
-
-        public IAsyncEnumerable<OpenAIHttpOperationResult<TextCompletionResponse, ErrorResponse>> GetStream(TextCompletionListRequest request)
         {
             request.Stream = true;
             return HttpClient.PostStream<TextCompletionResponse, ErrorResponse>("v1/completions", request, JsonSerializerOptions);
