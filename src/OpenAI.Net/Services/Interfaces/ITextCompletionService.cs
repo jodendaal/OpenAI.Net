@@ -19,16 +19,6 @@ namespace OpenAI.Net.Services.Interfaces
         /// <summary>
         /// <inheritdoc cref="ITextCompletionService"/>
         /// </summary>
-        Task<OpenAIHttpOperationResult<TextCompletionResponse, ErrorResponse>> Get(TextCompletionListRequest request);
-
-        /// <summary>
-        /// <inheritdoc cref="ITextCompletionService"/>
-        /// </summary>
         IAsyncEnumerable<OpenAIHttpOperationResult<TextCompletionResponse, ErrorResponse>> GetStream(TextCompletionRequest request);
-
-        /// <summary>
-        /// <inheritdoc cref="ITextCompletionService"/>
-        /// </summary>
-        IAsyncEnumerable<OpenAIHttpOperationResult<TextCompletionResponse, ErrorResponse>> GetStream(TextCompletionListRequest request);
     }
 }

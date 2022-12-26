@@ -4,14 +4,21 @@ using System.Text.Json.Serialization;
 namespace OpenAI.Net.Models.Requests
 {
 
-    public class TextCompletionRequestBase<T>
-    { 
-      /// <summary>
-      /// The prompt(s) to generate completions for, encoded as a string, array of strings, array of tokens, or array of token arrays. <br/>
-      /// Note that<|endoftext|> is the document separator that the model sees during training, so if a prompt is not specified the model will generate as if from the beginning of a new document.<br/>
-      /// <see href="https://beta.openai.com/docs/api-reference/completions/create#completions/create-prompt" />
-      /// </summary>
-        public T Prompt { get; set; }
+    public class TextCompletionRequest
+    {
+        public TextCompletionRequest(string model, IList<string> prompt)
+        {
+            Model = model;
+            Prompt = prompt;
+        }
+        public TextCompletionRequest(string model, string prompt) : this(model, prompt.ToList()) { }
+
+        /// <summary>
+        /// The prompt(s) to generate completions for, encoded as a string, array of strings, array of tokens, or array of token arrays. <br/>
+        /// Note that<|endoftext|> is the document separator that the model sees during training, so if a prompt is not specified the model will generate as if from the beginning of a new document.<br/>
+        /// <see href="https://beta.openai.com/docs/api-reference/completions/create#completions/create-prompt" />
+        /// </summary>
+        public IList<string> Prompt { get; set; }
 
         /// <summary>
         /// ID of the model to use.<br/>
@@ -88,7 +95,7 @@ namespace OpenAI.Net.Models.Requests
         /// The returned text will not contain the stop sequence. <br/>
         /// <see href="https://beta.openai.com/docs/api-reference/completions/create#completions/create-stop" />
         /// </summary>
-        public string? Stop { get; set; }
+        public IList<string>? Stop { get; set; }
 
         /// <summary>
         /// Number between -2.0 and 2.0. <br/>
@@ -127,23 +134,5 @@ namespace OpenAI.Net.Models.Requests
         /// A unique identifier representing your end-user, which can help OpenAI to monitor and detect abuse. <a href="https://beta.openai.com/docs/guides/safety-best-practices/end-user-ids">Learn more</a>.
         /// </summary>
         public string User { get; set; }
-    }
-
-    public class TextCompletionRequest : TextCompletionRequestBase<string>
-    {
-        public TextCompletionRequest(string model, string prompt)
-        {
-            Model = model;
-            Prompt = prompt;
-        }
-    }
-
-    public class TextCompletionListRequest: TextCompletionRequestBase<IList<string>>
-    {
-        public TextCompletionListRequest(string model, IList<string> prompt)
-        {
-            Model = model;
-            Prompt = prompt;
-        }
     }
 }

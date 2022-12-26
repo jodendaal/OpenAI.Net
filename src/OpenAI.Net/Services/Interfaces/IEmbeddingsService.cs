@@ -17,12 +17,5 @@ namespace OpenAI.Net.Services.Interfaces
         /// <param name="model"></param>
         /// <returns></returns>
         Task<OpenAIHttpOperationResult<EmbeddingsResponse, ErrorResponse>> Create(EmbeddingsRequest model);
-
-        /// <summary>
-        /// Creates an embedding vector representing the input text.
-        /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
-        Task<OpenAIHttpOperationResult<EmbeddingsResponse, ErrorResponse>> Create(EmbeddingsListRequest model);
     }
 }

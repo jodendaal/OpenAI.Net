@@ -13,7 +13,7 @@ namespace OpenAI.Net
         /// </summary>
         public static Task<OpenAIHttpOperationResult<ModerationResponse, ErrorResponse>> Create(this IModerationService service, string input,string model)
         {
-            var request = new ModerationRequest(input) { Model = model };
+            var request = new ModerationRequest(input.ToList()) { Model = model };
             return service.Create(request);
         }
 
@@ -22,7 +22,7 @@ namespace OpenAI.Net
         /// </summary>
         public static Task<OpenAIHttpOperationResult<ModerationResponse, ErrorResponse>> Create(this IModerationService service, IList<string> input, string model)
         {
-            var request = new ModerationListRequest(input) { Model = model };
+            var request = new ModerationRequest(input) { Model = model };
             return service.Create(request);
         }
     }

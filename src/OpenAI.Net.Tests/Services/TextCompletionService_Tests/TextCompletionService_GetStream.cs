@@ -117,7 +117,7 @@ namespace OpenAI.Net.Tests.Services.TextCompletionService_Tests
 
             var service = new TextCompletionService(httpClient);
 
-            var request = new TextCompletionListRequest(modelName, new List<string>() { "Say this is a test" });
+            var request = new TextCompletionRequest(modelName, new List<string>() { "Say this is a test" });
             var itemCount = 0;
             var exceptionoccured = false;
             try

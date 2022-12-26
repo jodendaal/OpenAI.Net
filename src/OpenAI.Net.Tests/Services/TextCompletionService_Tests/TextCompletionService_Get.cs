@@ -63,7 +63,7 @@ namespace OpenAI.Net.Tests.Services.TextCompletionService_Tests
             });
 
             var service = new TextCompletionService(httpClient);
-            var request = new TextCompletionListRequest("text-davinci-003", new List<string>() { "Say this is a test" });
+            var request = new TextCompletionRequest("text-davinci-003", new List<string>() { "Say this is a test" });
             var response = await service.Get(request);
 
             Assert.That(response.Result?.Choices?.Count() == 1, Is.EqualTo(isSuccess));

@@ -22,10 +22,5 @@ namespace OpenAI.Net.Services
         {
             return HttpClient.Post<EmbeddingsResponse, ErrorResponse>($"v1/embeddings", model, JsonSerializerOptions);
         }
-
-        public Task<OpenAIHttpOperationResult<EmbeddingsResponse, ErrorResponse>> Create(EmbeddingsListRequest model)
-        {
-            return HttpClient.Post<EmbeddingsResponse, ErrorResponse>($"v1/embeddings", model, JsonSerializerOptions);
-        }
     }
 }

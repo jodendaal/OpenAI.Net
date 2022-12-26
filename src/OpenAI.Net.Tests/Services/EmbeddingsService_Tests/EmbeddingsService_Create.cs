@@ -55,7 +55,7 @@ namespace OpenAI.Net.Tests.Services.EmbeddingsService_Tests
             var httpClient = GetHttpClient(responseStatusCode, responseJson, "/v1/embeddings");
 
             var service = new EmbeddingsService(httpClient);
-            var request = new EmbeddingsListRequest(new List<string>() { "The food was delicious and the waiter..." }, "text-embedding-ada-002") { User = "test" };
+            var request = new EmbeddingsRequest(new List<string>() { "The food was delicious and the waiter..." }, "text-embedding-ada-002") { User = "test" };
             var response = await service.Create(request);
 
             Assert.That(response.Result?.Data?.Length > 0, Is.EqualTo(isSuccess));
@@ -78,7 +78,7 @@ namespace OpenAI.Net.Tests.Services.EmbeddingsService_Tests
             var service = new EmbeddingsService(httpClient);
             var response = await service.Create("The food was delicious and the waiter...", "text-embedding-ada-002", "test");
 
-            Assert.That(jsonRequest.Contains(@"""input"":""The food was delicious and the waiter..."""));
+            Assert.That(jsonRequest.Contains(@"""input"":[""The food was delicious and the waiter...""]"));
             Assert.That(jsonRequest.Contains(@"""user"":""test"""));
 
 
@@ -126,7 +126,7 @@ namespace OpenAI.Net.Tests.Services.EmbeddingsService_Tests
             var service = new EmbeddingsService(httpClient);
             var response = await service.Create("The food was delicious and the waiter...",  "test");
 
-            Assert.That(jsonRequest.Contains(@"""input"":""The food was delicious and the waiter..."""));
+            Assert.That(jsonRequest.Contains(@"""input"":[""The food was delicious and the waiter...""]"));
             Assert.That(jsonRequest.Contains(@"""user"":""test"""));
 
 
