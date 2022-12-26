@@ -31,7 +31,7 @@ N.B We recommened using environment variables, configuration files or secret fil
 
 # Example Usage
 
-You can view examples of a console, web application and Blazor app using th streaming API [here](https://github.com/jodendaal/OpenAI.Net/tree/main/examples). 
+You can view examples of a console, web application and Blazor app using the streaming API [here](https://github.com/jodendaal/OpenAI.Net/tree/main/examples). 
 
 You can also have a look at the Integration Tests for usage examples [here](https://github.com/jodendaal/OpenAI.Net/tree/main/src/OpenAI.Net.Integration.Tests).
 
