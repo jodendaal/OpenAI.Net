@@ -1,0 +1,32 @@
+﻿@page
+@model GenerateImageModel
+@{
+    ViewData["Title"] = "Search";
+}
+
+<h1>Generate Image</h1>
+
+@if(!string.IsNullOrEmpty(Model.ErrorMessage))
+{
+    <p>@Model.ErrorMessage</p>
+}
+
+
+
+<form method="post">
+    <div>
+        <label>Max Results</label>
+        <input asp-for="MaxResults" />
+    </div>
+    <label>Enter Search Term</label>
+    <input asp-for="SearchText" />
+    <button type="submit">Search</button>
+</form>
+
+
+@foreach(var url in Model.Results)
+{
+    <div>
+        <img src="@url" width="300" height="300"></img>
+    </div>
+}
