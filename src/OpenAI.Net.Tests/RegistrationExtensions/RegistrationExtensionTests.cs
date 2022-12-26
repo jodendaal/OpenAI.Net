@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using OpenAI.Net.Extensions;
 using OpenAI.Net.Services;
 
 namespace OpenAI.Net.Tests.RegistrationExtensions

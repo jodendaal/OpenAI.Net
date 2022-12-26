@@ -1,5 +1,4 @@
-﻿using OpenAI.Net.Models.Requests;
-using System.Net;
+﻿using System.Net;
 
 namespace OpenAI.Net.Integration.Tests
 {

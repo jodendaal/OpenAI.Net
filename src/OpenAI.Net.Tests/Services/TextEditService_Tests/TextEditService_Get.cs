@@ -1,9 +1,7 @@
-﻿using Moq.Protected;
-using Moq;
+﻿using Moq;
 using OpenAI.Net.Models.Requests;
 using System.Net;
 using OpenAI.Net.Services;
-using OpenAI.Net.Extensions;
 
 namespace OpenAI.Net.Tests.Services.TextEditService_Tests
 {

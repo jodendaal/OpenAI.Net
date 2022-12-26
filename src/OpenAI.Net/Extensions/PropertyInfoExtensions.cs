@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using System.Text.Json.Serialization;
 
-namespace OpenAI.Net.Extensions
+namespace OpenAI.Net
 {
     public static class PropertyInfoExtensions
     {

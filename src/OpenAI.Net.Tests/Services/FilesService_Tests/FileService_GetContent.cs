@@ -1,8 +1,5 @@
-﻿using Moq.Protected;
-using Moq;
-using OpenAI.Net.Models.Requests;
+﻿using OpenAI.Net.Models.Requests;
 using System.Net;
-using OpenAI.Net.Extensions;
 using OpenAI.Net.Services;
 
 namespace OpenAI.Net.Tests.Services.FilesService_Tests

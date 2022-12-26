@@ -1,10 +1,6 @@
-﻿using Moq.Protected;
-using Moq;
-using OpenAI.Net.Models.Requests;
+﻿using OpenAI.Net.Models.Requests;
 using System.Net;
-using System.Reflection;
 using OpenAI.Net.Services;
-using OpenAI.Net.Extensions;
 
 namespace OpenAI.Net.Tests.Services.TextCompletionService_Tests
 {

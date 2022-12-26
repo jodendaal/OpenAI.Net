@@ -1,7 +1,4 @@
-﻿using Moq.Protected;
-using Moq;
-using System.Net;
-using OpenAI.Net.Models.Requests;
+﻿using System.Net;
 using OpenAI.Net.Services;
 
 namespace OpenAI.Net.Tests.Services.FineTuneService_Tests

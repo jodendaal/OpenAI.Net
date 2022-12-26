@@ -1,13 +1,4 @@
-﻿using Moq.Protected;
-using Moq;
-using OpenAI.Net.Models.Requests;
-using System.Net;
-using OpenAI.Net.Services;
-using OpenAI.Net.Extensions;
-using OpenAI.Net.Models.OperationResult;
-using OpenAI.Net.Models.Responses;
-using OpenAI.Net.Models.Responses.Common;
-using OpenAI.Net.Models;
+﻿using OpenAI.Net.Models;
 
 namespace OpenAI.Net.Tests.Services.FilesService_Tests
 {

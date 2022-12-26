@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using OpenAI.Net.Extensions;
 
 namespace OpenAI.Net.Integration.Tests
 {

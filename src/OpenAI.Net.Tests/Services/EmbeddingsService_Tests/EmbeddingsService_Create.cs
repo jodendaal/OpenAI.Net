@@ -1,10 +1,7 @@
-﻿using Moq.Protected;
-using Moq;
-using System.Net;
+﻿using System.Net;
 using OpenAI.Net.Models.Requests;
 using OpenAI.Net.Services;
-using OpenAI.Net.Models.Responses;
-using OpenAI.Net.Extensions;
+
 
 namespace OpenAI.Net.Tests.Services.EmbeddingsService_Tests
 {
@@ -38,7 +35,7 @@ namespace OpenAI.Net.Tests.Services.EmbeddingsService_Tests
         public async Task Create(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
         {
             var httpClient = GetHttpClient(responseStatusCode, responseJson, "/v1/embeddings");
-
+            
             var service = new EmbeddingsService(httpClient);
             var request = new EmbeddingsRequest("The food was delicious and the waiter...", "text-embedding-ada-002") { User = "test" };
             var response = await service.Create(request);
