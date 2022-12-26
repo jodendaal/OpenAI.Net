@@ -1,0 +1,71 @@
+﻿@page "/search"
+
+<PageTitle>Search</PageTitle>
+
+@using BlazorApp.Data
+@using OpenAI.Net
+@inject IOpenAIService OpenAIService
+
+<h1>Search OpenAI</h1>
+
+<p>This component demonstrates fetching data from a service using the stream API.</p>
+<p>Stream callbacks : @loopCount</p>
+
+
+<EditForm Model="@searchModel" OnValidSubmit="@SearchText">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <InputText id="name" @bind-Value="searchModel.SearchText" />
+    <InputNumber id="noOfResults" @bind-Value="searchModel.NoOfResults" />
+    <InputNumber id="maxTokens" @bind-Value="searchModel.MaxTokens" />
+
+    <button type="submit">Search</button>
+</EditForm>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Results</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var result in results)
+        {
+            <tr>
+                <td>@result</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+@code {
+    private SearchModel searchModel = new()
+    {
+        MaxTokens =200,
+        NoOfResults =2,
+        SearchText = "write me a poem about christmas"
+    };
+    private int loopCount = 0;
+    private string[] results = new string[0];
+
+    private async Task SearchText()
+    {
+        results = new string[searchModel.NoOfResults];
+
+        await foreach (var result in OpenAIService.TextCompletion.GetStream(searchModel.SearchText, o =>
+        {
+            o.N = searchModel.NoOfResults;
+            o.MaxTokens = searchModel.MaxTokens;
+        }))
+        {
+            var index = result.Result.Choices[0].Index;
+            results[index] += result.Result.Choices[0].Text;
+
+            loopCount++;
+            StateHasChanged();
+        }
+    }
+   
+}
