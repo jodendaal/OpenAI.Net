@@ -39,7 +39,7 @@
 name: OpenAI.NET Build
 
 on:
-  push:
+  pull_request:
     branches: [ "main" ]
 
 jobs:
@@ -80,6 +80,10 @@ jobs:
       run: dotnet tool install coverlet.console --tool-path src/OpenAI.Net.Tests
       working-directory: src/OpenAI.Net.Tests
 
+    # Build
+    - name: Build
+      run: dotnet build src/OpenAI.Net.sln --configuration Release 
+
     # Execute all unit tests in the solution
     - name: Execute unit tests
       run: dotnet test src/OpenAI.Net.Tests/OpenAI.Net.Tests.csproj --configuration Release /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
@@ -91,38 +95,5 @@ jobs:
       
     # Stryker
     - name: Run Stryker
-      run: src/OpenAI.Net.Tests/dotnet-stryker --reporter "dashboard" --version "main" --dashboard-api-key ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
+      run: src/OpenAI.Net.Tests/dotnet-stryker
       working-directory: src/OpenAI.Net.Tests
-
-
-
-    # Build
-    - name: Build
-      run: dotnet build src/OpenAI.Net.sln --configuration Release 
-
-    - name: Publish NuGet
-      run: dotnet nuget push src/OpenAI.Net/bin/Release/**\*.nupkg --skip-duplicate --api-key ${{ secrets.NUGET_APIKEY }} --source https://api.nuget.org/v3/index.json
-
-    - name: Create Test Coverage Badge
-      uses: simon-k/dotnet-code-coverage-badge@v1.0.0
-      id: create_coverage_badge
-      with:
-        label: Unit Test Coverage
-        color: brightgreen
-        path: src\OpenAI.Net.Tests\coverage.opencover.xml
-        gist-filename: OpenAI.Net-code-coverage.json
-        gist-id: 1823aaf39c6273b92442849479616daf
-        gist-auth-token: ${{ secrets.GIST_AUTH_TOKEN }}   
-            
-    - name: Print code coverage
-      run: echo "Code coverage percentage ${{steps.create_coverage_badge.outputs.percentage}}%"
-
-    - name: Print badge data
-      run: echo "Badge data ${{steps.test_step.outputs.badge}}"
-  
-    # Upload the MSIX package: https://github.com/marketplace/actions/upload-a-build-artifact
-   # - name: Upload build artifacts
-    #  uses: actions/upload-artifact@v3
-   #   with:
-     #   name: MSIX Package
-     #   path: ${{ env.Wap_Project_Directory }}\AppPackages
