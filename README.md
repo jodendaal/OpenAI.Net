@@ -18,56 +18,65 @@ Install package [Nuget package](https://www.nuget.org/packages/TimSoft.OpenAI.Ne
 Install-Package OpenAI.Net.Client
 ```
 
-Register services using the extension method
+Register services using the provided extension methods
 
 ```csharp
- services.AddOpenAIServices(apiKey);
- OR
- services.AddOpenAIServices(apiKey, organizationId);
- OR
- services.AddOpenAIServices(apiKey, organizationId, apiUrl);
+services.AddOpenAIServices(options => {
+    options.ApiKey = builder.Configuration["OpenAI:ApiKey"];
+});
 ```
+
 N.B We recommened using environment variables, configuration files or secret file for storing the API key securely. See [here](https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-7.0&tabs=windows) for further details.
 
-Inject the service where you need it.
 
-e.g
+# Example Usage
+
+You can view examples of a console and web application [here](https://github.com/jodendaal/OpenAI.Net/tree/main/examples). 
+
+You can also have a look at the Integration Tests for usage examples [here](https://github.com/jodendaal/OpenAI.Net/tree/main/src/OpenAI.Net.Integration.Tests).
+
+Simple console app usage below.
 
 ```csharp
-    public class MyAwsomeService 
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using OpenAI.Net;
+
+namespace ConsoleApp
+{
+    internal class Program
     {
-        private readonly IOpenAIService _openAIService;
-        private readonly ILogger<MyAwsomeService> _logger;
-
-        public MyAwsomeService(IOpenAIService openAIService,ILogger<MyAwsomeService> logger)
+        static async void Main(string[] args)
         {
-            _openAIService = openAIService;
-            _logger = logger;
-        }
+            using var host = Host.CreateDefaultBuilder(args)
+            .ConfigureServices((builder, services) =>
+            {
+                services.AddOpenAIServices(options => {
+                    options.ApiKey = builder.Configuration["OpenAI:ApiKey"];
+                });
+            })
+            .Build();
 
-        public async Task<TextCompletionResponse> Search()
-        {
-            var response = await _openAIService.TextCompletion.Get("text-davinci-003", "Say this is a test",(o) => {
-                o.MaxTokens = 1024;
-                o.BestOf = 2;
-            });
+            var openAi = host.Services.GetService<IOpenAIService>();
+            var response = await openAi.TextCompletion.Get("How long until we reach mars?");
 
             if (response.IsSuccess)
             {
-                return response.Result;
+                foreach(var result in response.Result.Choices)
+                {
+                    Console.WriteLine(result.Text);
+                }
             }
             else
             {
-                _logger.LogError(response.Exception, response.ErrorMessage, response.ErrorResponse);
+                Console.WriteLine($"{response.ErrorMessage}");
             }
-
-            return new TextCompletionResponse();
         }
     }
-
-
+}
 ```
 
+# Supported API's
 ### Full support of all current API's
 -   [x] [Models](https://beta.openai.com/docs/api-reference/models)
     -   [x] [List Models](https://beta.openai.com/docs/api-reference/models/list)

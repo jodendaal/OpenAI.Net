@@ -1,0 +1,34 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Search";
+}
+
+<h1>Text Completion</h1>
+
+@if(!string.IsNullOrEmpty(Model.ErrorMessage))
+{
+    <p>@Model.ErrorMessage</p>
+}
+
+
+
+<form method="post">
+    <div>
+        <label>Max Results</label>
+        <input asp-for="MaxResults" />
+        <label>Max Tokens</label>
+        <input asp-for="MaxTokens" />
+    </div>
+    <label>Enter Search Term</label>
+    <input asp-for="SearchText" />
+    <button type="submit">Search</button>
+</form>
+
+
+@foreach(var result in Model.Results)
+{
+    <div>
+        <p>@result</p>
+    </div>
+}

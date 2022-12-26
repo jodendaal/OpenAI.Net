@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using OpenAI.Net.Models;
 using OpenAI.Net.Services;
 using OpenAI.Net.Services.Interfaces;
 
@@ -6,6 +7,20 @@ namespace OpenAI.Net
 {
     public static class RegistrationExtensions
     {
+        public static IServiceCollection AddOpenAIServices(this IServiceCollection services, Action<OpenAIServiceRegistrationOptions> options)
+        {
+            var optionsInstance = new OpenAIServiceRegistrationOptions();
+            options.Invoke(optionsInstance);
+
+            OpenAIDefaults.ApiUrl = optionsInstance.ApiUrl;
+            OpenAIDefaults.TextCompletionModel = optionsInstance.Defaults.TextCompletionModel;
+            OpenAIDefaults.TextEditModel = optionsInstance.Defaults.TextEditModel;
+            OpenAIDefaults.EmbeddingsModel = optionsInstance.Defaults.EmbeddingsModel;
+
+            services.AddOpenAIServices(optionsInstance.ApiKey, optionsInstance.OrganizationId, optionsInstance.ApiUrl);
+            return services;
+        }
+
         public static IServiceCollection AddOpenAIServices(this IServiceCollection services,string apiKey, string? organization = null,string apiUrl = "https://api.openai.com/")
         {
             Action<HttpClient> configureClient = (c) => {
