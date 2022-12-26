@@ -9,80 +9,60 @@ namespace OpenAI.Net.Extensions
     {
         public static async Task<OpenAIHttpOperationResult<T, TError>> PostForm<T, TError>(this HttpClient httpClient, string? path, Object @object)
         {
-            try
+            return await ErrorHandler(async () =>
             {
                 @object.Validate();
                 var formData = @object.ToMultipartFormDataContent();
 
                 var response = await httpClient.PostAsync(path, formData);
                 return await response.HandleResponse<T, TError>();
-            }
-            catch (Exception ex)
-            {
-                return new OpenAIHttpOperationResult<T, TError>(ex, System.Net.HttpStatusCode.BadRequest);
-            }
+            });
         }
 
         public static async Task<OpenAIHttpOperationResult<T, TError>> Delete<T, TError>(this HttpClient httpClient, string? path)
         {
-            try
+            return await ErrorHandler(async () =>
             {
                 var response = await httpClient.DeleteAsync(path);
                 return await response.HandleResponse<T, TError>();
-            }
-            catch (Exception ex)
-            {
-                return new OpenAIHttpOperationResult<T, TError>(ex, System.Net.HttpStatusCode.BadRequest);
-            }
+            });
         }
 
         public static async Task<OpenAIHttpOperationResult<T, TError>> Get<T, TError>(this HttpClient httpClient, string? path)
         {
-            try
+            return await ErrorHandler(async () =>
             {
                 var response = await httpClient.GetAsync(path);
                 return await response.HandleResponse<T, TError>();
-            }
-            catch (Exception ex)
-            {
-                return new OpenAIHttpOperationResult<T, TError>(ex, System.Net.HttpStatusCode.BadRequest);
-            }
+            });
         }
 
         public static async Task<OpenAIHttpOperationResult<FileContentInfo,TError>> GetFile<TError>(this HttpClient httpClient, string? path)
         {
-            try
+            return await ErrorHandler(async () =>
             {
                 var response = await httpClient.GetAsync(path);
                 if (response.IsSuccessStatusCode)
                 {
                     var bytes = await response.Content.ReadAsByteArrayAsync();
-                    var fileName = response.Content?.Headers?.ContentDisposition?.FileName?.Replace(@"""","");
+                    var fileName = response.Content?.Headers?.ContentDisposition?.FileName?.Replace(@"""", "");
                     var fileContents = new FileContentInfo(bytes, fileName ?? "file");
                     return new OpenAIHttpOperationResult<FileContentInfo, TError>(fileContents, response.StatusCode);
                 }
 
                 var errorResponse = await response.Content.ReadAsStringAsync();
                 return new OpenAIHttpOperationResult<FileContentInfo, TError>(new Exception(response.StatusCode.ToString(), new Exception(errorResponse)), response.StatusCode, errorResponse);
-            }
-            catch (Exception ex)
-            {
-                return new OpenAIHttpOperationResult<FileContentInfo, TError>(ex, System.Net.HttpStatusCode.BadRequest);
-            }
+            });
         }
 
-        public static async Task<OpenAIHttpOperationResult<T,TError>> Post<T, TError>(this HttpClient httpClient,string? path, Object @object, JsonSerializerOptions? jsonSerializerOptions = null)
+        public static async Task<OpenAIHttpOperationResult<T, TError>> Post<T, TError>(this HttpClient httpClient, string? path, Object @object, JsonSerializerOptions? jsonSerializerOptions = null)
         {
-            try
+            return await ErrorHandler(async () =>
             {
                 @object.Validate();
                 var response = await httpClient.PostAsJsonAsync(path, @object, jsonSerializerOptions);
                 return await response.HandleResponse<T, TError>();
-            }
-            catch (Exception ex)
-            {
-                return new OpenAIHttpOperationResult<T, TError>(ex, System.Net.HttpStatusCode.BadRequest);
-            }
+            });
         }
 
         public static async IAsyncEnumerable<OpenAIHttpOperationResult<T, TError>> PostStream<T, TError>(this HttpClient httpClient, string? path, Object @object, JsonSerializerOptions? jsonSerializerOptions = null)
@@ -119,6 +99,18 @@ namespace OpenAI.Net.Extensions
 
             var errorResponse = await response.Content.ReadAsStringAsync();
             return new OpenAIHttpOperationResult<T, TError>(new Exception(response.StatusCode.ToString(), new Exception(errorResponse)), response.StatusCode, errorResponse);
+        }
+
+        private static async Task<OpenAIHttpOperationResult<T, TError>> ErrorHandler<T, TError>(Func<Task<OpenAIHttpOperationResult<T, TError>>> func)
+        {
+            try
+            {
+                return await func();
+            }
+            catch (Exception ex)
+            {
+                return new OpenAIHttpOperationResult<T, TError>(ex, System.Net.HttpStatusCode.BadRequest);
+            }
         }
     }
 }
