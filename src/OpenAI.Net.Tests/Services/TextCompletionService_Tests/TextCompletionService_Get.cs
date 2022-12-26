@@ -31,8 +31,8 @@ namespace OpenAI.Net.Tests.Services.TextCompletionService_Tests
         {
         }
 
-        [TestCase(true, HttpStatusCode.OK, responseJson, null, Description = "Successfull Request", TestName = "GetStream_When_Success")]
-        [TestCase(false, HttpStatusCode.BadRequest, ErrorResponseJson, "an error occured", Description = "Failed Request", TestName = "GetStream_When_Fail")]
+        [TestCase(true, HttpStatusCode.OK, responseJson, null, Description = "Successfull Request", TestName = "Get_When_Success")]
+        [TestCase(false, HttpStatusCode.BadRequest, ErrorResponseJson, "an error occured", Description = "Failed Request", TestName = "Get_When_Fail")]
         public async Task Get(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
         {
             var jsonRequest = "";
@@ -42,6 +42,28 @@ namespace OpenAI.Net.Tests.Services.TextCompletionService_Tests
 
             var service = new TextCompletionService(httpClient);
             var request = new TextCompletionRequest("text-davinci-003", "Say this is a test");
+            var response = await service.Get(request);
+
+            Assert.That(response.Result?.Choices?.Count() == 1, Is.EqualTo(isSuccess));
+
+            AssertResponse(response, isSuccess, errorMessage, responseStatusCode);
+
+            Assert.NotNull(jsonRequest);
+            Assert.That(jsonRequest.Contains("best_of"), Is.EqualTo(false), "Serialzation options are incorrect, null values should not be serialised");
+            Assert.That(jsonRequest.Contains("model", StringComparison.OrdinalIgnoreCase), Is.EqualTo(true), "Serialzation options are incorrect, camel case should be used");
+        }
+
+        [TestCase(true, HttpStatusCode.OK, responseJson, null, Description = "Successfull Request", TestName = "GetList_When_Success")]
+        [TestCase(false, HttpStatusCode.BadRequest, ErrorResponseJson, "an error occured", Description = "Failed Request", TestName = "GetList_When_Fail")]
+        public async Task GetList(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
+        {
+            var jsonRequest = "";
+            var httpClient = GetHttpClient(responseStatusCode, responseJson, "/v1/completions", "https://api.openai.com", (request) => {
+                jsonRequest = jsonRequest = request.Content.ReadAsStringAsync().Result;
+            });
+
+            var service = new TextCompletionService(httpClient);
+            var request = new TextCompletionListRequest("text-davinci-003", new List<string>() { "Say this is a test" });
             var response = await service.Get(request);
 
             Assert.That(response.Result?.Choices?.Count() == 1, Is.EqualTo(isSuccess));
@@ -81,6 +103,33 @@ namespace OpenAI.Net.Tests.Services.TextCompletionService_Tests
             Assert.That(jsonRequest.Contains("model", StringComparison.OrdinalIgnoreCase), Is.EqualTo(true), "Serialzation options are incorrect, camel case should be used");
         }
 
+        [TestCase(true, HttpStatusCode.OK, responseJson, null, Description = "Successfull Request", TestName = "GetListExtensionWithOptions_When_Success")]
+        [TestCase(false, HttpStatusCode.BadRequest, ErrorResponseJson, "an error occured", Description = "Failed Request", TestName = "GetListExtensionWithOptions_When_Fail")]
+        public async Task GetListExtensionWithOptions(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
+        {
+            var jsonRequest = "";
+            var httpClient = GetHttpClient(responseStatusCode, responseJson, "/v1/completions", "https://api.openai.com", (request) => {
+                jsonRequest = jsonRequest = request.Content.ReadAsStringAsync().Result;
+            });
+
+            var service = new TextCompletionService(httpClient);
+            var response = await service.Get("text-davinci-003", new List<string>() { "Say this is a test"}, (o) => {
+                o.Echo = true;
+                o.LogProbs = 99;
+            });
+
+            Assert.That(jsonRequest.Contains(@"""logprobs"":99"));
+            Assert.That(jsonRequest.Contains(@"""echo"":true"));
+
+            Assert.That(response.Result?.Choices?.Count() == 1, Is.EqualTo(isSuccess));
+
+            AssertResponse(response, isSuccess, errorMessage, responseStatusCode);
+
+            Assert.NotNull(jsonRequest);
+            Assert.That(jsonRequest.Contains("best_of"), Is.EqualTo(false), "Serialzation options are incorrect, null values should not be serialised");
+            Assert.That(jsonRequest.Contains("model", StringComparison.OrdinalIgnoreCase), Is.EqualTo(true), "Serialzation options are incorrect, camel case should be used");
+        }
+
         [TestCase(true, HttpStatusCode.OK, responseJson, null, Description = "Successfull Request", TestName = "GetExtensionWithOptions_When_Success")]
         [TestCase(false, HttpStatusCode.BadRequest, ErrorResponseJson, "an error occured", Description = "Failed Request", TestName = "GetExtensionWithOptions_When_Fail")]
         public async Task GetExtensionWithOptionsAndDefaultModel(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
@@ -91,8 +140,34 @@ namespace OpenAI.Net.Tests.Services.TextCompletionService_Tests
             });
 
             var service = new TextCompletionService(httpClient);
-            var request = new TextCompletionRequest("text-davinci-003", "Say this is a test");
             var response = await service.Get("Say this is a test", (o) => {
+                o.Echo = true;
+                o.LogProbs = 99;
+            });
+
+            Assert.That(jsonRequest.Contains(@"""logprobs"":99"));
+            Assert.That(jsonRequest.Contains(@"""echo"":true"));
+
+            Assert.That(response.Result?.Choices?.Count() == 1, Is.EqualTo(isSuccess));
+
+            AssertResponse(response, isSuccess, errorMessage, responseStatusCode);
+
+            Assert.NotNull(jsonRequest);
+            Assert.That(jsonRequest.Contains("best_of"), Is.EqualTo(false), "Serialzation options are incorrect, null values should not be serialised");
+            Assert.That(jsonRequest.Contains("model", StringComparison.OrdinalIgnoreCase), Is.EqualTo(true), "Serialzation options are incorrect, camel case should be used");
+        }
+
+        [TestCase(true, HttpStatusCode.OK, responseJson, null, Description = "Successfull Request", TestName = "GetListExtensionWithOptions_When_Success")]
+        [TestCase(false, HttpStatusCode.BadRequest, ErrorResponseJson, "an error occured", Description = "Failed Request", TestName = "GetListExtensionWithOptions_When_Fail")]
+        public async Task GetListExtensionWithOptionsAndDefaultModel(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
+        {
+            var jsonRequest = "";
+            var httpClient = GetHttpClient(responseStatusCode, responseJson, "/v1/completions", "https://api.openai.com", (request) => {
+                jsonRequest = jsonRequest = request.Content.ReadAsStringAsync().Result;
+            });
+
+            var service = new TextCompletionService(httpClient);
+            var response = await service.Get(new List<string>() { "Say this is a test" }, (o) => {
                 o.Echo = true;
                 o.LogProbs = 99;
             });

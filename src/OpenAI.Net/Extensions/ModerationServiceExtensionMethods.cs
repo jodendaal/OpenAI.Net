@@ -16,5 +16,14 @@ namespace OpenAI.Net
             var request = new ModerationRequest(input) { Model = model };
             return service.Create(request);
         }
+
+        /// <summary>
+        /// <inheritdoc cref="IModerationService"/>
+        /// </summary>
+        public static Task<OpenAIHttpOperationResult<ModerationResponse, ErrorResponse>> Create(this IModerationService service, IList<string> input, string model)
+        {
+            var request = new ModerationListRequest(input) { Model = model };
+            return service.Create(request);
+        }
     }
 }
