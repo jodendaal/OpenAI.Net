@@ -138,7 +138,20 @@ await foreach(var response in service.TextCompletion.GetStream("Say this is a te
     Console.WriteLine(response?.Result?.Choices[0].Text);
 }
 ```
+### Completion with array input
+```csharp
 
+var prompts = new List<string>()
+{
+    "Say this is a test",
+    "Say this is not a test"
+};
+
+var response = await service.TextCompletion.Get(prompts,(o) => {
+                o.MaxTokens = 1024;
+                o.BestOf = 2;
+            });
+```
 
 ### Text Edit
 ```csharp
