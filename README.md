@@ -28,9 +28,14 @@ services.AddOpenAIServices(options => {
 
 N.B We recommened using environment variables, configuration files or secret file for storing the API key securely. See [here](https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-7.0&tabs=windows) for further details.
 
-Use the service where you need it.
 
-e.g
+# Example Usage
+
+You can view examples of a console and web application [here](https://github.com/jodendaal/OpenAI.Net/tree/main/examples). 
+
+You can also have a look at the Integration Tests for usage examples [here](https://github.com/jodendaal/OpenAI.Net/tree/main/src/OpenAI.Net.Integration.Tests).
+
+Simple console app usage below.
 
 ```csharp
 using Microsoft.Extensions.DependencyInjection;
@@ -71,6 +76,7 @@ namespace ConsoleApp
 }
 ```
 
+# Supported API's
 ### Full support of all current API's
 -   [x] [Models](https://beta.openai.com/docs/api-reference/models)
     -   [x] [List Models](https://beta.openai.com/docs/api-reference/models/list)
