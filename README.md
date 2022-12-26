@@ -31,7 +31,7 @@ N.B We recommened using environment variables, configuration files or secret fil
 
 # Example Usage
 
-You can view examples of a console and web application [here](https://github.com/jodendaal/OpenAI.Net/tree/main/examples). 
+You can view examples of a console, web application and Blazor app using th streaming API [here](https://github.com/jodendaal/OpenAI.Net/tree/main/examples). 
 
 You can also have a look at the Integration Tests for usage examples [here](https://github.com/jodendaal/OpenAI.Net/tree/main/src/OpenAI.Net.Integration.Tests).
 
@@ -125,7 +125,7 @@ This should provide confidence in the library going forwards.
 ### Completion
 
 ```csharp
-var response = await service.TextCompletion.Get("text-davinci-003", "Say this is a test",(o) => {
+var response = await service.TextCompletion.Get("Say this is a test",(o) => {
                 o.MaxTokens = 1024;
                 o.BestOf = 2;
             });
@@ -133,7 +133,7 @@ var response = await service.TextCompletion.Get("text-davinci-003", "Say this is
 
 ### Completion Stream
 ```csharp
-await foreach(var response in service.TextCompletion.GetStream(request))
+await foreach(var response in service.TextCompletion.GetStream("Say this is a test"))
 {
     Console.WriteLine(response?.Result?.Choices[0].Text);
 }
@@ -142,7 +142,7 @@ await foreach(var response in service.TextCompletion.GetStream(request))
 
 ### Text Edit
 ```csharp
-var response = await service.TextEdit.Get("text-davinci-edit-001", "Fix the spelling mistakes", "What day of the wek is it?", (o =>{
+var response = await service.TextEdit.Get("Fix the spelling mistakes", "What day of the wek is it?", (o =>{
     o.TopP = 0.1;
     o.Temperature = 100;
 }));
