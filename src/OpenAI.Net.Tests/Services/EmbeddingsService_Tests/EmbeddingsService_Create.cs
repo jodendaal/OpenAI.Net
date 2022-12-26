@@ -71,5 +71,29 @@ namespace OpenAI.Net.Tests.Services.EmbeddingsService_Tests
 
             AssertResponse(response, isSuccess, errorMessage, responseStatusCode);
         }
+
+        [TestCase(true, HttpStatusCode.OK, responseJson, null, TestName = "CreateWithExtension_When_Success")]
+        [TestCase(false, HttpStatusCode.BadRequest, ErrorResponseJson, "an error occured", TestName = "CreateWithExtension_When_Fail")]
+        public async Task CreateWithExtensionAndDefaultModel(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
+        {
+            var jsonRequest = "";
+            var httpClient = GetHttpClient(responseStatusCode, responseJson, "/v1/embeddings", "https://api.openai.com", (request) => {
+                jsonRequest = request.Content.ReadAsStringAsync().Result;
+            });
+
+            var service = new EmbeddingsService(httpClient);
+            var response = await service.Create("The food was delicious and the waiter...",  "test");
+
+            Assert.That(jsonRequest.Contains(@"""input"":""The food was delicious and the waiter..."""));
+            Assert.That(jsonRequest.Contains(@"""user"":""test"""));
+
+
+            Assert.That(response.Result?.Data?.Length > 0, Is.EqualTo(isSuccess));
+            Assert.That(response.Result?.Data?[0]?.Embedding.Length == 3, Is.EqualTo(isSuccess));
+            Assert.That(response.Result?.Object != null, Is.EqualTo(isSuccess));
+            Assert.That(response.Result?.Usage != null, Is.EqualTo(isSuccess));
+
+            AssertResponse(response, isSuccess, errorMessage, responseStatusCode);
+        }
     }
 }

@@ -11,7 +11,9 @@ namespace ConsoleApp
             using var host = Host.CreateDefaultBuilder(args)
             .ConfigureServices((builder, services) =>
             {
-                services.AddOpenAIServices(builder.Configuration["OpenAI:ApiKey"]);
+                services.AddOpenAIServices(options => {
+                    options.ApiKey = builder.Configuration["OpenAI:ApiKey"];
+                });
             })
             .Build();
 

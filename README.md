@@ -18,18 +18,17 @@ Install package [Nuget package](https://www.nuget.org/packages/TimSoft.OpenAI.Ne
 Install-Package OpenAI.Net.Client
 ```
 
-Register services using the extension method
+Register services using the provided extension methods
 
 ```csharp
- services.AddOpenAIServices(apiKey);
- OR
- services.AddOpenAIServices(apiKey, organizationId);
- OR
- services.AddOpenAIServices(apiKey, organizationId, apiUrl);
+services.AddOpenAIServices(options => {
+    options.ApiKey = builder.Configuration["OpenAI:ApiKey"];
+});
 ```
+
 N.B We recommened using environment variables, configuration files or secret file for storing the API key securely. See [here](https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-7.0&tabs=windows) for further details.
 
-Inject the service where you need it.
+Use the service where you need it.
 
 e.g
 
@@ -47,7 +46,9 @@ namespace ConsoleApp
             using var host = Host.CreateDefaultBuilder(args)
             .ConfigureServices((builder, services) =>
             {
-                services.AddOpenAIServices(builder.Configuration["OpenAI:ApiKey"]);
+                services.AddOpenAIServices(options => {
+                    options.ApiKey = builder.Configuration["OpenAI:ApiKey"];
+                });
             })
             .Build();
 

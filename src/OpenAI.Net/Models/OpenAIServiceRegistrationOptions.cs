@@ -13,7 +13,8 @@
     public class OpenAIServiceRegistrationDefaults
     {
         public string TextCompletionModel { get; set; } = OpenAIDefaults.TextCompletionModel;
-        public string TextEditModel { get; set; }
+        public string TextEditModel { get; set; } = OpenAIDefaults.TextEditModel;
+        public string EmbeddingsModel { get; set; } = OpenAIDefaults.EmbeddingsModel;
     }
 
 

@@ -15,6 +15,7 @@ namespace OpenAI.Net
             OpenAIDefaults.ApiUrl = optionsInstance.ApiUrl;
             OpenAIDefaults.TextCompletionModel = optionsInstance.Defaults.TextCompletionModel;
             OpenAIDefaults.TextEditModel = optionsInstance.Defaults.TextEditModel;
+            OpenAIDefaults.EmbeddingsModel = optionsInstance.Defaults.EmbeddingsModel;
 
             services.AddOpenAIServices(optionsInstance.ApiKey, optionsInstance.OrganizationId, optionsInstance.ApiUrl);
             return services;
