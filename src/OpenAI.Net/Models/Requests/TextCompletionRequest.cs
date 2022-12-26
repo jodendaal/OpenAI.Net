@@ -3,13 +3,15 @@ using System.Text.Json.Serialization;
 
 namespace OpenAI.Net.Models.Requests
 {
-    public class TextCompletionRequest
-    {
-        public TextCompletionRequest(string model, string prompt)
-        {
-            Model = model;
-            Prompt = prompt;
-        }
+
+    public class TextCompletionRequestBase<T>
+    { 
+      /// <summary>
+      /// The prompt(s) to generate completions for, encoded as a string, array of strings, array of tokens, or array of token arrays. <br/>
+      /// Note that<|endoftext|> is the document separator that the model sees during training, so if a prompt is not specified the model will generate as if from the beginning of a new document.<br/>
+      /// <see href="https://beta.openai.com/docs/api-reference/completions/create#completions/create-prompt" />
+      /// </summary>
+        public T Prompt { get; set; }
 
         /// <summary>
         /// ID of the model to use.<br/>
@@ -17,13 +19,6 @@ namespace OpenAI.Net.Models.Requests
         /// </summary>
         [Required]
         public string Model { get; set; }
-
-        /// <summary>
-        /// The prompt(s) to generate completions for, encoded as a string, array of strings, array of tokens, or array of token arrays. <br/>
-        /// Note that<|endoftext|> is the document separator that the model sees during training, so if a prompt is not specified the model will generate as if from the beginning of a new document.<br/>
-        /// <see href="https://beta.openai.com/docs/api-reference/completions/create#completions/create-prompt" />
-        /// </summary>
-        public string Prompt { get; set; }
 
         /// <summary>
         /// The maximum number of <a href="https://beta.openai.com/tokenizer">tokens</a> to generate in the completion. <br/> 
@@ -86,7 +81,7 @@ namespace OpenAI.Net.Models.Requests
         /// Echo back the prompt in addition to the completion <br/>
         /// <see href="https://beta.openai.com/docs/api-reference/completions/create#completions/create-echo" />
         /// </summary>
-        public bool? Echo { get; set; } 
+        public bool? Echo { get; set; }
 
         /// <summary>
         /// Up to 4 sequences where the API will stop generating further tokens. <br/>
@@ -132,5 +127,23 @@ namespace OpenAI.Net.Models.Requests
         /// A unique identifier representing your end-user, which can help OpenAI to monitor and detect abuse. <a href="https://beta.openai.com/docs/guides/safety-best-practices/end-user-ids">Learn more</a>.
         /// </summary>
         public string User { get; set; }
+    }
+
+    public class TextCompletionRequest : TextCompletionRequestBase<string>
+    {
+        public TextCompletionRequest(string model, string prompt)
+        {
+            Model = model;
+            Prompt = prompt;
+        }
+    }
+
+    public class TextCompletionListRequest: TextCompletionRequestBase<IList<string>>
+    {
+        public TextCompletionListRequest(string model, IList<string> prompt)
+        {
+            Model = model;
+            Prompt = prompt;
+        }
     }
 }

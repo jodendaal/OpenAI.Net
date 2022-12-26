@@ -15,5 +15,10 @@ namespace OpenAI.Net.Services.Interfaces
         /// <inheritdoc cref="IModerationService"/>
         /// </summary>
         Task<OpenAIHttpOperationResult<ModerationResponse, ErrorResponse>> Create(ModerationRequest model);
+
+        /// <summary>
+        /// <inheritdoc cref="IModerationService"/>
+        /// </summary>
+        Task<OpenAIHttpOperationResult<ModerationResponse, ErrorResponse>> Create(ModerationListRequest model);
     }
 }

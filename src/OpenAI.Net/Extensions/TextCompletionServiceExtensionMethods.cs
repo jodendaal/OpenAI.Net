@@ -20,12 +20,33 @@ namespace OpenAI.Net
         }
 
         /// <summary>
+        /// <inheritdoc cref="ITextCompletionService"/>
+        /// </summary>
+        public static Task<OpenAIHttpOperationResult<TextCompletionResponse, ErrorResponse>> Get(this ITextCompletionService textCompletion, string model, IList<string> prompt, Action<TextCompletionListRequest>? options = null)
+        {
+            var request = new TextCompletionListRequest(model, prompt);
+            options?.Invoke(request);
+            return textCompletion.Get(request);
+        }
+
+        /// <summary>
         /// <inheritdoc cref="ITextCompletionService"/>  <br />
         /// Uses model set as default in OpenAIDefaults.TextCompletionModel
         /// </summary>
         public static Task<OpenAIHttpOperationResult<TextCompletionResponse, ErrorResponse>> Get(this ITextCompletionService textCompletion,string prompt, Action<TextCompletionRequest>? options = null)
         {
             var request = new TextCompletionRequest(OpenAIDefaults.TextCompletionModel, prompt);
+            options?.Invoke(request);
+            return textCompletion.Get(request);
+        }
+
+        /// <summary>
+        /// <inheritdoc cref="ITextCompletionService"/>  <br />
+        /// Uses model set as default in OpenAIDefaults.TextCompletionModel
+        /// </summary>
+        public static Task<OpenAIHttpOperationResult<TextCompletionResponse, ErrorResponse>> Get(this ITextCompletionService textCompletion, IList<string> prompt, Action<TextCompletionListRequest>? options = null)
+        {
+            var request = new TextCompletionListRequest(OpenAIDefaults.TextCompletionModel, prompt);
             options?.Invoke(request);
             return textCompletion.Get(request);
         }
@@ -41,12 +62,33 @@ namespace OpenAI.Net
         }
 
         /// <summary>
+        /// <inheritdoc cref="ITextCompletionService"/>
+        /// </summary>
+        public static IAsyncEnumerable<OpenAIHttpOperationResult<TextCompletionResponse, ErrorResponse>> GetStream(this ITextCompletionService textCompletion, string model, IList<string> prompt, Action<TextCompletionListRequest>? options = null)
+        {
+            var request = new TextCompletionListRequest(model, prompt);
+            options?.Invoke(request);
+            return textCompletion.GetStream(request);
+        }
+
+        /// <summary>
         /// <inheritdoc cref="ITextCompletionService"/>  <br />
         /// Uses model set as default in OpenAIDefaults.TextCompletionModel
         /// </summary>
         public static IAsyncEnumerable<OpenAIHttpOperationResult<TextCompletionResponse, ErrorResponse>> GetStream(this ITextCompletionService textCompletion, string prompt, Action<TextCompletionRequest>? options = null)
         {
             var request = new TextCompletionRequest(OpenAIDefaults.TextCompletionModel, prompt);
+            options?.Invoke(request);
+            return textCompletion.GetStream(request);
+        }
+
+        /// <summary>
+        /// <inheritdoc cref="ITextCompletionService"/>  <br />
+        /// Uses model set as default in OpenAIDefaults.TextCompletionModel
+        /// </summary>
+        public static IAsyncEnumerable<OpenAIHttpOperationResult<TextCompletionResponse, ErrorResponse>> GetStream(this ITextCompletionService textCompletion, IList<string> prompt, Action<TextCompletionListRequest>? options = null)
+        {
+            var request = new TextCompletionListRequest(OpenAIDefaults.TextCompletionModel, prompt);
             options?.Invoke(request);
             return textCompletion.GetStream(request);
         }
