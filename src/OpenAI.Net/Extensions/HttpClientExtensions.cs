@@ -2,6 +2,7 @@
 using System.Net.Http.Json;
 using System.Text.Json;
 using OpenAI.Net.Models;
+using System.Text;
 
 namespace OpenAI.Net
 {
@@ -68,22 +69,28 @@ namespace OpenAI.Net
         public static async IAsyncEnumerable<OpenAIHttpOperationResult<T, TError>> PostStream<T, TError>(this HttpClient httpClient, string? path, Object @object, JsonSerializerOptions? jsonSerializerOptions = null)
         {
             @object.Validate();
-            var response = await httpClient.PostAsJsonAsync(path, @object, jsonSerializerOptions);
-            
-            if (response.IsSuccessStatusCode)
-            {
-                var responseStream = await response.Content.ReadAsStreamAsync();
-                using var reader = new StreamReader(responseStream);
-                string? line = null;
-                while ((line = await reader.ReadLineAsync()) != null)
-                {
-                    if (line.StartsWith("data: "))
-                        line = line.Substring("data: ".Length);
 
-                    if (!string.IsNullOrWhiteSpace(line) && line != "[DONE]")
+            using (HttpRequestMessage req = new HttpRequestMessage(HttpMethod.Post, path))
+            {
+                req.Content = new StringContent(JsonSerializer.Serialize(@object, jsonSerializerOptions), UnicodeEncoding.UTF8, "application/json");
+                
+                var response = await httpClient.SendAsync(req, HttpCompletionOption.ResponseHeadersRead);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    var responseStream = await response.Content.ReadAsStreamAsync();
+                    using var reader = new StreamReader(responseStream);
+                    string? line = null;
+                    while ((line = await reader.ReadLineAsync()) != null)
                     {
-                        var t = JsonSerializer.Deserialize<T>(line.Trim(), jsonSerializerOptions);
-                        yield return new OpenAIHttpOperationResult<T, TError>(t, response.StatusCode);
+                        if (line.StartsWith("data: "))
+                            line = line.Substring("data: ".Length);
+
+                        if (!string.IsNullOrWhiteSpace(line) && line != "[DONE]")
+                        {
+                            var t = JsonSerializer.Deserialize<T>(line.Trim(), jsonSerializerOptions);
+                            yield return new OpenAIHttpOperationResult<T, TError>(t, response.StatusCode);
+                        }
                     }
                 }
             }
