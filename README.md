@@ -47,7 +47,7 @@ e.g
 
         public async Task<TextCompletionResponse> Search()
         {
-            var response = await _openAIService.TextCompletion.Get(model, "Say this is a test",(o) => {
+            var response = await _openAIService.TextCompletion.Get("text-davinci-003", "Say this is a test",(o) => {
                 o.MaxTokens = 1024;
                 o.BestOf = 2;
             });
@@ -116,7 +116,7 @@ This should provide confidence in the library going forwards.
 ### Completion
 
 ```csharp
-var response = await service.TextCompletion.Get(model, "Say this is a test",(o) => {
+var response = await service.TextCompletion.Get("text-davinci-003", "Say this is a test",(o) => {
                 o.MaxTokens = 1024;
                 o.BestOf = 2;
             });
