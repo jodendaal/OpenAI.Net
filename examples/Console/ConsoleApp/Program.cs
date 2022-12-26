@@ -6,7 +6,7 @@ namespace ConsoleApp
 {
     internal class Program
     {
-        static async void Main(string[] args)
+        static async Task Main(string[] args)
         {
             using var host = Host.CreateDefaultBuilder(args)
             .ConfigureServices((builder, services) =>
