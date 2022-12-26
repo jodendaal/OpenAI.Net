@@ -2,7 +2,7 @@
 using OpenAI.Net.Models;
 using System.Reflection;
 
-namespace OpenAI.Net.Extensions
+namespace OpenAI.Net
 {
     public static class MultipartFormDataContentExtensions
     {

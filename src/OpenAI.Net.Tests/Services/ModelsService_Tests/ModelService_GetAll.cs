@@ -1,6 +1,4 @@
-﻿using Moq.Protected;
-using Moq;
-using System.Net;
+﻿using System.Net;
 using OpenAI.Net.Services;
 
 namespace OpenAI.Net.Tests.Services.ModelsService_Tests

@@ -1,7 +1,7 @@
 ﻿
 using System.ComponentModel.DataAnnotations;
 
-namespace OpenAI.Net.Extensions
+namespace OpenAI.Net
 {
     public static class ObjectExtensions
     {

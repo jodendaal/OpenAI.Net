@@ -3,7 +3,7 @@ using System.Net.Http.Json;
 using System.Text.Json;
 using OpenAI.Net.Models;
 
-namespace OpenAI.Net.Extensions
+namespace OpenAI.Net
 {
     public static class HttpClientExtensions
     {

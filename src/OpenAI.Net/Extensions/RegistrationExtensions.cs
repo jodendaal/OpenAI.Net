@@ -2,7 +2,7 @@
 using OpenAI.Net.Services;
 using OpenAI.Net.Services.Interfaces;
 
-namespace OpenAI.Net.Extensions
+namespace OpenAI.Net
 {
     public static class RegistrationExtensions
     {
