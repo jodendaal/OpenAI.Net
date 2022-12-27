@@ -214,7 +214,7 @@ namespace OpenAI.Net.Tests.Services.TextCompletionService_Tests
         [TestCase(true, HttpStatusCode.OK, $"{responseJson}", null, false, Description = "Successfull Request", TestName = "GetListStreamWithOptions_When_Success")]
         [TestCase(true, HttpStatusCode.OK, $"{responseJson}", null, true, 2, Description = "Successfull Request Multiline", TestName = "GetListStreamWithOptions_When_Using_Line_Data_Success")]
         [TestCase(false, HttpStatusCode.BadRequest, ErrorResponseJson, "an error occured", false, 0, null, Description = "Failed Request Validation", TestName = "GetListStreamWithOptions_When_Invalid_Model_Fail")]
-        public async Task GetListStreamWithOptions(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage, bool useMultiLineData, int expectedItemCount = 1, string modelName = "text-davinci-003")
+        public async Task GetListStreamWithOptions(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage, bool useMultiLineData, int expectedItemCount = 1, string modelName = ModelTypes.TextDavinci003)
         {
             responseJson = responseJson.Replace("\r\n", "").Replace("\n", "");
 

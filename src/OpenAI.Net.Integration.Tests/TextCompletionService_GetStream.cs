@@ -19,7 +19,7 @@ namespace OpenAI.Net.Integration.Tests
                                     ###
                                     Q: when does timtim have his birthday and how old will he be?";
 
-            var request = new TextCompletionRequest("text-davinci-003", multipleQuestions) { MaxTokens = 1024, N = null};
+            var request = new TextCompletionRequest(ModelTypes.TextDavinci003, multipleQuestions) { MaxTokens = 1024, N = null};
 
             await foreach(var t in OpenAIService.TextCompletion.GetStream(request))
             {

@@ -27,7 +27,7 @@ namespace OpenAI.Net.Tests.Services.TextEditService_Tests
 
             var service = new TextEditService(httpClient);
 
-            var request = new TextEditRequest("text-davinci-edit-001", "Fix the spelling mistakes", "What day of the wek is it?");
+            var request = new TextEditRequest(ModelTypes.TextDavinciEdit001, "Fix the spelling mistakes", "What day of the wek is it?");
             var response = await service.Get(request);
 
          
@@ -52,7 +52,7 @@ namespace OpenAI.Net.Tests.Services.TextEditService_Tests
 
             var service = new TextEditService(httpClient);
 
-            var response = await service.Get("text-davinci-edit-001", "Fix the spelling mistakes", "What day of the wek is it?", (o =>{
+            var response = await service.Get(ModelTypes.TextDavinciEdit001, "Fix the spelling mistakes", "What day of the wek is it?", (o =>{
                 o.TopP = 0.1;
                 o.Temperature = 100;
             }));
