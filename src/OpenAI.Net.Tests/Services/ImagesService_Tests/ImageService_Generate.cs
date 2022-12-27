@@ -89,7 +89,7 @@ namespace OpenAI.Net.Tests.Services.ImagesService_Tests
 
             var service = new ImageService(httpClient);
 
-            var response = await service.Genearate("A cute baby sea otter", o => {
+            var response = await service.Generate("A cute baby sea otter", o => {
                 o.User = "test";
                 o.N = 2;
                 o.Size = "1024x1024";

@@ -28,7 +28,7 @@ namespace WebApplication.Pages
         public int MaxResults { get; set; } = 1;
         public async Task OnPost()
         {
-            var response = await _openAIService.Images.Genearate(SearchText, o => {
+            var response = await _openAIService.Images.Generate(SearchText, o => {
                 o.N = MaxResults;
             });
             if(response.IsSuccess)
