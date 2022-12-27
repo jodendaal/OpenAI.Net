@@ -35,6 +35,6 @@ namespace OpenAI.Net.Models.Requests
         /// <a href="https://beta.openai.com/docs/api-reference/images/create#images/create-user">Learn more</a>. <br/>
         /// <see href="https://beta.openai.com/docs/api-reference/embeddings/create#embeddings/create-user" />
         /// </summary>
-        public string User { get; set; }
+        public string? User { get; set; }
     }
 }
