@@ -41,7 +41,7 @@ namespace OpenAI.Net.Tests.Services.TextCompletionService_Tests
             });
 
             var service = new TextCompletionService(httpClient);
-            var request = new TextCompletionRequest("text-davinci-003", "Say this is a test");
+            var request = new TextCompletionRequest(ModelTypes.TextDavinci003, "Say this is a test");
             var response = await service.Get(request);
 
             Assert.That(response.Result?.Choices?.Count() == 1, Is.EqualTo(isSuccess));
@@ -63,7 +63,7 @@ namespace OpenAI.Net.Tests.Services.TextCompletionService_Tests
             });
 
             var service = new TextCompletionService(httpClient);
-            var request = new TextCompletionRequest("text-davinci-003", new List<string>() { "Say this is a test" });
+            var request = new TextCompletionRequest(ModelTypes.TextDavinci003, new List<string>() { "Say this is a test" });
             var response = await service.Get(request);
 
             Assert.That(response.Result?.Choices?.Count() == 1, Is.EqualTo(isSuccess));
@@ -85,8 +85,8 @@ namespace OpenAI.Net.Tests.Services.TextCompletionService_Tests
             });
 
             var service = new TextCompletionService(httpClient);
-            var request = new TextCompletionRequest("text-davinci-003", "Say this is a test");
-            var response = await service.Get("text-davinci-003", "Say this is a test", (o) => {
+            var request = new TextCompletionRequest(ModelTypes.TextDavinci003, "Say this is a test");
+            var response = await service.Get(ModelTypes.TextDavinci003, "Say this is a test", (o) => {
                 o.Echo = true;
                 o.LogProbs = 99;
             });
@@ -113,7 +113,7 @@ namespace OpenAI.Net.Tests.Services.TextCompletionService_Tests
             });
 
             var service = new TextCompletionService(httpClient);
-            var response = await service.Get("text-davinci-003", new List<string>() { "Say this is a test"}, (o) => {
+            var response = await service.Get(ModelTypes.TextDavinci003, new List<string>() { "Say this is a test"}, (o) => {
                 o.Echo = true;
                 o.LogProbs = 99;
             });

@@ -1,12 +1,13 @@
-﻿using OpenAI.Net.Models.Requests;
+﻿using OpenAI.Net.Models;
+using OpenAI.Net.Models.Requests;
 using System.Net;
 
 namespace OpenAI.Net.Integration.Tests
 {
     public class TextCompletionService_Get : BaseTest
     {
-        [TestCase("text-davinci-003", true, HttpStatusCode.OK,null, TestName = "Get_When_Success")]
-        [TestCase("text-davinci-003", true, HttpStatusCode.OK, true, TestName = "Get_When_Echo_True_Success")]
+        [TestCase(ModelTypes.TextDavinci003, true, HttpStatusCode.OK,null, TestName = "Get_When_Success")]
+        [TestCase(ModelTypes.TextDavinci003, true, HttpStatusCode.OK, true, TestName = "Get_When_Echo_True_Success")]
         [TestCase("invalid_model", false, HttpStatusCode.NotFound,false, TestName = "Get_When_Fail")]
         public async Task Get(string model,bool isSuccess, HttpStatusCode statusCode, bool? echo)
         {
@@ -33,8 +34,8 @@ namespace OpenAI.Net.Integration.Tests
             }
         }
 
-        [TestCase("text-davinci-003", true, HttpStatusCode.OK, null, TestName = "Get_When_Success")]
-        [TestCase("text-davinci-003", true, HttpStatusCode.OK, true, TestName = "Get_When_Echo_True_Success")]
+        [TestCase(ModelTypes.TextDavinci003, true, HttpStatusCode.OK, null, TestName = "Get_When_Success")]
+        [TestCase(ModelTypes.TextDavinci003, true, HttpStatusCode.OK, true, TestName = "Get_When_Echo_True_Success")]
         [TestCase("invalid_model", false, HttpStatusCode.NotFound, false, TestName = "Get_When_Fail")]
         public async Task GetExtension(string model, bool isSuccess, HttpStatusCode statusCode, bool? echo)
         {
@@ -66,7 +67,7 @@ namespace OpenAI.Net.Integration.Tests
         }
 
 
-        [TestCase("text-davinci-003", true, HttpStatusCode.OK, null, TestName = "GetList_When_Success")]
+        [TestCase(ModelTypes.TextDavinci003, true, HttpStatusCode.OK, null, TestName = "GetList_When_Success")]
         [TestCase("invalid_model", false, HttpStatusCode.NotFound, false, TestName = "GetList_When_Fail")]
         public async Task GetListExtension(string model, bool isSuccess, HttpStatusCode statusCode, bool? echo)
         {
