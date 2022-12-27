@@ -2,7 +2,6 @@
  
  
 <img src="https://raw.githubusercontent.com/jodendaal/OpenAI.Net/main/src/OpenAI.Net/OpenAILogo.svg" alt="OpenAI" width="300"/>
-
 # OpenAI.Net
 OpenAI library for .NET
 
