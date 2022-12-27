@@ -31,7 +31,7 @@ services.AddOpenAIServices(options => {
 });
 ```
 
-N.B We recommened using environment variables, configuration files or secret file for storing the API key securely. See [here](https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-7.0&tabs=windows) for further details.
+N.B We recommend using environment variables, configuration files or secret file for storing the API key securely. See [here](https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-7.0&tabs=windows) for further details.
 
 
 # Example Usage
