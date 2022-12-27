@@ -1,0 +1,244 @@
+<html><head><meta name="google-site-verification" content="X0R8Gul3ewm3LbDbMchm5TztVHXrCvPKyd60P5CdEC0" /> <meta charset="UTF-8"></head><body><p><a href="https://github.com/jodendaal/OpenAI.Net/actions/workflows/dotnet-desktop.yml"><img src="https://github.com/jodendaal/OpenAI.Net/actions/workflows/dotnet-desktop.yml/badge.svg?branch=main" alt=".NET" style="max-width: 100%;"></a> <a href="https://www.nuget.org/packages/OpenAI.Net.Client" rel="nofollow"><img src="https://camo.githubusercontent.com/ae9e433276aa9464e9f8fef26f937f718dbd8c01b54d104a43eb32a6d9281f7a/68747470733a2f2f6275696c6473746174732e696e666f2f6e756765742f4f70656e41492e4e65742e436c69656e74" alt="NuGet Badge" data-canonical-src="https://buildstats.info/nuget/OpenAI.Net.Client" style="max-width: 100%;"></a>  <a target="_blank" rel="noopener noreferrer nofollow" href="https://camo.githubusercontent.com/ce8f460d5d59cbf33404ed263d715d794ad5d877c32109ca92d3dd52821cbf87/68747470733a2f2f696d672e736869656c64732e696f2f656e64706f696e743f75726c3d68747470733a2f2f676973742e67697468756275736572636f6e74656e742e636f6d2f2f6a6f64656e6461616c2f31383233616166333963363237336239323434323834393437393631366461662f7261772f4f70656e41492e4e65742d636f64652d636f7665726167652e6a736f6e"><img src="https://camo.githubusercontent.com/ce8f460d5d59cbf33404ed263d715d794ad5d877c32109ca92d3dd52821cbf87/68747470733a2f2f696d672e736869656c64732e696f2f656e64706f696e743f75726c3d68747470733a2f2f676973742e67697468756275736572636f6e74656e742e636f6d2f2f6a6f64656e6461616c2f31383233616166333963363237336239323434323834393437393631366461662f7261772f4f70656e41492e4e65742d636f64652d636f7665726167652e6a736f6e" alt="badge" data-canonical-src="https://img.shields.io/endpoint?url=https://gist.githubusercontent.com//jodendaal/1823aaf39c6273b92442849479616daf/raw/OpenAI.Net-code-coverage.json" style="max-width: 100%;"></a>  <a href="https://dashboard.stryker-mutator.io/reports/github.com/jodendaal/OpenAI.Net/main" rel="nofollow"><img src="https://camo.githubusercontent.com/154a3536c5bb46c34a8496adf445b5fb4df5eb8655647a400e06c034ab6892ef/68747470733a2f2f696d672e736869656c64732e696f2f656e64706f696e743f7374796c653d666c61742675726c3d687474707325334125324625324662616467652d6170692e737472796b65722d6d757461746f722e696f2532466769746875622e636f6d2532466a6f64656e6461616c2532464f70656e41492e4e65742532466d61696e" alt="Stryker Mutation testing badge" data-canonical-src="https://img.shields.io/endpoint?style=flat&amp;url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Fjodendaal%2FOpenAI.Net%2Fmain" style="max-width: 100%;"></a>  <a href="https://github.com/jodendaal/OpenAI.Net/blob/main/LICENSE"><img src="https://camo.githubusercontent.com/83d3746e5881c1867665223424263d8e604df233d0a11aae0813e0414d433943/68747470733a2f2f696d672e736869656c64732e696f2f62616467652f6c6963656e73652d4d49542d626c75652e737667" alt="license" data-canonical-src="https://img.shields.io/badge/license-MIT-blue.svg" style="max-width: 100%;"></a></p>
+<h1><a id="user-content-openainet" class="anchor" aria-hidden="true" href="#openainet"><span aria-hidden="true" class="octicon octicon-link"></span></a>OpenAI.Net</h1>
+<p>OpenAI library for .NET</p>
+<p>C# .NET library for use with the OpenAI API.</p>
+<p>This is community-maintained library.</p>
+<p>This library supports .net core 6.0 and above.</p>
+<h1><a id="user-content-getting-started" class="anchor" aria-hidden="true" href="#getting-started"><span aria-hidden="true" class="octicon octicon-link"></span></a>Getting started</h1>
+<p>Install package <a href="https://www.nuget.org/packages/TimSoft.OpenAI.Net/" rel="nofollow">Nuget package</a></p>
+<div class="highlight highlight-source-powershell"><pre><span class="pl-c1">Install-Package</span> OpenAI.Net.Client</pre></div>
+<p>Register services using the provided extension methods</p>
+<div class="highlight highlight-source-cs"><pre><span class="pl-smi">services</span>.<span class="pl-en">AddOpenAIServices</span>(<span class="pl-en">options</span> <span class="pl-k">=&gt;</span> {
+    <span class="pl-smi">options</span>.<span class="pl-smi">ApiKey</span> <span class="pl-k">=</span> <span class="pl-smi">builder</span>.<span class="pl-smi">Configuration</span>[<span class="pl-s"><span class="pl-pds">"</span>OpenAI:ApiKey<span class="pl-pds">"</span></span>];
+});</pre></div>
+<p>N.B We recommened using environment variables, configuration files or secret file for storing the API key securely. See <a href="https://learn.microsoft.com/en-us/aspnet/core/security/app-secrets?view=aspnetcore-7.0&amp;tabs=windows" rel="nofollow">here</a> for further details.</p>
+<h1><a id="user-content-example-usage" class="anchor" aria-hidden="true" href="#example-usage"><span aria-hidden="true" class="octicon octicon-link"></span></a>Example Usage</h1>
+<p>You can view examples of a console, web application and Blazor app using the streaming API <a href="https://github.com/jodendaal/OpenAI.Net/tree/main/examples">here</a>.</p>
+<p>You can also have a look at the Integration Tests for usage examples <a href="https://github.com/jodendaal/OpenAI.Net/tree/main/src/OpenAI.Net.Integration.Tests">here</a>.</p>
+<p>Simple console app usage below.</p>
+<div class="highlight highlight-source-cs"><pre><span class="pl-k">using</span> <span class="pl-en">Microsoft</span>.<span class="pl-en">Extensions</span>.<span class="pl-en">DependencyInjection</span>;
+<span class="pl-k">using</span> <span class="pl-en">Microsoft</span>.<span class="pl-en">Extensions</span>.<span class="pl-en">Hosting</span>;
+<span class="pl-k">using</span> <span class="pl-en">OpenAI</span>.<span class="pl-en">Net</span>;
+
+<span class="pl-k">namespace</span> <span class="pl-en">ConsoleApp</span>
+{
+    <span class="pl-k">internal</span> <span class="pl-k">class</span> <span class="pl-en">Program</span>
+    {
+        <span class="pl-k">static</span> <span class="pl-k">async</span> <span class="pl-k">void</span> <span class="pl-en">Main</span>(<span class="pl-k">string</span>[] <span class="pl-en">args</span>)
+        {
+            <span class="pl-k">using</span> <span class="pl-k">var</span> <span class="pl-en">host</span> <span class="pl-k">=</span> <span class="pl-smi">Host</span>.<span class="pl-en">CreateDefaultBuilder</span>(<span class="pl-smi">args</span>)
+            .<span class="pl-en">ConfigureServices</span>((<span class="pl-en">builder</span>, <span class="pl-en">services</span>) <span class="pl-k">=&gt;</span>
+            {
+                <span class="pl-smi">services</span>.<span class="pl-en">AddOpenAIServices</span>(<span class="pl-en">options</span> <span class="pl-k">=&gt;</span> {
+                    <span class="pl-smi">options</span>.<span class="pl-smi">ApiKey</span> <span class="pl-k">=</span> <span class="pl-smi">builder</span>.<span class="pl-smi">Configuration</span>[<span class="pl-s"><span class="pl-pds">"</span>OpenAI:ApiKey<span class="pl-pds">"</span></span>];
+                });
+            })
+            .<span class="pl-en">Build</span>();
+
+            <span class="pl-k">var</span> <span class="pl-en">openAi</span> <span class="pl-k">=</span> <span class="pl-smi">host</span>.<span class="pl-smi">Services</span>.<span class="pl-en">GetService</span>&lt;<span class="pl-en">IOpenAIService</span>&gt;();
+            <span class="pl-k">var</span> <span class="pl-en">response</span> <span class="pl-k">=</span> <span class="pl-k">await</span> <span class="pl-smi">openAi</span>.<span class="pl-smi">TextCompletion</span>.<span class="pl-en">Get</span>(<span class="pl-s"><span class="pl-pds">"</span>How long until we reach mars?<span class="pl-pds">"</span></span>);
+
+            <span class="pl-k">if</span> (<span class="pl-smi">response</span>.<span class="pl-smi">IsSuccess</span>)
+            {
+                <span class="pl-k">foreach</span>(<span class="pl-k">var</span> <span class="pl-en">result</span> <span class="pl-k">in</span> <span class="pl-smi">response</span>.<span class="pl-smi">Result</span>.<span class="pl-smi">Choices</span>)
+                {
+                    <span class="pl-smi">Console</span>.<span class="pl-en">WriteLine</span>(<span class="pl-smi">result</span>.<span class="pl-smi">Text</span>);
+                }
+            }
+            <span class="pl-k">else</span>
+            {
+                <span class="pl-smi">Console</span>.<span class="pl-en">WriteLine</span>(<span class="pl-s"><span class="pl-pds">$"</span>{<span class="pl-smi">response</span>.<span class="pl-smi">ErrorMessage</span>}<span class="pl-pds">"</span></span>);
+            }
+        }
+    }
+}</pre></div>
+<h1><a id="user-content-supported-apis" class="anchor" aria-hidden="true" href="#supported-apis"><span aria-hidden="true" class="octicon octicon-link"></span></a>Supported API's</h1>
+<h3><a id="user-content-full-support-of-all-current-apis" class="anchor" aria-hidden="true" href="#full-support-of-all-current-apis"><span aria-hidden="true" class="octicon octicon-link"></span></a>Full support of all current API's</h3>
+<ul>
+<li>
+<p>[x] <a href="https://beta.openai.com/docs/api-reference/models" rel="nofollow">Models</a></p>
+<ul>
+<li>[x] <a href="https://beta.openai.com/docs/api-reference/models/list" rel="nofollow">List Models</a>
+</li>
+<li>[x] <a href="https://beta.openai.com/docs/api-reference/models/retrieve" rel="nofollow">Retrieve model</a>
+</li>
+</ul>
+</li>
+<li>
+<p>[x] <a href="https://beta.openai.com/docs/api-reference/completions" rel="nofollow">Completions</a></p>
+<ul>
+<li>[x] <a href="https://beta.openai.com/docs/api-reference/completions/create" rel="nofollow">Create completion</a>
+</li>
+<li>[x] <a href="https://beta.openai.com/docs/api-reference/completions#completions/create-stream" rel="nofollow">Create completion with streaming</a>
+</li>
+</ul>
+</li>
+<li>
+<p>[x] <a href="https://beta.openai.com/docs/api-reference/edits" rel="nofollow">Edits</a></p>
+<ul>
+<li>[x] <a href="https://beta.openai.com/docs/api-reference/edits/create" rel="nofollow">Create edit</a>
+</li>
+</ul>
+</li>
+<li>
+<p>[x] <a href="https://beta.openai.com/docs/api-reference/images" rel="nofollow">Images</a></p>
+<ul>
+<li>[x] <a href="https://beta.openai.com/docs/api-reference/images/create" rel="nofollow">Create image</a>
+</li>
+<li>[x] <a href="https://beta.openai.com/docs/api-reference/images/" rel="nofollow">Create image edit</a>
+</li>
+<li>[x] <a href="https://beta.openai.com/docs/api-reference/images/create-variation" rel="nofollow">Create image variation</a>
+</li>
+</ul>
+</li>
+<li>
+<p>[x] <a href="https://beta.openai.com/docs/api-reference/embeddings" rel="nofollow">Embeddings</a></p>
+<ul>
+<li>[x] <a href="https://beta.openai.com/docs/api-reference/embeddings/create" rel="nofollow">Create embeddings</a>
+</li>
+</ul>
+</li>
+<li>
+<p>[x] <a href="https://beta.openai.com/docs/api-reference/files" rel="nofollow">Files</a></p>
+<ul>
+<li>[x] <a href="https://beta.openai.com/docs/api-reference/files/list" rel="nofollow">List files</a>
+</li>
+<li>[x] <a href="https://beta.openai.com/docs/api-reference/files/upload" rel="nofollow">Upload file</a>
+</li>
+<li>[x] <a href="https://beta.openai.com/docs/api-reference/files/delete" rel="nofollow">Delete file</a>
+</li>
+<li>[x] <a href="https://beta.openai.com/docs/api-reference/files/retrieve" rel="nofollow">Retrieve file</a>
+</li>
+<li>[x] <a href="https://beta.openai.com/docs/api-reference/files/retrieve-content" rel="nofollow">Retrieve file content</a>
+</li>
+</ul>
+</li>
+<li>
+<p>[x] <a href="https://beta.openai.com/docs/api-reference/fine-tunes" rel="nofollow">Fine-tunes</a></p>
+<ul>
+<li>[x] <a href="https://beta.openai.com/docs/api-reference/fine-tunes" rel="nofollow">Create fine-tune</a>
+</li>
+<li>[x] <a href="https://beta.openai.com/docs/api-reference/fine-tunes/list" rel="nofollow">List fine-tunes</a>
+</li>
+<li>[x] <a href="https://beta.openai.com/docs/api-reference/fine-tunes/retrieve" rel="nofollow">Retrieve fine-tune</a>
+</li>
+<li>[x] <a href="https://beta.openai.com/docs/api-reference/fine-tunes/cancel" rel="nofollow">Cancel fine-tune</a>
+</li>
+<li>[x] <a href="https://beta.openai.com/docs/api-reference/fine-tunes/events" rel="nofollow">List fine-tune events</a>
+</li>
+<li>[x] <a href="https://beta.openai.com/docs/api-reference/fine-tunes/delete-model" rel="nofollow">Delete fine-tune model</a>
+</li>
+</ul>
+</li>
+<li>
+<p>[x] <a href="https://beta.openai.com/docs/api-reference/moderations" rel="nofollow">Moderations</a></p>
+<ul>
+<li>[x] <a href="https://beta.openai.com/docs/api-reference/moderations/create" rel="nofollow">Create moderation</a>
+</li>
+</ul>
+</li>
+</ul>
+<h1><a id="user-content-testing" class="anchor" aria-hidden="true" href="#testing"><span aria-hidden="true" class="octicon octicon-link"></span></a>Testing</h1>
+<p>This project has 100% code coverage with Unit tests and 100% pass rate with <a href="https://stryker-mutator.io/docs/stryker-net/introduction/" rel="nofollow">Stryker mutation testing</a>.</p>
+<p>See latest Stryker report <a href="https://dashboard.stryker-mutator.io/reports/github.com/jodendaal/OpenAI.Net/main#mutant" rel="nofollow">here</a>.</p>
+<p>We also have Integration tests foreach service.</p>
+<p>This should provide confidence in the library going forwards.</p>
+<h1><a id="user-content-examples" class="anchor" aria-hidden="true" href="#examples"><span aria-hidden="true" class="octicon octicon-link"></span></a>Examples</h1>
+<h3><a id="user-content-completion" class="anchor" aria-hidden="true" href="#completion"><span aria-hidden="true" class="octicon octicon-link"></span></a>Completion</h3>
+<div class="highlight highlight-source-cs"><pre><span class="pl-k">var</span> <span class="pl-en">response</span> <span class="pl-k">=</span> <span class="pl-k">await</span> <span class="pl-smi">service</span>.<span class="pl-smi">TextCompletion</span>.<span class="pl-en">Get</span>(<span class="pl-s"><span class="pl-pds">"</span>Say this is a test<span class="pl-pds">"</span></span>,(<span class="pl-en">o</span>) <span class="pl-k">=&gt;</span> {
+                <span class="pl-smi">o</span>.<span class="pl-smi">MaxTokens</span> <span class="pl-k">=</span> <span class="pl-c1">1024</span>;
+                <span class="pl-smi">o</span>.<span class="pl-smi">BestOf</span> <span class="pl-k">=</span> <span class="pl-c1">2</span>;
+            });</pre></div>
+<h3><a id="user-content-completion-stream" class="anchor" aria-hidden="true" href="#completion-stream"><span aria-hidden="true" class="octicon octicon-link"></span></a>Completion Stream</h3>
+<div class="highlight highlight-source-cs"><pre><span class="pl-en">await</span> <span class="pl-en">foreach</span>(<span class="pl-en">var</span> <span class="pl-en">response</span> <span class="pl-en">in</span> <span class="pl-en">service</span>.TextCompletion.GetStream("<span class="pl-en">Say</span> <span class="pl-en">this</span> <span class="pl-en">is</span> <span class="pl-en">a</span> test"))
+{
+    <span class="pl-smi">Console</span>.<span class="pl-en">WriteLine</span>(<span class="pl-smi">response</span><span class="pl-k">?</span>.<span class="pl-smi">Result</span><span class="pl-k">?</span>.<span class="pl-smi">Choices</span>[<span class="pl-c1">0</span>].<span class="pl-smi">Text</span>);
+}</pre></div>
+<h3><a id="user-content-completion-with-array-input" class="anchor" aria-hidden="true" href="#completion-with-array-input"><span aria-hidden="true" class="octicon octicon-link"></span></a>Completion with array input</h3>
+<div class="highlight highlight-source-cs"><pre><span class="pl-k">var</span> <span class="pl-en">prompts</span> <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">List</span>&lt;<span class="pl-k">string</span>&gt;()
+{
+    <span class="pl-s"><span class="pl-pds">"</span>Say this is a test<span class="pl-pds">"</span></span>,
+    <span class="pl-s"><span class="pl-pds">"</span>Say this is not a test<span class="pl-pds">"</span></span>
+};
+
+<span class="pl-k">var</span> <span class="pl-en">response</span> <span class="pl-k">=</span> <span class="pl-k">await</span> <span class="pl-smi">service</span>.<span class="pl-smi">TextCompletion</span>.<span class="pl-en">Get</span>(<span class="pl-smi">prompts</span>,(<span class="pl-en">o</span>) <span class="pl-k">=&gt;</span> {
+                <span class="pl-smi">o</span>.<span class="pl-smi">MaxTokens</span> <span class="pl-k">=</span> <span class="pl-c1">1024</span>;
+                <span class="pl-smi">o</span>.<span class="pl-smi">BestOf</span> <span class="pl-k">=</span> <span class="pl-c1">2</span>;
+            });</pre></div>
+<h3><a id="user-content-text-edit" class="anchor" aria-hidden="true" href="#text-edit"><span aria-hidden="true" class="octicon octicon-link"></span></a>Text Edit</h3>
+<div class="highlight highlight-source-cs"><pre><span class="pl-k">var</span> <span class="pl-en">response</span> <span class="pl-k">=</span> <span class="pl-k">await</span> <span class="pl-smi">service</span>.<span class="pl-smi">TextEdit</span>.<span class="pl-en">Get</span>(<span class="pl-s"><span class="pl-pds">"</span>Fix the spelling mistakes<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>What day of the wek is it?<span class="pl-pds">"</span></span>, (<span class="pl-en">o</span> <span class="pl-k">=&gt;</span>{
+    <span class="pl-smi">o</span>.<span class="pl-smi">TopP</span> <span class="pl-k">=</span> <span class="pl-c1">0</span><span class="pl-c1">.</span><span class="pl-c1">1</span>;
+    <span class="pl-smi">o</span>.<span class="pl-smi">Temperature</span> <span class="pl-k">=</span> <span class="pl-c1">100</span>;
+}));</pre></div>
+<h3><a id="user-content-image-edit" class="anchor" aria-hidden="true" href="#image-edit"><span aria-hidden="true" class="octicon octicon-link"></span></a>Image Edit</h3>
+<h5><a id="user-content-using-file-paths" class="anchor" aria-hidden="true" href="#using-file-paths"><span aria-hidden="true" class="octicon octicon-link"></span></a>Using file paths</h5>
+<div class="highlight highlight-source-cs"><pre><span class="pl-k">var</span> <span class="pl-en">response</span> <span class="pl-k">=</span> <span class="pl-k">await</span> <span class="pl-smi">service</span>.<span class="pl-smi">Images</span>.<span class="pl-en">Edit</span>(<span class="pl-s"><span class="pl-pds">"</span>A cute baby sea otter<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">@"</span>Images\BabyCat.png<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">@"</span>Images\Mask.png<span class="pl-pds">"</span></span>, <span class="pl-en">o</span> <span class="pl-k">=&gt;</span> {
+    <span class="pl-smi">o</span>.<span class="pl-smi">N</span> <span class="pl-k">=</span> <span class="pl-c1">99</span>;
+});</pre></div>
+<h5><a id="user-content-using-file-bytes" class="anchor" aria-hidden="true" href="#using-file-bytes"><span aria-hidden="true" class="octicon octicon-link"></span></a>Using file bytes</h5>
+<div class="highlight highlight-source-cs"><pre><span class="pl-k">var</span> <span class="pl-en">response</span> <span class="pl-k">=</span> <span class="pl-k">await</span> <span class="pl-smi">service</span>.<span class="pl-smi">Images</span>.<span class="pl-en">Edit</span>(<span class="pl-s"><span class="pl-pds">"</span>A cute baby sea otter<span class="pl-pds">"</span></span>,<span class="pl-smi">File</span>.<span class="pl-en">ReadAllBytes</span>(<span class="pl-s"><span class="pl-pds">@"</span>Images\BabyCat.png<span class="pl-pds">"</span></span>), <span class="pl-smi">File</span>.<span class="pl-en">ReadAllBytes</span>(<span class="pl-s"><span class="pl-pds">@"</span>Images\BabyCat.png<span class="pl-pds">"</span></span>), <span class="pl-en">o</span> <span class="pl-k">=&gt;</span> {
+    <span class="pl-smi">o</span>.<span class="pl-smi">N</span> <span class="pl-k">=</span> <span class="pl-c1">99</span>;
+});</pre></div>
+<h3><a id="user-content-image-generate" class="anchor" aria-hidden="true" href="#image-generate"><span aria-hidden="true" class="octicon octicon-link"></span></a>Image Generate</h3>
+<div class="highlight highlight-source-cs"><pre><span class="pl-k">var</span> <span class="pl-en">response</span> <span class="pl-k">=</span> <span class="pl-k">await</span> <span class="pl-smi">service</span>.<span class="pl-smi">Images</span>.<span class="pl-en">Generate</span>(<span class="pl-s"><span class="pl-pds">"</span>A cute baby sea otter<span class="pl-pds">"</span></span>,<span class="pl-c1">2</span>, <span class="pl-s"><span class="pl-pds">"</span>1024x1024<span class="pl-pds">"</span></span>);</pre></div>
+<h3><a id="user-content-image-variation" class="anchor" aria-hidden="true" href="#image-variation"><span aria-hidden="true" class="octicon octicon-link"></span></a>Image Variation</h3>
+<h5><a id="user-content-using-file-paths-1" class="anchor" aria-hidden="true" href="#using-file-paths-1"><span aria-hidden="true" class="octicon octicon-link"></span></a>Using file paths</h5>
+<div class="highlight highlight-source-cs"><pre><span class="pl-k">var</span> <span class="pl-en">response</span> <span class="pl-k">=</span> <span class="pl-k">await</span> <span class="pl-smi">service</span>.<span class="pl-smi">Images</span>.<span class="pl-en">Variation</span>(<span class="pl-s"><span class="pl-pds">@"</span>Images\BabyCat.png<span class="pl-pds">"</span></span>, <span class="pl-en">o</span> <span class="pl-k">=&gt;</span> {
+    <span class="pl-smi">o</span>.<span class="pl-smi">N</span> <span class="pl-k">=</span> <span class="pl-c1">2</span>;
+    <span class="pl-smi">o</span>.<span class="pl-smi">Size</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>1024x1024<span class="pl-pds">"</span></span>;
+});</pre></div>
+<h5><a id="user-content-using-file-bytes-1" class="anchor" aria-hidden="true" href="#using-file-bytes-1"><span aria-hidden="true" class="octicon octicon-link"></span></a>Using file bytes</h5>
+<div class="highlight highlight-source-cs"><pre> <span class="pl-k">var</span> <span class="pl-en">response</span> <span class="pl-k">=</span> <span class="pl-k">await</span> <span class="pl-smi">service</span>.<span class="pl-smi">Images</span>.<span class="pl-en">Variation</span>(<span class="pl-smi">File</span>.<span class="pl-en">ReadAllBytes</span>(<span class="pl-s"><span class="pl-pds">@"</span>Images\BabyCat.png<span class="pl-pds">"</span></span>), <span class="pl-en">o</span> <span class="pl-k">=&gt;</span> {
+                <span class="pl-smi">o</span>.<span class="pl-smi">N</span> <span class="pl-k">=</span> <span class="pl-c1">2</span>;
+                <span class="pl-smi">o</span>.<span class="pl-smi">Size</span> <span class="pl-k">=</span> <span class="pl-s"><span class="pl-pds">"</span>1024x1024<span class="pl-pds">"</span></span>;
+});</pre></div>
+<h3><a id="user-content-fine-tune-create" class="anchor" aria-hidden="true" href="#fine-tune-create"><span aria-hidden="true" class="octicon octicon-link"></span></a>Fine Tune Create</h3>
+<div class="highlight highlight-source-cs"><pre><span class="pl-k">var</span> <span class="pl-en">response</span> <span class="pl-k">=</span> <span class="pl-k">await</span> <span class="pl-smi">service</span>.<span class="pl-smi">FineTune</span>.<span class="pl-en">Create</span>(<span class="pl-s"><span class="pl-pds">"</span>myfile.jsonl<span class="pl-pds">"</span></span>, <span class="pl-en">o</span> <span class="pl-k">=&gt;</span> {
+    <span class="pl-smi">o</span>.<span class="pl-smi">BatchSize</span> <span class="pl-k">=</span> <span class="pl-c1">1</span>;
+});</pre></div>
+<h3><a id="user-content-fine-tune-get-all" class="anchor" aria-hidden="true" href="#fine-tune-get-all"><span aria-hidden="true" class="octicon octicon-link"></span></a>Fine Tune Get All</h3>
+<div class="highlight highlight-source-cs"><pre><span class="pl-k">var</span> <span class="pl-en">response</span> <span class="pl-k">=</span> <span class="pl-k">await</span> <span class="pl-smi">service</span>.<span class="pl-smi">FineTune</span>.<span class="pl-en">Get</span>();</pre></div>
+<h3><a id="user-content-fine-tune-get-by-id" class="anchor" aria-hidden="true" href="#fine-tune-get-by-id"><span aria-hidden="true" class="octicon octicon-link"></span></a>Fine Tune Get By Id</h3>
+<div class="highlight highlight-source-cs"><pre><span class="pl-k">var</span> <span class="pl-en">response</span> <span class="pl-k">=</span> <span class="pl-k">await</span> <span class="pl-smi">service</span>.<span class="pl-smi">FineTune</span>.<span class="pl-en">Get</span>(<span class="pl-s"><span class="pl-pds">"</span>fineTuneId<span class="pl-pds">"</span></span>);</pre></div>
+<h3><a id="user-content-fine-tune-get-events" class="anchor" aria-hidden="true" href="#fine-tune-get-events"><span aria-hidden="true" class="octicon octicon-link"></span></a>Fine Tune Get Events</h3>
+<div class="highlight highlight-source-cs"><pre><span class="pl-k">var</span> <span class="pl-en">response</span> <span class="pl-k">=</span> <span class="pl-k">await</span> <span class="pl-smi">service</span>.<span class="pl-smi">FineTune</span>.<span class="pl-en">GetEvents</span>(<span class="pl-s"><span class="pl-pds">"</span>fineTuneId<span class="pl-pds">"</span></span>);</pre></div>
+<h3><a id="user-content-fine-tune-delete" class="anchor" aria-hidden="true" href="#fine-tune-delete"><span aria-hidden="true" class="octicon octicon-link"></span></a>Fine Tune Delete</h3>
+<div class="highlight highlight-source-cs"><pre><span class="pl-k">var</span> <span class="pl-en">response</span> <span class="pl-k">=</span> <span class="pl-k">await</span> <span class="pl-smi">service</span>.<span class="pl-smi">FineTune</span>.<span class="pl-en">Delete</span>(<span class="pl-s"><span class="pl-pds">"</span>modelId<span class="pl-pds">"</span></span>);</pre></div>
+<h3><a id="user-content-fine-tune-cancel" class="anchor" aria-hidden="true" href="#fine-tune-cancel"><span aria-hidden="true" class="octicon octicon-link"></span></a>Fine Tune Cancel</h3>
+<div class="highlight highlight-source-cs"><pre><span class="pl-k">var</span> <span class="pl-en">response</span> <span class="pl-k">=</span> <span class="pl-k">await</span> <span class="pl-smi">service</span>.<span class="pl-smi">FineTune</span>.<span class="pl-en">Cancel</span>(<span class="pl-s"><span class="pl-pds">"</span>fineTuneId<span class="pl-pds">"</span></span>);</pre></div>
+<h3><a id="user-content-file-upload" class="anchor" aria-hidden="true" href="#file-upload"><span aria-hidden="true" class="octicon octicon-link"></span></a>File Upload</h3>
+<h5><a id="user-content-using-file-path" class="anchor" aria-hidden="true" href="#using-file-path"><span aria-hidden="true" class="octicon octicon-link"></span></a>Using file path</h5>
+<div class="highlight highlight-source-cs"><pre><span class="pl-k">var</span> <span class="pl-en">response</span> <span class="pl-k">=</span> <span class="pl-k">await</span> <span class="pl-smi">service</span>.<span class="pl-smi">Files</span>.<span class="pl-en">Upload</span>(<span class="pl-s"><span class="pl-pds">@"</span>Images\BabyCat.png<span class="pl-pds">"</span></span>);</pre></div>
+<h5><a id="user-content-using-file-bytes-2" class="anchor" aria-hidden="true" href="#using-file-bytes-2"><span aria-hidden="true" class="octicon octicon-link"></span></a>Using file bytes</h5>
+<div class="highlight highlight-source-cs"><pre><span class="pl-k">var</span> <span class="pl-en">response</span> <span class="pl-k">=</span> <span class="pl-k">await</span> <span class="pl-smi">service</span>.<span class="pl-smi">Files</span>.<span class="pl-en">Upload</span>(<span class="pl-smi">bytes</span>, <span class="pl-s"><span class="pl-pds">"</span>mymodel.jsonl<span class="pl-pds">"</span></span>);</pre></div>
+<h3><a id="user-content-file-get-content" class="anchor" aria-hidden="true" href="#file-get-content"><span aria-hidden="true" class="octicon octicon-link"></span></a>File Get Content</h3>
+<div class="highlight highlight-source-cs"><pre> <span class="pl-k">var</span> <span class="pl-en">response</span> <span class="pl-k">=</span> <span class="pl-k">await</span> <span class="pl-smi">service</span>.<span class="pl-smi">Files</span>.<span class="pl-en">GetContent</span>(<span class="pl-s"><span class="pl-pds">"</span>fileId<span class="pl-pds">"</span></span>);</pre></div>
+<h3><a id="user-content-file-get-file-detail" class="anchor" aria-hidden="true" href="#file-get-file-detail"><span aria-hidden="true" class="octicon octicon-link"></span></a>File Get File Detail</h3>
+<div class="highlight highlight-source-cs"><pre><span class="pl-k">var</span> <span class="pl-en">response</span> <span class="pl-k">=</span> <span class="pl-k">await</span> <span class="pl-smi">service</span>.<span class="pl-smi">Files</span>.<span class="pl-en">Get</span>(<span class="pl-s"><span class="pl-pds">"</span>fileId<span class="pl-pds">"</span></span>);</pre></div>
+<h3><a id="user-content-file-get-file-all" class="anchor" aria-hidden="true" href="#file-get-file-all"><span aria-hidden="true" class="octicon octicon-link"></span></a>File Get File All</h3>
+<div class="highlight highlight-source-cs"><pre><span class="pl-k">var</span> <span class="pl-en">response</span> <span class="pl-k">=</span> <span class="pl-k">await</span> <span class="pl-smi">service</span>.<span class="pl-smi">Files</span>.<span class="pl-en">Get</span>();</pre></div>
+<h3><a id="user-content-file-delete" class="anchor" aria-hidden="true" href="#file-delete"><span aria-hidden="true" class="octicon octicon-link"></span></a>File Delete</h3>
+<div class="highlight highlight-source-cs"><pre><span class="pl-k">var</span> <span class="pl-en">response</span> <span class="pl-k">=</span> <span class="pl-k">await</span> <span class="pl-smi">service</span>.<span class="pl-smi">Files</span>.<span class="pl-en">Delete</span>(<span class="pl-s"><span class="pl-pds">"</span>1<span class="pl-pds">"</span></span>);</pre></div>
+<h3><a id="user-content-emdeddings-create" class="anchor" aria-hidden="true" href="#emdeddings-create"><span aria-hidden="true" class="octicon octicon-link"></span></a>Emdeddings Create</h3>
+<div class="highlight highlight-source-cs"><pre><span class="pl-k">var</span> <span class="pl-en">response</span> <span class="pl-k">=</span> <span class="pl-k">await</span> <span class="pl-smi">service</span>.<span class="pl-smi">Embeddings</span>.<span class="pl-en">Create</span>(<span class="pl-s"><span class="pl-pds">"</span>The food was delicious and the waiter...<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>text-embedding-ada-002<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>test<span class="pl-pds">"</span></span>);</pre></div>
+<h3><a id="user-content-models-get-all" class="anchor" aria-hidden="true" href="#models-get-all"><span aria-hidden="true" class="octicon octicon-link"></span></a>Models Get All</h3>
+<div class="highlight highlight-source-cs"><pre><span class="pl-k">var</span> <span class="pl-en">response</span> <span class="pl-k">=</span> <span class="pl-k">await</span> <span class="pl-smi">service</span>.<span class="pl-smi">Models</span>.<span class="pl-en">Get</span>();</pre></div>
+<h3><a id="user-content-models-get-by-id" class="anchor" aria-hidden="true" href="#models-get-by-id"><span aria-hidden="true" class="octicon octicon-link"></span></a>Models Get By Id</h3>
+<div class="highlight highlight-source-cs"><pre><span class="pl-k">var</span> <span class="pl-en">response</span> <span class="pl-k">=</span> <span class="pl-k">await</span> <span class="pl-smi">service</span>.<span class="pl-en">Get</span>(<span class="pl-s"><span class="pl-pds">"</span>babbage<span class="pl-pds">"</span></span>);</pre></div>
+<h3><a id="user-content-moderation-create" class="anchor" aria-hidden="true" href="#moderation-create"><span aria-hidden="true" class="octicon octicon-link"></span></a>Moderation Create</h3>
+<div class="highlight highlight-source-cs"><pre><span class="pl-k">var</span> <span class="pl-en">response</span> <span class="pl-k">=</span> <span class="pl-k">await</span> <span class="pl-smi">service</span>.<span class="pl-smi">Moderation</span>.<span class="pl-en">Create</span>(<span class="pl-s"><span class="pl-pds">"</span>input text<span class="pl-pds">"</span></span>, <span class="pl-s"><span class="pl-pds">"</span>test<span class="pl-pds">"</span></span>);</pre></div>
+<h1><a id="user-content-contributions" class="anchor" aria-hidden="true" href="#contributions"><span aria-hidden="true" class="octicon octicon-link"></span></a>Contributions</h1>
+<p>Contributions are welcome.</p>
+<p>Minimum requirements for any PR's.</p>
+<ul>
+<li>
+<p>MUST include Unit tests and maintain 100% coverage.</p>
+</li>
+<li>
+<p>MUST pass Stryker mutation testing with 100%</p>
+</li>
+<li>
+<p>SHOULD have integration tests</p>
+</li>
+</ul>
+</body></html>
