@@ -76,23 +76,23 @@ jobs:
       uses: microsoft/setup-msbuild@v1.0.2
 
     # Install coverlet
-  #  - name: Install Coverlet
-  #    run: dotnet tool install coverlet.console --tool-path src/OpenAI.Net.Tests
-  #    working-directory: src/OpenAI.Net.Tests
+    - name: Install Coverlet
+      run: dotnet tool install coverlet.console --tool-path src/OpenAI.Net.Tests
+      working-directory: src/OpenAI.Net.Tests
 
     # Execute all unit tests in the solution
-   # - name: Execute unit tests
-   #   run: dotnet test src/OpenAI.Net.Tests/OpenAI.Net.Tests.csproj --configuration Release /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
+    - name: Execute unit tests
+      run: dotnet test src/OpenAI.Net.Tests/OpenAI.Net.Tests.csproj --configuration Release /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
       
     # Install Stryker
-   # - name: Install Stryker
-   #   run: dotnet tool install dotnet-stryker --tool-path src/OpenAI.Net.Tests
-   #   working-directory: src/OpenAI.Net.Tests
+    - name: Install Stryker
+      run: dotnet tool install dotnet-stryker --tool-path src/OpenAI.Net.Tests
+      working-directory: src/OpenAI.Net.Tests
       
     # Stryker
-    #- name: Run Stryker
-   #   run: src/OpenAI.Net.Tests/dotnet-stryker --reporter "dashboard" --version "main" --dashboard-api-key ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
-    #  working-directory: src/OpenAI.Net.Tests
+    - name: Run Stryker
+      run: src/OpenAI.Net.Tests/dotnet-stryker --reporter "dashboard" --version "main" --dashboard-api-key ${{ secrets.STRYKER_DASHBOARD_API_KEY }}
+      working-directory: src/OpenAI.Net.Tests
 
 
 
