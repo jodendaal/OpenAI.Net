@@ -12,7 +12,7 @@ This library supports .net core 6.0 and above.
 
 # Getting started
 
-Install package [Nuget package](https://www.nuget.org/packages/TimSoft.OpenAI.Net/)
+Install package [Nuget package](https://www.nuget.org/packages/OpenAI.Net.Client)
 
 ```powershell
 Install-Package OpenAI.Net.Client
