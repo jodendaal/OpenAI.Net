@@ -7,7 +7,7 @@ namespace OpenAI.Net
 {
     public static class RegistrationExtensions
     {
-        public static IServiceCollection AddOpenAIServices(this IServiceCollection services, Action<OpenAIServiceRegistrationOptions> options)
+        public static IServiceCollection AddOpenAIServices(this IServiceCollection services, Action<OpenAIServiceRegistrationOptions> options,Action<IHttpClientBuilder> httpClientBuilderOptions = default!)
         {
             var optionsInstance = new OpenAIServiceRegistrationOptions();
             options.Invoke(optionsInstance);
@@ -17,11 +17,11 @@ namespace OpenAI.Net
             OpenAIDefaults.TextEditModel = optionsInstance.Defaults.TextEditModel;
             OpenAIDefaults.EmbeddingsModel = optionsInstance.Defaults.EmbeddingsModel;
 
-            services.AddOpenAIServices(optionsInstance.ApiKey, optionsInstance.OrganizationId, optionsInstance.ApiUrl);
+            services.AddOpenAIServices(optionsInstance.ApiKey, optionsInstance.OrganizationId, optionsInstance.ApiUrl, httpClientBuilderOptions);
             return services;
         }
 
-        public static IServiceCollection AddOpenAIServices(this IServiceCollection services,string apiKey, string? organization = null,string apiUrl = "https://api.openai.com/")
+        public static IServiceCollection AddOpenAIServices(this IServiceCollection services,string apiKey, string? organization = null,string apiUrl = "https://api.openai.com/", Action<IHttpClientBuilder> httpClientOptions = default!)
         {
             Action<HttpClient> configureClient = (c) => {
                 c.BaseAddress = new Uri(apiUrl);
@@ -33,17 +33,22 @@ namespace OpenAI.Net
                 }
             };
 
-            services.AddHttpClient<IModelsService, ModelsService>(configureClient);
-            services.AddHttpClient<ITextCompletionService, TextCompletionService>(configureClient);
-            services.AddHttpClient<ITextEditService, TextEditService>(configureClient);
-            services.AddHttpClient<IImageService, ImageService>(configureClient);
-            services.AddHttpClient<IFilesService, FilesService>(configureClient);
-            services.AddHttpClient<IFineTuneService, FineTuneService>(configureClient);
-            services.AddHttpClient<IModerationService, ModerationService>(configureClient);
-            services.AddHttpClient<IEmbeddingsService, EmbeddingsService>(configureClient);
+            ConfigureHttpClientBuilder(services.AddHttpClient<IModelsService, ModelsService>(configureClient), httpClientOptions);
+            ConfigureHttpClientBuilder(services.AddHttpClient<ITextCompletionService, TextCompletionService>(configureClient), httpClientOptions);
+            ConfigureHttpClientBuilder(services.AddHttpClient<ITextEditService, TextEditService>(configureClient), httpClientOptions);
+            ConfigureHttpClientBuilder(services.AddHttpClient<IImageService, ImageService>(configureClient), httpClientOptions);
+            ConfigureHttpClientBuilder(services.AddHttpClient<IFilesService, FilesService>(configureClient), httpClientOptions);
+            ConfigureHttpClientBuilder(services.AddHttpClient<IFineTuneService, FineTuneService>(configureClient), httpClientOptions);
+            ConfigureHttpClientBuilder(services.AddHttpClient<IModerationService, ModerationService>(configureClient), httpClientOptions);
+            ConfigureHttpClientBuilder(services.AddHttpClient<IEmbeddingsService, EmbeddingsService>(configureClient), httpClientOptions);
 
             services.AddTransient<IOpenAIService, OpenAIService>();
             return services;
+        }
+
+        private static void ConfigureHttpClientBuilder(IHttpClientBuilder clientBuilder, Action<IHttpClientBuilder> action)
+        {
+            action?.Invoke(clientBuilder);
         }
     }
 }
