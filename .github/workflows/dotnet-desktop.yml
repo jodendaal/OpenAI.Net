@@ -104,7 +104,7 @@ jobs:
       run: dotnet nuget push src/OpenAI.Net/bin/Release/**\*.nupkg --skip-duplicate --api-key ${{ secrets.NUGET_APIKEY }} --source https://api.nuget.org/v3/index.json
       
     - name: Publish NuGet to GitHub Packages
-      run: dotnet nuget push src/OpenAI.Net/bin/Release/**\*.nupkg --skip-duplicate --api-key ${{ secrets.GITHUB_TOKEN }} --source "github"
+      run: dotnet nuget push src/OpenAI.Net/bin/Release/**\*.nupkg --skip-duplicate --api-key ${{ secrets.GITHUB_TOKEN }} --source https://nuget.pkg.github.com/OWNER/index.json
 
     - name: Create Test Coverage Badge
       uses: simon-k/dotnet-code-coverage-badge@v1.0.0
