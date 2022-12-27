@@ -16,7 +16,7 @@ namespace OpenAI.Net
             return service.Generate(request);
         }
 
-        public static Task<OpenAIHttpOperationResult<ImageGenerationResponse, ErrorResponse>> Genearate(this IImageService service, string prompt, Action<ImageGenerationRequest>? options = null)
+        public static Task<OpenAIHttpOperationResult<ImageGenerationResponse, ErrorResponse>> Generate(this IImageService service, string prompt, Action<ImageGenerationRequest>? options = null)
         {
             var request = new ImageGenerationRequest(prompt);
             options?.Invoke(request);

@@ -1,4 +1,6 @@
  [![.NET](https://github.com/jodendaal/OpenAI.Net/actions/workflows/dotnet-desktop.yml/badge.svg?branch=main)](https://github.com/jodendaal/OpenAI.Net/actions/workflows/dotnet-desktop.yml) [![NuGet Badge](https://buildstats.info/nuget/OpenAI.Net.Client)](https://www.nuget.org/packages/OpenAI.Net.Client)  ![badge](https://img.shields.io/endpoint?url=https://gist.githubusercontent.com//jodendaal/1823aaf39c6273b92442849479616daf/raw/OpenAI.Net-code-coverage.json)  [![Stryker Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Fjodendaal%2FOpenAI.Net%2Fmain)](https://dashboard.stryker-mutator.io/reports/github.com/jodendaal/OpenAI.Net/main)  [![license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/jodendaal/OpenAI.Net/blob/main/LICENSE)
+
+ 
 <img src="https://raw.githubusercontent.com/jodendaal/OpenAI.Net/main/src/OpenAI.Net/OpenAILogo.svg" alt="OpenAI" width="300"/>
 
 
