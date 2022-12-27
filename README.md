@@ -78,7 +78,7 @@ namespace ConsoleApp
 
 # Configuring Http Client Options
 ### The registration extension allows for configuration of the http client via the IHttpClientBuilder interface.
-### This allows for adding a Polly retry policy for example. See example app [here](https://github.com/jodendaal/OpenAI.Net/tree/main/examples/Console/ConsoleAppWithPolly)
+### This allows for adding a Polly retry policy for example. See example [here](https://github.com/jodendaal/OpenAI.Net/tree/main/examples/Console/ConsoleAppWithPolly).
 
 ```csharp
 services.AddOpenAIServices(options => {
@@ -288,7 +288,7 @@ var response = await service.Models.Get();
 
 ### Models Get By Id
 ```csharp
-var response = await service.Get("babbage");
+var response = await service.Models.Get("babbage");
 ```
 
 ### Moderation Create
