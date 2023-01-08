@@ -1,4 +1,6 @@
-﻿using OpenAI.Net.Models.Responses;
+﻿using OpenAI.Net.Models.OperationResult;
+using OpenAI.Net.Models.Responses;
+using OpenAI.Net.Models.Responses.Common;
 using System.Net;
 using System.Reflection;
 
@@ -27,5 +29,6 @@ namespace OpenAI.Net.Integration.Tests
                 throw new Exception(result.ErrorMessage);
             }
         }
+      
     }
 }
