@@ -14,6 +14,7 @@ This is community-maintained library.
 
 This library supports .net core 6.0 and above.
 
+Youtube tutorial : [Creating your own ChatGPT clone with .NET: A Step-by-Step Guide](https://www.youtube.com/watch?v=hRkVGSMijjs&t=51s)
 
 # Getting started
 
