@@ -312,3 +312,6 @@ Minimum requirements for any PR's.
 
 - MUST pass Stryker mutation testing with 100%
 - SHOULD have integration tests
+
+# Buy me a coffee 
+https://www.buymeacoffee.com/timdoestech?new=1
