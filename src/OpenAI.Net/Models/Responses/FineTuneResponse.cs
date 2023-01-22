@@ -32,9 +32,9 @@ namespace OpenAI.Net.Models.Responses
     public class HyperParam
     {
         [JsonPropertyName("batch_size")]
-        public int BatchSize { get; set; }
+        public int? BatchSize { get; set; }
         [JsonPropertyName("learning_rate_multiplier")]
-        public double LearningRateMultiplier { get; set; }
+        public double? LearningRateMultiplier { get; set; }
         [JsonPropertyName("n_epochs")]
         public int NoOfEpochs { get; set; }
         [JsonPropertyName("prompt_loss_weight")]
