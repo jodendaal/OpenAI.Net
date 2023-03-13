@@ -44,5 +44,10 @@ namespace OpenAI.Net
         /// <inheritdoc cref="IEmbeddingsService"/>
         /// </summary>
         public IEmbeddingsService Embeddings { get; }
+
+        /// <summary>
+        /// <inheritdoc cref="IChatCompletionService"/>
+        /// </summary>
+        public IChatCompletionService Chat { get;}
     }
 }
