@@ -16,7 +16,7 @@ namespace OpenAI.Net
         {
             var request = new ChatCompletionRequest(Message.Create(ChatRoleType.User, userMessage));
             options?.Invoke(request);
-            return chatCompletion.Create(request);
+            return chatCompletion.Get(request);
         }
 
         /// <summary>
@@ -26,7 +26,7 @@ namespace OpenAI.Net
         {
             var request = new ChatCompletionRequest(messages);
             options?.Invoke(request);
-            return chatCompletion.Create(request);
+            return chatCompletion.Get(request);
         }
 
 
@@ -37,7 +37,7 @@ namespace OpenAI.Net
         {
             var request = new ChatCompletionRequest(message);
             options?.Invoke(request);
-            return chatCompletion.Create(request);
+            return chatCompletion.Get(request);
         }
 
 
@@ -48,7 +48,7 @@ namespace OpenAI.Net
         {
             var request = new ChatCompletionRequest(Message.Create(ChatRoleType.User, userMessage));
             options?.Invoke(request);
-            return chatCompletion.CreateStream(request);
+            return chatCompletion.GetStream(request);
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace OpenAI.Net
         {
             var request = new ChatCompletionRequest(messages);
             options?.Invoke(request);
-            return chatCompletion.CreateStream(request);
+            return chatCompletion.GetStream(request);
         }
 
 
@@ -69,7 +69,7 @@ namespace OpenAI.Net
         {
             var request = new ChatCompletionRequest(message);
             options?.Invoke(request);
-            return chatCompletion.CreateStream(request);
+            return chatCompletion.GetStream(request);
         }
     }
 }

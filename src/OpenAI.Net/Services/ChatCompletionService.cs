@@ -12,12 +12,12 @@ namespace OpenAI.Net.Services
         {
         }
 
-        public Task<OpenAIHttpOperationResult<ChatCompletionResponse, ErrorResponse>> Create(ChatCompletionRequest request)
+        public Task<OpenAIHttpOperationResult<ChatCompletionResponse, ErrorResponse>> Get(ChatCompletionRequest request)
         {
             return HttpClient.Post<ChatCompletionResponse, ErrorResponse>("v1/chat/completions", request, JsonSerializerOptions);
         }
 
-        public IAsyncEnumerable<OpenAIHttpOperationResult<ChatStreamCompletionResponse, ErrorResponse>> CreateStream(ChatCompletionRequest request)
+        public IAsyncEnumerable<OpenAIHttpOperationResult<ChatStreamCompletionResponse, ErrorResponse>> GetStream(ChatCompletionRequest request)
         {
             request.Stream = true;
             return HttpClient.PostStream<ChatStreamCompletionResponse, ErrorResponse>("v1/chat/completions", request, JsonSerializerOptions);
