@@ -4,7 +4,7 @@ using OpenAI.Net.Services;
 
 namespace OpenAI.Net.Tests.Services.ChatCompletionService_Tests
 {
-    internal class ChatCompletionService_Create : BaseServiceTest
+    internal class ChatCompletionService_Get : BaseServiceTest
     {
         const string responseJson = @"{""id"":""chatcmpl-6tjUTDUidlAZv7bkF9kZjXPmj1ECZ"",
                                     ""object"":""chat.completion"",""created"":1678740925,
@@ -19,9 +19,9 @@ namespace OpenAI.Net.Tests.Services.ChatCompletionService_Tests
         {
         }
 
-        [TestCase(true, HttpStatusCode.OK, responseJson, null, Description = "Successfull Request", TestName = "Create_When_Success")]
-        [TestCase(false, HttpStatusCode.BadRequest, ErrorResponseJson, "an error occured", Description = "Failed Request", TestName = "Create_When_Fail")]
-        public async Task Create(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
+        [TestCase(true, HttpStatusCode.OK, responseJson, null, Description = "Successfull Request", TestName = "Get_When_Success")]
+        [TestCase(false, HttpStatusCode.BadRequest, ErrorResponseJson, "an error occured", Description = "Failed Request", TestName = "Get_When_Fail")]
+        public async Task Get(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
         {
             var jsonRequest = "";
             var httpClient = GetHttpClient(responseStatusCode, responseJson, "/v1/chat/completions", "https://api.openai.com", (request) =>
@@ -32,7 +32,7 @@ namespace OpenAI.Net.Tests.Services.ChatCompletionService_Tests
             var service = new ChatCompletionService(httpClient);
             var message = Message.Create(ChatRoleType.User, "Say this is a test");
             var request = new ChatCompletionRequest(message);
-            var response = await service.Create(request);
+            var response = await service.Get(request);
 
             Assert.That(response.Result?.Choices?.Count() == 1, Is.EqualTo(isSuccess));
 
@@ -42,9 +42,9 @@ namespace OpenAI.Net.Tests.Services.ChatCompletionService_Tests
             Assert.That(jsonRequest.Contains("model", StringComparison.OrdinalIgnoreCase), Is.EqualTo(true), "Serialzation options are incorrect, camel case should be used");
         }
 
-        [TestCase(true, HttpStatusCode.OK, responseJson, null, Description = "Successfull Request", TestName = "CreateList_When_Success")]
-        [TestCase(false, HttpStatusCode.BadRequest, ErrorResponseJson, "an error occured", Description = "Failed Request", TestName = "CreateList_When_Fail")]
-        public async Task CreateList(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
+        [TestCase(true, HttpStatusCode.OK, responseJson, null, Description = "Successfull Request", TestName = "GetList_When_Success")]
+        [TestCase(false, HttpStatusCode.BadRequest, ErrorResponseJson, "an error occured", Description = "Failed Request", TestName = "GetList_When_Fail")]
+        public async Task GetList(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
         {
             var jsonRequest = "";
             var httpClient = GetHttpClient(responseStatusCode, responseJson, "/v1/chat/completions", "https://api.openai.com", (request) =>
@@ -55,7 +55,7 @@ namespace OpenAI.Net.Tests.Services.ChatCompletionService_Tests
             var service = new ChatCompletionService(httpClient);
             var message = Message.Create(ChatRoleType.User, "Say this is a test");
             var request = new ChatCompletionRequest(message.ToList());
-            var response = await service.Create(request);
+            var response = await service.Get(request);
 
             Assert.That(response.Result?.Choices?.Count() == 1, Is.EqualTo(isSuccess));
 
@@ -65,9 +65,9 @@ namespace OpenAI.Net.Tests.Services.ChatCompletionService_Tests
             Assert.That(jsonRequest.Contains("model", StringComparison.OrdinalIgnoreCase), Is.EqualTo(true), "Serialzation options are incorrect, camel case should be used");
         }
 
-        [TestCase(true, HttpStatusCode.OK, responseJson, null, Description = "Successfull Request", TestName = "CreateWithMessageListExtrension_When_Success")]
-        [TestCase(false, HttpStatusCode.BadRequest, ErrorResponseJson, "an error occured", Description = "Failed Request", TestName = "CreateWithMessageListExtrension_When_Fail")]
-        public async Task CreateWithMessageListExtrension(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
+        [TestCase(true, HttpStatusCode.OK, responseJson, null, Description = "Successfull Request", TestName = "GetWithMessageListExtrension_When_Success")]
+        [TestCase(false, HttpStatusCode.BadRequest, ErrorResponseJson, "an error occured", Description = "Failed Request", TestName = "GetWithMessageListExtrension_When_Fail")]
+        public async Task GetWithMessageListExtrension(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
         {
             var jsonRequest = "";
             var httpClient = GetHttpClient(responseStatusCode, responseJson, "/v1/chat/completions", "https://api.openai.com", (request) =>
@@ -91,9 +91,9 @@ namespace OpenAI.Net.Tests.Services.ChatCompletionService_Tests
             Assert.That(jsonRequest.Contains(@"""top_p"":10", StringComparison.OrdinalIgnoreCase), Is.EqualTo(true), "Options where not applied for TopP");
         }
 
-        [TestCase(true, HttpStatusCode.OK, responseJson, null, Description = "Successfull Request", TestName = "CreateWithMessageExtension_When_Success")]
-        [TestCase(false, HttpStatusCode.BadRequest, ErrorResponseJson, "an error occured", Description = "Failed Request", TestName = "CreateWithMessageExtension_When_Fail")]
-        public async Task CreateWithMessageExtension(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
+        [TestCase(true, HttpStatusCode.OK, responseJson, null, Description = "Successfull Request", TestName = "GetWithMessageExtension_When_Success")]
+        [TestCase(false, HttpStatusCode.BadRequest, ErrorResponseJson, "an error occured", Description = "Failed Request", TestName = "GetWithMessageExtension_When_Fail")]
+        public async Task GetWithMessageExtension(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
         {
             var jsonRequest = "";
             var httpClient = GetHttpClient(responseStatusCode, responseJson, "/v1/chat/completions", "https://api.openai.com", (request) =>
@@ -117,9 +117,9 @@ namespace OpenAI.Net.Tests.Services.ChatCompletionService_Tests
             Assert.That(jsonRequest.Contains(@"""top_p"":10", StringComparison.OrdinalIgnoreCase), Is.EqualTo(true), "Options where not applied for TopP");
         }
 
-        [TestCase(true, HttpStatusCode.OK, responseJson, null, Description = "Successfull Request", TestName = "CreateWithUserMessageExtension_When_Success")]
-        [TestCase(false, HttpStatusCode.BadRequest, ErrorResponseJson, "an error occured", Description = "Failed Request", TestName = "CreateWithUserMessageExtension_When_Fail")]
-        public async Task CreateWithUserMessageExtension(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
+        [TestCase(true, HttpStatusCode.OK, responseJson, null, Description = "Successfull Request", TestName = "GetWithUserMessageExtension_When_Success")]
+        [TestCase(false, HttpStatusCode.BadRequest, ErrorResponseJson, "an error occured", Description = "Failed Request", TestName = "GetWithUserMessageExtension_When_Fail")]
+        public async Task GetWithUserMessageExtension(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
         {
             var jsonRequest = "";
             var httpClient = GetHttpClient(responseStatusCode, responseJson, "/v1/chat/completions", "https://api.openai.com", (request) =>
@@ -142,9 +142,9 @@ namespace OpenAI.Net.Tests.Services.ChatCompletionService_Tests
             Assert.That(jsonRequest.Contains(@"""top_p"":10", StringComparison.OrdinalIgnoreCase), Is.EqualTo(true), "Options where not applied for TopP");
         }
 
-        [TestCase(true, HttpStatusCode.OK, responseJson, null, Description = "Successfull Request", TestName = "CreateWithModel_When_Success")]
-        [TestCase(false, HttpStatusCode.BadRequest, ErrorResponseJson, "an error occured", Description = "Failed Request", TestName = "CreateWithModel_When_Fail")]
-        public async Task CreateWithModel(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
+        [TestCase(true, HttpStatusCode.OK, responseJson, null, Description = "Successfull Request", TestName = "GetWithModel_When_Success")]
+        [TestCase(false, HttpStatusCode.BadRequest, ErrorResponseJson, "an error occured", Description = "Failed Request", TestName = "GetWithModel_When_Fail")]
+        public async Task GetWithModel(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
         {
             var jsonRequest = "";
             var httpClient = GetHttpClient(responseStatusCode, responseJson, "/v1/chat/completions", "https://api.openai.com", (request) =>
@@ -155,7 +155,7 @@ namespace OpenAI.Net.Tests.Services.ChatCompletionService_Tests
             var service = new ChatCompletionService(httpClient);
             var message = Message.Create(ChatRoleType.User, "Say this is a test");
             var request = new ChatCompletionRequest(ModelTypes.GPT35Turbo, message);
-            var response = await service.Create(request);
+            var response = await service.Get(request);
 
             Assert.That(response.Result?.Choices?.Count() == 1, Is.EqualTo(isSuccess));
 

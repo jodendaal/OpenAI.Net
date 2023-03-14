@@ -13,10 +13,10 @@ public interface IChatCompletionService
     /// <summary>
     /// <inheritdoc cref="IChatCompletionService"/>
     /// </summary>
-    Task<OpenAIHttpOperationResult<ChatCompletionResponse, ErrorResponse>> Create(ChatCompletionRequest request);
+    Task<OpenAIHttpOperationResult<ChatCompletionResponse, ErrorResponse>> Get(ChatCompletionRequest request);
 
     /// <summary>
     /// <inheritdoc cref="IChatCompletionService"/>
     /// </summary>
-    IAsyncEnumerable<OpenAIHttpOperationResult<ChatStreamCompletionResponse, ErrorResponse>> CreateStream(ChatCompletionRequest request);
+    IAsyncEnumerable<OpenAIHttpOperationResult<ChatStreamCompletionResponse, ErrorResponse>> GetStream(ChatCompletionRequest request);
 }
