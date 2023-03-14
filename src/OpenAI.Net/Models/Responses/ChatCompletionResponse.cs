@@ -1,4 +1,5 @@
 ﻿using OpenAI.Net.Models.Responses.Common;
+using System.Text.Json.Serialization;
 
 namespace OpenAI.Net.Models.Responses;
 
@@ -24,7 +25,8 @@ public class ChatStreamCompletionResponse : ChatCompletionBaseResponse
 public class ChatChoice
 {
     public Message Message { get; set; }
-    public string Finish_reason { get; set; }
+    [JsonPropertyName("finish_reason")]
+    public string FinishReason { get; set; }
     public int Index { get; set; }
 }
 
@@ -39,7 +41,8 @@ public class ChatStreamChoice
 {
     public Delta Delta { get; set; }
     public int Index { get; set; }
-    public object Finish_reason { get; set; }
+    [JsonPropertyName("finish_reason")]
+    public object FinishReason { get; set; }
 }
 
 public class Delta
