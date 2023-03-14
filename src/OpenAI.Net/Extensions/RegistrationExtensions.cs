@@ -7,7 +7,7 @@ namespace OpenAI.Net
 {
     public static class RegistrationExtensions
     {
-        public static IServiceCollection AddOpenAIServices(this IServiceCollection services, Action<OpenAIServiceRegistrationOptions> options,Action<IHttpClientBuilder> httpClientBuilderOptions = default!)
+        public static IServiceCollection AddOpenAIServices(this IServiceCollection services, Action<OpenAIServiceRegistrationOptions> options, Action<IHttpClientBuilder> httpClientBuilderOptions = default!)
         {
             var optionsInstance = new OpenAIServiceRegistrationOptions();
             options.Invoke(optionsInstance);
@@ -21,9 +21,10 @@ namespace OpenAI.Net
             return services;
         }
 
-        public static IServiceCollection AddOpenAIServices(this IServiceCollection services,string apiKey, string? organization = null,string apiUrl = "https://api.openai.com/", Action<IHttpClientBuilder> httpClientOptions = default!)
+        public static IServiceCollection AddOpenAIServices(this IServiceCollection services, string apiKey, string? organization = null, string apiUrl = "https://api.openai.com/", Action<IHttpClientBuilder> httpClientOptions = default!)
         {
-            Action<HttpClient> configureClient = (c) => {
+            Action<HttpClient> configureClient = (c) =>
+            {
                 c.BaseAddress = new Uri(apiUrl);
                 c.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", apiKey);
 
@@ -50,42 +51,6 @@ namespace OpenAI.Net
         private static void ConfigureHttpClientBuilder(IHttpClientBuilder clientBuilder, Action<IHttpClientBuilder> action)
         {
             action?.Invoke(clientBuilder);
-        }
-
-
-        public static IServiceCollection AddOpenAIServicesAOP(this IServiceCollection services, string apiKey, string? organization = null, string apiUrl = "https://api.openai.com/", Action<IHttpClientBuilder> httpClientOptions = default!)
-        {
-            Action<HttpClient> configureClient = (c) => {
-                c.BaseAddress = new Uri(apiUrl);
-                c.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", apiKey);
-
-                if (!string.IsNullOrEmpty(organization))
-                {
-                    c.DefaultRequestHeaders.Add("OpenAI-Organization", $"{organization}");
-                }
-            };
-
-
-            services.AddScoped((s) => {
-                    var t = s.GetService<IModelsService>();
-
-                return new ModelsService(new HttpClient());
-            });
-
-           
-
-
-            ConfigureHttpClientBuilder(services.AddHttpClient<IModelsService, ModelsService>(configureClient), httpClientOptions);
-            ConfigureHttpClientBuilder(services.AddHttpClient<ITextCompletionService, TextCompletionService>(configureClient), httpClientOptions);
-            ConfigureHttpClientBuilder(services.AddHttpClient<ITextEditService, TextEditService>(configureClient), httpClientOptions);
-            ConfigureHttpClientBuilder(services.AddHttpClient<IImageService, ImageService>(configureClient), httpClientOptions);
-            ConfigureHttpClientBuilder(services.AddHttpClient<IFilesService, FilesService>(configureClient), httpClientOptions);
-            ConfigureHttpClientBuilder(services.AddHttpClient<IFineTuneService, FineTuneService>(configureClient), httpClientOptions);
-            ConfigureHttpClientBuilder(services.AddHttpClient<IModerationService, ModerationService>(configureClient), httpClientOptions);
-            ConfigureHttpClientBuilder(services.AddHttpClient<IEmbeddingsService, EmbeddingsService>(configureClient), httpClientOptions);
-
-            services.AddTransient<IOpenAIService, OpenAIService>();
-            return services;
         }
     }
 }
