@@ -8,7 +8,7 @@ namespace OpenAI.Net.Integration.Tests
         public async Task CreateStream()
         {
             var prompt = @"Say this is a test";
-            var message = new Message(ChatRoleType.User, prompt);
+            var message = Message.Create(ChatRoleType.User, prompt);
             var request = new ChatCompletionRequest(message);
 
             await foreach(var t in OpenAIService.Chat.CreateStream(request))

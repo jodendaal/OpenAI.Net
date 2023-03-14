@@ -10,7 +10,7 @@ namespace OpenAI.Net.Integration.Tests
         [TestCase("invalid_model", false, HttpStatusCode.NotFound, TestName = "Create_When_Fail")]
         public async Task Get(string model,bool isSuccess, HttpStatusCode statusCode)
         { 
-            var message = new Message(ChatRoleType.User, "Say this is a test");
+            var message = Message.Create(ChatRoleType.User, "Say this is a test");
             var request = new ChatCompletionRequest(message);
 
             var response = await OpenAIService.Chat.Create(request);
