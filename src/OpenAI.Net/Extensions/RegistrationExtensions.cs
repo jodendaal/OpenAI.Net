@@ -43,6 +43,7 @@ namespace OpenAI.Net
             ConfigureHttpClientBuilder(services.AddHttpClient<IModerationService, ModerationService>(configureClient), httpClientOptions);
             ConfigureHttpClientBuilder(services.AddHttpClient<IEmbeddingsService, EmbeddingsService>(configureClient), httpClientOptions);
             ConfigureHttpClientBuilder(services.AddHttpClient<IChatCompletionService, ChatCompletionService>(configureClient), httpClientOptions);
+            ConfigureHttpClientBuilder(services.AddHttpClient<IAudioService, AudioService>(configureClient), httpClientOptions);
 
             services.AddTransient<IOpenAIService, OpenAIService>();
             return services;

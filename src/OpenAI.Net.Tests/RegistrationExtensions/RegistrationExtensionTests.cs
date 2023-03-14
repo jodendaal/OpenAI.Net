@@ -34,6 +34,7 @@ namespace OpenAI.Net.Tests.RegistrationExtensions
             Assert.NotNull(openAIService.TextEdit, "OpenAIService.TextEdit was null");
             Assert.NotNull(openAIService.Moderation, "OpenAIService.Moderation was null");
             Assert.NotNull(openAIService.Chat, "OpenAIService.Chat was null");
+            Assert.NotNull(openAIService.Audio, "OpenAIService.Audio was null");
 
             Assert.True(httpClientOptionsCalled, "HttpClientOptions not called");
 
@@ -76,6 +77,8 @@ namespace OpenAI.Net.Tests.RegistrationExtensions
             Assert.NotNull(openAIService.TextCompletion, "OpenAIService.TextCompletion was null");
             Assert.NotNull(openAIService.TextEdit, "OpenAIService.TextEdit was null");
             Assert.NotNull(openAIService.Moderation, "OpenAIService.Moderation was null");
+            Assert.NotNull(openAIService.Chat, "OpenAIService.Chat was null");
+            Assert.NotNull(openAIService.Audio, "OpenAIService.Audio was null");
 
             Assert.True(httpClientOptionsCalled, "HttpClientOptions not called");
 

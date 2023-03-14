@@ -69,5 +69,7 @@ namespace OpenAI.Net
         public const string TextSimilarityCurie001 = "text-similarity-curie-001";
         public const string TextSimilarityDavinci001 = "text-similarity-davinci-001";
         public const string GPT35Turbo = "gpt-3.5-turbo";
+        public const string Whisper1 = "whisper-1";
+        
     }
 }

@@ -49,5 +49,10 @@ namespace OpenAI.Net
         /// <inheritdoc cref="IChatCompletionService"/>
         /// </summary>
         public IChatCompletionService Chat { get;}
+
+        /// <summary>
+        /// <inheritdoc cref="IAudioService"/>
+        /// </summary>
+        public IAudioService Audio { get; }
     }
 }
