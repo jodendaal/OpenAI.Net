@@ -5,7 +5,7 @@ namespace OpenAI.Net.Models.Requests
 {
     public class CreateTranslationRequest
     {
-        public CreateTranslationRequest(string file, string model = ModelTypes.Whisper1)
+        public CreateTranslationRequest(FileContentInfo file, string model = ModelTypes.Whisper1)
         {
             File = file;
             Model = model;
@@ -17,7 +17,7 @@ namespace OpenAI.Net.Models.Requests
         /// </summary>
         [Required]
 
-        public string File { get; set; }
+        public FileContentInfo File { get; set; }
 
         // <summary>
         /// ID of the model to use. Only whisper-1 is currently available. <br/>

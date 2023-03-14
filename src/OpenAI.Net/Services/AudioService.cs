@@ -14,12 +14,12 @@ namespace OpenAI.Net.Services
 
         public Task<OpenAIHttpOperationResult<AudioReponse, ErrorResponse>> GetTranscription(CreateTranscriptionRequest request)
         {
-            return HttpClient.Post<AudioReponse, ErrorResponse>("v1/audio/transcriptions", request, JsonSerializerOptions);
+            return HttpClient.PostForm<AudioReponse, ErrorResponse>("v1/audio/transcriptions", request);
         }
 
         public Task<OpenAIHttpOperationResult<AudioReponse, ErrorResponse>> GetTranslation(CreateTranslationRequest request)
         {
-            return HttpClient.Post<AudioReponse, ErrorResponse>("v1/audio/translations", request, JsonSerializerOptions);
+            return HttpClient.PostForm<AudioReponse, ErrorResponse>("v1/audio/translations", request);
         }
     }
 }
