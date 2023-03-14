@@ -14,6 +14,7 @@ namespace OpenAI.Net
         public IModerationService Moderation { get; }
         public IEmbeddingsService Embeddings { get; }
         public IChatCompletionService Chat { get; }
+        public IAudioService Audio { get; }
 
         public OpenAIService(
             IModelsService modelsService, 
@@ -24,7 +25,8 @@ namespace OpenAI.Net
             IFineTuneService fineTuneService,
             IModerationService moderationService, 
             IEmbeddingsService embeddings,
-            IChatCompletionService chat)
+            IChatCompletionService chat,
+            IAudioService audio)
         {
             Models = modelsService;
             TextCompletion = textCompletionService;
@@ -35,6 +37,7 @@ namespace OpenAI.Net
             Moderation = moderationService;
             Embeddings = embeddings;
             Chat = chat;
+            Audio = audio;
         }
     }
 }
