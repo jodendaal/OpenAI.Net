@@ -1,4 +1,5 @@
 ﻿using OpenAI.Net.Models.Responses.Common;
+using System.Text.Json.Serialization;
 
 namespace OpenAI.Net.Models.Responses
 {
@@ -18,7 +19,8 @@ namespace OpenAI.Net.Models.Responses
         public string Text { get; set; }
         public int Index { get; set; }
         public object Logprobs { get; set; }
-        public string Finish_reason { get; set; }
+        [JsonPropertyName("finish_reason")]
+        public string FinishReason { get; set; }
     }
 
 }

@@ -1,6 +1,9 @@
 ﻿
 
+dotnet tool install -g dotnet-stryker
+dotnet tool restore
 dotnet stryker -o
+
 
 dotnet tool install -g dotnet-reportgenerator-globaltool
 
