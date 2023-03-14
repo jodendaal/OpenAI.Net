@@ -12,7 +12,7 @@ namespace OpenAI.Net.Tests.RegistrationExtensions
         [Test]
         public void SinggeMessageToList()
         {
-            var message = new Message(ChatRoleType.User, "Test");
+            var message = Message.Create(ChatRoleType.User, "Test");
 
             var list = message.ToList();
 

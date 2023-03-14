@@ -130,14 +130,26 @@ namespace OpenAI.Net.Models.Requests
 
 public class Message
 {
-    public Message(string role, string content)
+    private static string[]  _validRoles = new string[] { ChatRoleType.User, ChatRoleType.System, ChatRoleType.Assistant };
+
+    private Message(string role, string content)
     {
         Role = role;
         Content = content;
     }
 
-    public string Role { get; set; }
-    public string Content { get; set; }
+    public string Role { get; init; }
+    public string Content { get; init; }
+
+    public static Message Create(string role, string content)
+    {
+        if (!_validRoles.Contains(role))
+        {
+            throw new ArgumentException($"Role must be one of the following ${string.Join(",", _validRoles)}",nameof(role));
+        }
+
+        return new Message(role, content);
+    }
 }
 
 public class ChatRoleType

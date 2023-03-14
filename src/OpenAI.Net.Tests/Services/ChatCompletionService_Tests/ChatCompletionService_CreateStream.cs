@@ -43,7 +43,7 @@ namespace OpenAI.Net.Tests.Services.ChatCompletionService_Tests
 
             var service = new ChatCompletionService(httpClient);
 
-            var message = new Message(ChatRoleType.User, "Say this is a test");
+            var message = Message.Create(ChatRoleType.User, "Say this is a test");
             var request = new ChatCompletionRequest(message,modelName);
             var itemCount = 0;
             var exceptionoccured = false;
@@ -72,6 +72,177 @@ namespace OpenAI.Net.Tests.Services.ChatCompletionService_Tests
                 Assert.NotNull(jsonRequest);
 
                 Assert.That(jsonRequest.Contains("best_of"), Is.EqualTo(false), "Serialzation options are incorrect, null values should not be serialised");
+        }
+
+        [TestCase(true, HttpStatusCode.OK, $"{responseJson}", null, false, Description = "Successfull Request", TestName = "CreateStreamWithMessageExtension_When_Success")]
+        [TestCase(true, HttpStatusCode.OK, $"{responseJson}", null, true, 2, Description = "Successfull Request Multiline", TestName = "CreateStreamWithMessageExtension_When_Using_Line_Data_Success")]
+        [TestCase(false, HttpStatusCode.BadRequest, ErrorResponseJson, "an error occured", false, 0, Description = "Failed Request", TestName = "CreateStreamWithMessageExtension_When_Using_Fail")]
+        [TestCase(false, HttpStatusCode.BadRequest, ErrorResponseJson, "an error occured", false, 0, null, Description = "Failed Request Validation", TestName = "CreateStreamWithMessageExtension_When_Invalid_Model_Fail")]
+        public async Task CreateStreamWithMessageExtension(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage, bool useMultiLineData, int expectedItemCount = 1, string modelName = ModelTypes.GPT35Turbo)
+        {
+            responseJson = responseJson.Replace("\r\n", "").Replace("\n", "");
+
+            if (useMultiLineData)
+            {
+                var text = responseJson;
+                text = $"data: {responseJson}\r\n{responseJson}\r\n[DONE]";
+
+                responseJson = text;
+            }
+
+
+            var jsonRequest = "";
+
+            var httpClient = GetHttpClient(responseStatusCode, responseJson, "/v1/chat/completions", "https://api.openai.com", (request) => {
+                jsonRequest = jsonRequest = request.Content.ReadAsStringAsync().Result;
+            });
+
+            var service = new ChatCompletionService(httpClient);
+
+            var message = Message.Create(ChatRoleType.User, "Say this is a test");
+            
+            var itemCount = 0;
+            var exceptionoccured = false;
+            try
+            {
+                await foreach (var response in service.GetStream(message, options =>{ 
+                    options.Model = modelName;
+                }))
+                {
+                    AssertResponse(response, isSuccess, errorMessage, responseStatusCode);
+                    Assert.That(response.Result?.Choices?.Count() == 1, Is.EqualTo(isSuccess));
+
+                    itemCount++;
+                }
+            }
+            catch (Exception ex)
+            {
+                exceptionoccured = true;
+                Assert.That(isSuccess, Is.EqualTo(false));
+                Assert.That(ex.Message, Is.EqualTo("The Model field is required."));
+            }
+
+            Assert.That(exceptionoccured && modelName == null || !exceptionoccured && modelName != null, Is.EqualTo(true));
+            Assert.That(itemCount, Is.EqualTo(expectedItemCount));
+
+
+            Assert.NotNull(jsonRequest);
+
+            Assert.That(jsonRequest.Contains("best_of"), Is.EqualTo(false), "Serialzation options are incorrect, null values should not be serialised");
+        }
+
+        [TestCase(true, HttpStatusCode.OK, $"{responseJson}", null, false, Description = "Successfull Request", TestName = "CreateStreamWithMessageListExtension_When_Success")]
+        [TestCase(true, HttpStatusCode.OK, $"{responseJson}", null, true, 2, Description = "Successfull Request Multiline", TestName = "CreateStreamWithMessageListExtension_When_Using_Line_Data_Success")]
+        [TestCase(false, HttpStatusCode.BadRequest, ErrorResponseJson, "an error occured", false, 0, Description = "Failed Request", TestName = "CreateStreamWithMessageListExtension_When_Using_Fail")]
+        [TestCase(false, HttpStatusCode.BadRequest, ErrorResponseJson, "an error occured", false, 0, null, Description = "Failed Request Validation", TestName = "CreateStreamWithMessageListExtension_When_Invalid_Model_Fail")]
+        public async Task CreateStreamWithMessageListExtension(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage, bool useMultiLineData, int expectedItemCount = 1, string modelName = ModelTypes.GPT35Turbo)
+        {
+            responseJson = responseJson.Replace("\r\n", "").Replace("\n", "");
+
+            if (useMultiLineData)
+            {
+                var text = responseJson;
+                text = $"data: {responseJson}\r\n{responseJson}\r\n[DONE]";
+
+                responseJson = text;
+            }
+
+
+            var jsonRequest = "";
+
+            var httpClient = GetHttpClient(responseStatusCode, responseJson, "/v1/chat/completions", "https://api.openai.com", (request) => {
+                jsonRequest = jsonRequest = request.Content.ReadAsStringAsync().Result;
+            });
+
+            var service = new ChatCompletionService(httpClient);
+
+            var messages = new List<Message> { Message.Create(ChatRoleType.User, "Say this is a test") };
+
+            var itemCount = 0;
+            var exceptionoccured = false;
+            try
+            {
+                await foreach (var response in service.GetStream(messages, options => {
+                    options.Model = modelName;
+                }))
+                {
+                    AssertResponse(response, isSuccess, errorMessage, responseStatusCode);
+                    Assert.That(response.Result?.Choices?.Count() == 1, Is.EqualTo(isSuccess));
+
+                    itemCount++;
+                }
+            }
+            catch (Exception ex)
+            {
+                exceptionoccured = true;
+                Assert.That(isSuccess, Is.EqualTo(false));
+                Assert.That(ex.Message, Is.EqualTo("The Model field is required."));
+            }
+
+            Assert.That(exceptionoccured && modelName == null || !exceptionoccured && modelName != null, Is.EqualTo(true));
+            Assert.That(itemCount, Is.EqualTo(expectedItemCount));
+
+
+            Assert.NotNull(jsonRequest);
+
+            Assert.That(jsonRequest.Contains("best_of"), Is.EqualTo(false), "Serialzation options are incorrect, null values should not be serialised");
+        }
+
+
+        [TestCase(true, HttpStatusCode.OK, $"{responseJson}", null, false, Description = "Successfull Request", TestName = "CreateStreamWithUserMessageExtension_When_Success")]
+        [TestCase(true, HttpStatusCode.OK, $"{responseJson}", null, true, 2, Description = "Successfull Request Multiline", TestName = "CreateStreamWithUserMessageExtension_When_Using_Line_Data_Success")]
+        [TestCase(false, HttpStatusCode.BadRequest, ErrorResponseJson, "an error occured", false, 0, Description = "Failed Request", TestName = "CreateStreamWithUserMessageExtension_When_Using_Fail")]
+        [TestCase(false, HttpStatusCode.BadRequest, ErrorResponseJson, "an error occured", false, 0, null, Description = "Failed Request Validation", TestName = "CreateStreamWithUserMessageExtension_When_Invalid_Model_Fail")]
+        public async Task CreateStreamWithUserMessageExtension(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage, bool useMultiLineData, int expectedItemCount = 1, string modelName = ModelTypes.GPT35Turbo)
+        {
+            responseJson = responseJson.Replace("\r\n", "").Replace("\n", "");
+
+            if (useMultiLineData)
+            {
+                var text = responseJson;
+                text = $"data: {responseJson}\r\n{responseJson}\r\n[DONE]";
+
+                responseJson = text;
+            }
+
+
+            var jsonRequest = "";
+
+            var httpClient = GetHttpClient(responseStatusCode, responseJson, "/v1/chat/completions", "https://api.openai.com", (request) => {
+                jsonRequest = jsonRequest = request.Content.ReadAsStringAsync().Result;
+            });
+
+            var service = new ChatCompletionService(httpClient);
+
+
+            var itemCount = 0;
+            var exceptionoccured = false;
+            try
+            {
+                await foreach (var response in service.GetStream("Say this is a test", options => {
+                    options.Model = modelName;
+                }))
+                {
+                    AssertResponse(response, isSuccess, errorMessage, responseStatusCode);
+                    Assert.That(response.Result?.Choices?.Count() == 1, Is.EqualTo(isSuccess));
+
+                    itemCount++;
+                }
+            }
+            catch (Exception ex)
+            {
+                exceptionoccured = true;
+                Assert.That(isSuccess, Is.EqualTo(false));
+                Assert.That(ex.Message, Is.EqualTo("The Model field is required."));
+            }
+
+            Assert.That(exceptionoccured && modelName == null || !exceptionoccured && modelName != null, Is.EqualTo(true));
+            Assert.That(itemCount, Is.EqualTo(expectedItemCount));
+
+
+            Assert.NotNull(jsonRequest);
+
+            Assert.That(jsonRequest.Contains("best_of"), Is.EqualTo(false), "Serialzation options are incorrect, null values should not be serialised");
         }
     }
 }
