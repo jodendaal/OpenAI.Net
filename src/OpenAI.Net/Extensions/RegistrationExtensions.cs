@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using OpenAI.Net.Brokers;
 using OpenAI.Net.Models;
 using OpenAI.Net.Services;
 using OpenAI.Net.Services.Interfaces;
@@ -34,8 +35,66 @@ namespace OpenAI.Net
                 }
             };
 
+            ConfigureHttpClientBuilder(services.AddHttpClient<IHttpService, HttpService>(configureClient), httpClientOptions);
+
+            services.AddTransient<ITextCompletionBroker, TextCompletionBroker>();
+            services.AddTransient<ITextCompletionService, TextCompletionService>();
+
             ConfigureHttpClientBuilder(services.AddHttpClient<IModelsService, ModelsService>(configureClient), httpClientOptions);
-            ConfigureHttpClientBuilder(services.AddHttpClient<ITextCompletionService, TextCompletionService>(configureClient), httpClientOptions);
+            //ConfigureHttpClientBuilder(services.AddHttpClient<ITextCompletionService, TextCompletionService>(configureClient), httpClientOptions);
+            ConfigureHttpClientBuilder(services.AddHttpClient<ITextEditService, TextEditService>(configureClient), httpClientOptions);
+            ConfigureHttpClientBuilder(services.AddHttpClient<IImageService, ImageService>(configureClient), httpClientOptions);
+            ConfigureHttpClientBuilder(services.AddHttpClient<IFilesService, FilesService>(configureClient), httpClientOptions);
+            ConfigureHttpClientBuilder(services.AddHttpClient<IFineTuneService, FineTuneService>(configureClient), httpClientOptions);
+            ConfigureHttpClientBuilder(services.AddHttpClient<IModerationService, ModerationService>(configureClient), httpClientOptions);
+            ConfigureHttpClientBuilder(services.AddHttpClient<IEmbeddingsService, EmbeddingsService>(configureClient), httpClientOptions);
+            ConfigureHttpClientBuilder(services.AddHttpClient<IChatCompletionService, ChatCompletionService>(configureClient), httpClientOptions);
+            ConfigureHttpClientBuilder(services.AddHttpClient<IAudioService, AudioService>(configureClient), httpClientOptions);
+
+            services.AddTransient<IOpenAIService, OpenAIService>();
+            return services;
+        }
+
+        // <summary>
+        /// Connect to Azure OpenAI API using API key
+        /// </summary>
+        /// <param name="services">IServiceCollection</param>
+        /// <param name="accessToken">API key</param>
+        /// <param name="apiurl">The API Url</param>
+        /// <param name="options">Configure Options</param>
+        /// <param name="httpClientBuilderOptions">Configure HttpClient options</param>
+        /// <returns>IServiceCollection</returns>
+        public static IServiceCollection AddOpenAIAzureServices(this IServiceCollection services, Action<OpenAIServiceAzureRegistrationOptionsWithApiKey> options, Action<IHttpClientBuilder> httpClientOptions = default!)
+        {
+            var optionsInstance = new OpenAIServiceAzureRegistrationOptionsWithApiKey();
+            options.Invoke(optionsInstance);
+
+            OpenAIDefaults.ApiUrl = optionsInstance.ApiUrl;
+            OpenAIDefaults.TextCompletionModel = optionsInstance.Defaults.TextCompletionModel;
+            OpenAIDefaults.TextEditModel = optionsInstance.Defaults.TextEditModel;
+            OpenAIDefaults.EmbeddingsModel = optionsInstance.Defaults.EmbeddingsModel;
+
+            Action<HttpClient> configureClient = (c) =>
+            {
+                c.BaseAddress = new Uri(optionsInstance.ApiUrl);
+                c.DefaultRequestHeaders.Add("api-key", optionsInstance.ApiKey);
+
+            };
+
+            ConfigureHttpClientBuilder(services.AddHttpClient<IHttpService, HttpService>(configureClient), httpClientOptions);
+
+            var config = new AzureOpenAIConfig()
+            {
+                ApiVersion = optionsInstance.ApiVersion,
+                DeploymentName = optionsInstance.DeploymentName
+            };
+
+            services.AddSingleton(config);
+            services.AddTransient<ITextCompletionBroker, TextCompletionAzureBroker>();
+            services.AddTransient<ITextCompletionService, TextCompletionService>();
+
+            ConfigureHttpClientBuilder(services.AddHttpClient<IModelsService, ModelsService>(configureClient), httpClientOptions);
+            //ConfigureHttpClientBuilder(services.AddHttpClient<ITextCompletionService, TextCompletionService>(configureClient), httpClientOptions);
             ConfigureHttpClientBuilder(services.AddHttpClient<ITextEditService, TextEditService>(configureClient), httpClientOptions);
             ConfigureHttpClientBuilder(services.AddHttpClient<IImageService, ImageService>(configureClient), httpClientOptions);
             ConfigureHttpClientBuilder(services.AddHttpClient<IFilesService, FilesService>(configureClient), httpClientOptions);

@@ -3,6 +3,7 @@ using Moq;
 using System.Net;
 using OpenAI.Net.Models.OperationResult;
 using OpenAI.Net.Models.Responses.Common;
+using OpenAI.Net.Services.Interfaces;
 
 namespace OpenAI.Net.Tests.Services
 {
@@ -36,7 +37,7 @@ namespace OpenAI.Net.Tests.Services
             return httpClient;
         }
 
-        public HttpClient GetHttpClient(HttpStatusCode responseStatusCode,string responseJson,string path,string url = "https://api.openai.com", Action<HttpRequestMessage> onRequest = null)
+        public HttpClient GetHttpClient(HttpStatusCode responseStatusCode,string responseJson,string path,string url = "https://api.openai.com/v1", Action<HttpRequestMessage> onRequest = null)
         {
             var res = new HttpResponseMessage { StatusCode = responseStatusCode, Content = new StringContent(responseJson) };
             var handlerMock = new Mock<HttpMessageHandler>();
@@ -60,6 +61,32 @@ namespace OpenAI.Net.Tests.Services
             var httpClient = new HttpClient(handlerMock.Object) { BaseAddress = new Uri(url) };
 
             return httpClient;
+        }
+
+        public IHttpService GetHttpService(HttpStatusCode responseStatusCode, string responseJson, string path, string url = "https://api.openai.com/v1", Action<HttpRequestMessage> onRequest = null)
+        {
+            var res = new HttpResponseMessage { StatusCode = responseStatusCode, Content = new StringContent(responseJson) };
+            var handlerMock = new Mock<HttpMessageHandler>();
+            handlerMock
+               .Protected()
+               .Setup<Task<HttpResponseMessage>>(
+                  "SendAsync",
+                  ItExpr.IsAny<HttpRequestMessage>(),
+                  ItExpr.IsAny<CancellationToken>())
+               .ReturnsAsync(() => res)
+               .Callback<HttpRequestMessage, CancellationToken>((r, c) =>
+               {
+                   if (onRequest != null)
+                   {
+                       onRequest(r);
+                   }
+
+                   Assert.That(r.RequestUri.AbsolutePath, Is.EqualTo(path), "Path is incorrect");
+               });
+
+            var httpClient = new HttpClient(handlerMock.Object) { BaseAddress = new Uri(url) };
+
+            return new HttpService(httpClient);
         }
 
         public void AssertResponse<T>(OpenAIHttpOperationResult<T,ErrorResponse> response,bool isSuccess,string errorMessage,HttpStatusCode responseStatusCode)

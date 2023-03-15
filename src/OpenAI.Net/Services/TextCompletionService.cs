@@ -3,24 +3,28 @@ using OpenAI.Net.Models.Requests;
 using OpenAI.Net.Models.Responses.Common;
 using OpenAI.Net.Models.Responses;
 using OpenAI.Net.Services.Interfaces;
+using OpenAI.Net.Brokers;
 
 namespace OpenAI.Net.Services
 {
-    public class TextCompletionService : BaseService, ITextCompletionService
+    public class TextCompletionService : ITextCompletionService
     {
-        public TextCompletionService(HttpClient client) : base(client)
+        private readonly ITextCompletionBroker _textCompletionBroker;
+
+        public TextCompletionService(ITextCompletionBroker textCompletionBroker)
         {
+            _textCompletionBroker = textCompletionBroker;
         }
 
         public Task<OpenAIHttpOperationResult<TextCompletionResponse, ErrorResponse>> Get(TextCompletionRequest request)
         {
-            return HttpClient.Post<TextCompletionResponse, ErrorResponse>("v1/completions", request, JsonSerializerOptions);
+            return _textCompletionBroker.Get(request);
         }
 
         public IAsyncEnumerable<OpenAIHttpOperationResult<TextCompletionResponse, ErrorResponse>> GetStream(TextCompletionRequest request)
         {
             request.Stream = true;
-            return HttpClient.PostStream<TextCompletionResponse, ErrorResponse>("v1/completions", request, JsonSerializerOptions);
+            return _textCompletionBroker.GetStream(request);
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using OpenAI.Net.Models.Requests;
 using System.Net;
 using OpenAI.Net.Services;
+using OpenAI.Net.Brokers;
 
 namespace OpenAI.Net.Tests.Services.TextCompletionService_Tests
 {
@@ -36,18 +37,18 @@ namespace OpenAI.Net.Tests.Services.TextCompletionService_Tests
         public async Task Get(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
         {
             var jsonRequest = "";
-            var httpClient = GetHttpClient(responseStatusCode, responseJson, "/v1/completions", "https://api.openai.com",(request) => {
+            var httpClient = GetHttpService(responseStatusCode, responseJson, "/v1/completions", "https://api.openai.com",(request) => {
                 jsonRequest = jsonRequest = request.Content.ReadAsStringAsync().Result;
             });
 
-            var service = new TextCompletionService(httpClient);
+            var service = new TextCompletionService(new TextCompletionBroker(httpClient));
             var request = new TextCompletionRequest(ModelTypes.TextDavinci003, "Say this is a test");
             var response = await service.Get(request);
 
             Assert.That(response.Result?.Choices?.Count() == 1, Is.EqualTo(isSuccess));
 
             AssertResponse(response, isSuccess, errorMessage, responseStatusCode);
-
+           
             Assert.NotNull(jsonRequest);
             Assert.That(jsonRequest.Contains("best_of"), Is.EqualTo(false), "Serialzation options are incorrect, null values should not be serialised");
             Assert.That(jsonRequest.Contains("model", StringComparison.OrdinalIgnoreCase), Is.EqualTo(true), "Serialzation options are incorrect, camel case should be used");
@@ -58,11 +59,11 @@ namespace OpenAI.Net.Tests.Services.TextCompletionService_Tests
         public async Task GetList(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
         {
             var jsonRequest = "";
-            var httpClient = GetHttpClient(responseStatusCode, responseJson, "/v1/completions", "https://api.openai.com", (request) => {
+            var httpClient = GetHttpService(responseStatusCode, responseJson, "/v1/completions", "https://api.openai.com", (request) => {
                 jsonRequest = jsonRequest = request.Content.ReadAsStringAsync().Result;
             });
 
-            var service = new TextCompletionService(httpClient);
+            var service = new TextCompletionService(new TextCompletionBroker(httpClient));
             var request = new TextCompletionRequest(ModelTypes.TextDavinci003, new List<string>() { "Say this is a test" });
             var response = await service.Get(request);
 
@@ -80,11 +81,11 @@ namespace OpenAI.Net.Tests.Services.TextCompletionService_Tests
         public async Task GetExtensionWithOptions(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
         {
             var jsonRequest = "";
-            var httpClient = GetHttpClient(responseStatusCode, responseJson, "/v1/completions", "https://api.openai.com", (request) => {
+            var httpClient = GetHttpService(responseStatusCode, responseJson, "/v1/completions", "https://api.openai.com", (request) => {
                 jsonRequest = jsonRequest = request.Content.ReadAsStringAsync().Result;
             });
 
-            var service = new TextCompletionService(httpClient);
+            var service = new TextCompletionService(new TextCompletionBroker(httpClient));
             var request = new TextCompletionRequest(ModelTypes.TextDavinci003, "Say this is a test");
             var response = await service.Get(ModelTypes.TextDavinci003, "Say this is a test", (o) => {
                 o.Echo = true;
@@ -108,11 +109,11 @@ namespace OpenAI.Net.Tests.Services.TextCompletionService_Tests
         public async Task GetListExtensionWithOptions(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
         {
             var jsonRequest = "";
-            var httpClient = GetHttpClient(responseStatusCode, responseJson, "/v1/completions", "https://api.openai.com", (request) => {
+            var httpClient = GetHttpService(responseStatusCode, responseJson, "/v1/completions", "https://api.openai.com", (request) => {
                 jsonRequest = jsonRequest = request.Content.ReadAsStringAsync().Result;
             });
 
-            var service = new TextCompletionService(httpClient);
+            var service = new TextCompletionService(new TextCompletionBroker(httpClient));
             var response = await service.Get(ModelTypes.TextDavinci003, new List<string>() { "Say this is a test"}, (o) => {
                 o.Echo = true;
                 o.LogProbs = 99;
@@ -135,11 +136,11 @@ namespace OpenAI.Net.Tests.Services.TextCompletionService_Tests
         public async Task GetExtensionWithOptionsAndDefaultModel(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
         {
             var jsonRequest = "";
-            var httpClient = GetHttpClient(responseStatusCode, responseJson, "/v1/completions", "https://api.openai.com", (request) => {
+            var httpClient = GetHttpService(responseStatusCode, responseJson, "/v1/completions", "https://api.openai.com", (request) => {
                 jsonRequest = jsonRequest = request.Content.ReadAsStringAsync().Result;
             });
 
-            var service = new TextCompletionService(httpClient);
+            var service = new TextCompletionService(new TextCompletionBroker(httpClient));
             var response = await service.Get("Say this is a test", (o) => {
                 o.Echo = true;
                 o.LogProbs = 99;
@@ -162,11 +163,11 @@ namespace OpenAI.Net.Tests.Services.TextCompletionService_Tests
         public async Task GetListExtensionWithOptionsAndDefaultModel(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
         {
             var jsonRequest = "";
-            var httpClient = GetHttpClient(responseStatusCode, responseJson, "/v1/completions", "https://api.openai.com", (request) => {
+            var httpClient = GetHttpService(responseStatusCode, responseJson, "/v1/completions", "https://api.openai.com", (request) => {
                 jsonRequest = jsonRequest = request.Content.ReadAsStringAsync().Result;
             });
 
-            var service = new TextCompletionService(httpClient);
+            var service = new TextCompletionService(new TextCompletionBroker(httpClient));
             var response = await service.Get(new List<string>() { "Say this is a test" }, (o) => {
                 o.Echo = true;
                 o.LogProbs = 99;
