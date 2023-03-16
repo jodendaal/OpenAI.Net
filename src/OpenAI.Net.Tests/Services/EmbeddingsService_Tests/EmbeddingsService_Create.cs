@@ -1,4 +1,5 @@
 ﻿using System.Net;
+using OpenAI.Net.Brokers;
 using OpenAI.Net.Models.Requests;
 using OpenAI.Net.Services;
 
@@ -34,9 +35,9 @@ namespace OpenAI.Net.Tests.Services.EmbeddingsService_Tests
         [TestCase(false, HttpStatusCode.BadRequest, ErrorResponseJson, "an error occured", TestName = "Create_When_Fail")]
         public async Task Create(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
         {
-            var httpClient = GetHttpClient(responseStatusCode, responseJson, "/v1/embeddings");
+            var httpService = GetHttpService(responseStatusCode, responseJson, "/v1/embeddings");
             
-            var service = new EmbeddingsService(httpClient);
+            var service = new EmbeddingsService(new EmbeddingsBroker(httpService));
             var request = new EmbeddingsRequest("The food was delicious and the waiter...", ModelTypes.TextEmbeddingAda002) { User = "test" };
             var response = await service.Create(request);
            
@@ -52,9 +53,9 @@ namespace OpenAI.Net.Tests.Services.EmbeddingsService_Tests
         [TestCase(false, HttpStatusCode.BadRequest, ErrorResponseJson, "an error occured", TestName = "CreateList_When_Fail")]
         public async Task CreateList(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
         {
-            var httpClient = GetHttpClient(responseStatusCode, responseJson, "/v1/embeddings");
+            var httpService = GetHttpService(responseStatusCode, responseJson, "/v1/embeddings");
 
-            var service = new EmbeddingsService(httpClient);
+            var service = new EmbeddingsService(new EmbeddingsBroker(httpService));
             var request = new EmbeddingsRequest(new List<string>() { "The food was delicious and the waiter..." }, ModelTypes.TextEmbeddingAda002) { User = "test" };
             var response = await service.Create(request);
 
@@ -71,11 +72,9 @@ namespace OpenAI.Net.Tests.Services.EmbeddingsService_Tests
         public async Task CreateWithExtension(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
         {
             var jsonRequest = "";
-            var httpClient = GetHttpClient(responseStatusCode, responseJson, "/v1/embeddings", "https://api.openai.com",(request) => {
-                jsonRequest = request.Content.ReadAsStringAsync().Result;
-            });
+            var httpService = GetHttpService(responseStatusCode, responseJson, "/v1/embeddings", "https://api.openai.com", (request) => { jsonRequest = request.Content.ReadAsStringAsync().Result; });
 
-            var service = new EmbeddingsService(httpClient);
+            var service = new EmbeddingsService(new EmbeddingsBroker(httpService));;
             var response = await service.Create("The food was delicious and the waiter...", ModelTypes.TextEmbeddingAda002, "test");
 
             Assert.That(jsonRequest.Contains(@"""input"":[""The food was delicious and the waiter...""]"));
@@ -95,11 +94,9 @@ namespace OpenAI.Net.Tests.Services.EmbeddingsService_Tests
         public async Task CreateListWithExtension(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
         {
             var jsonRequest = "";
-            var httpClient = GetHttpClient(responseStatusCode, responseJson, "/v1/embeddings", "https://api.openai.com", (request) => {
-                jsonRequest = request.Content.ReadAsStringAsync().Result;
-            });
+            var httpService = GetHttpService(responseStatusCode, responseJson, "/v1/embeddings", "https://api.openai.com", (request) => { jsonRequest = request.Content.ReadAsStringAsync().Result; });
 
-            var service = new EmbeddingsService(httpClient);
+            var service = new EmbeddingsService(new EmbeddingsBroker(httpService));;
             var response = await service.Create(new List<string>(){ "The food was delicious and the waiter..."}, ModelTypes.TextEmbeddingAda002, "test");
 
             Assert.That(jsonRequest.Contains(@"""input"":[""The food was delicious and the waiter...""]"));
@@ -119,11 +116,9 @@ namespace OpenAI.Net.Tests.Services.EmbeddingsService_Tests
         public async Task CreateWithExtensionAndDefaultModel(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
         {
             var jsonRequest = "";
-            var httpClient = GetHttpClient(responseStatusCode, responseJson, "/v1/embeddings", "https://api.openai.com", (request) => {
-                jsonRequest = request.Content.ReadAsStringAsync().Result;
-            });
+            var httpService = GetHttpService(responseStatusCode, responseJson, "/v1/embeddings", "https://api.openai.com", (request) => { jsonRequest = request.Content.ReadAsStringAsync().Result; });
 
-            var service = new EmbeddingsService(httpClient);
+            var service = new EmbeddingsService(new EmbeddingsBroker(httpService));;
             var response = await service.Create("The food was delicious and the waiter...",  "test");
 
             Assert.That(jsonRequest.Contains(@"""input"":[""The food was delicious and the waiter...""]"));
@@ -143,11 +138,9 @@ namespace OpenAI.Net.Tests.Services.EmbeddingsService_Tests
         public async Task CreateListWithExtensionAndDefaultModel(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
         {
             var jsonRequest = "";
-            var httpClient = GetHttpClient(responseStatusCode, responseJson, "/v1/embeddings", "https://api.openai.com", (request) => {
-                jsonRequest = request.Content.ReadAsStringAsync().Result;
-            });
+            var httpService = GetHttpService(responseStatusCode, responseJson, "/v1/embeddings", "https://api.openai.com", (request) => { jsonRequest = request.Content.ReadAsStringAsync().Result; });
 
-            var service = new EmbeddingsService(httpClient);
+            var service = new EmbeddingsService(new EmbeddingsBroker(httpService));;
             var response = await service.Create(new List<string>() { "The food was delicious and the waiter..." }, "test");
 
             Assert.That(jsonRequest.Contains(@"""input"":[""The food was delicious and the waiter...""]"));

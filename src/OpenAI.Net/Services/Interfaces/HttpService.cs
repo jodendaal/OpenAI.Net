@@ -6,6 +6,39 @@ using System.Text;
 
 namespace OpenAI.Net.Services.Interfaces
 {
+    public interface IHttpServiceFactory
+    {
+        IHttpService Create();
+    }
+
+    public class HttpServiceFactory : IHttpServiceFactory
+    {
+        public HttpServiceFactory()
+        {
+
+        }
+
+        public IHttpService Create()
+        {
+            return null;
+        }
+    }
+
+    public class HttpServiceFactoryAzure : IHttpServiceFactory
+    {
+        private readonly AzureOpenAIConfig _config;
+
+        public HttpServiceFactoryAzure(AzureOpenAIConfig config)
+        {
+            _config = config;
+        }
+
+        public IHttpService Create()
+        {
+            return null;
+        }
+    }
+
     public class HttpService : IHttpService
     {
         private readonly HttpClient _httpClient;

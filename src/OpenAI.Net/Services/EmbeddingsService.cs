@@ -3,24 +3,28 @@ using OpenAI.Net.Models.Requests;
 using OpenAI.Net.Models.Responses.Common;
 using OpenAI.Net.Models.Responses;
 using OpenAI.Net.Services.Interfaces;
+using OpenAI.Net.Brokers;
 
 namespace OpenAI.Net.Services
 {
     /// <summary>
     /// <inheritdoc cref="IEmbeddingsService"/>
     /// </summary>
-    public class EmbeddingsService : BaseService, IEmbeddingsService
+    public class EmbeddingsService : IEmbeddingsService
     {
+        private readonly IEmbeddingsBroker _embeddingsBroker;
+
         /// <summary>
         /// <inheritdoc cref="IEmbeddingsService"/>
         /// </summary>
-        public EmbeddingsService(HttpClient client) : base(client)
+        public EmbeddingsService(IEmbeddingsBroker embeddingsBroker) 
         {
+            _embeddingsBroker = embeddingsBroker;
         }
 
         public Task<OpenAIHttpOperationResult<EmbeddingsResponse, ErrorResponse>> Create(EmbeddingsRequest model)
         {
-            return HttpClient.Post<EmbeddingsResponse, ErrorResponse>($"v1/embeddings", model, JsonSerializerOptions);
+            return _embeddingsBroker.Create(model);
         }
     }
 }
