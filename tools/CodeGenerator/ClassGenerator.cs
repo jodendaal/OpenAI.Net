@@ -1,5 +1,7 @@
 ﻿using OpenAI.Net.Models.Responses;
+using System.Reflection;
 using System.Text;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace CodeGenerator
 {
@@ -20,8 +22,14 @@ namespace CodeGenerator
             {
                 var fieldName = result.Id.Replace("-", "");
 
-                sb.AppendLine(@$"        public const string {GenerateName(result.Id)} = ""{result.Id}"";");
-            }
+                //sb.AppendLine(@$"        public const string {GenerateName(result.Id)} = ""{result.Id}"";");
+                sb.AppendLine($"        /// <summary>");
+                sb.AppendLine($"        /// {result.Id}");
+                sb.AppendLine($"        /// </summary>");
+                sb.AppendLine(@$"        public static readonly Model {GenerateName(result.Id)} = new Model(""{result.Id}"");");
+                sb.AppendLine();
+
+    }
 
 
             sb.AppendLine("    }");

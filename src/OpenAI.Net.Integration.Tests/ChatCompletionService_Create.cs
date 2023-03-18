@@ -6,7 +6,7 @@ namespace OpenAI.Net.Integration.Tests
 {
     public class ChatCompletionService_Create : BaseTest
     {
-        [TestCase(ModelTypes.GPT35Turbo, true, HttpStatusCode.OK, TestName = "Create_When_Success")]
+        [TestCase("gpt-3.5-turbo", true, HttpStatusCode.OK, TestName = "Create_When_Success")]
         [TestCase("invalid_model", false, HttpStatusCode.NotFound, TestName = "Create_When_Fail")]
         public async Task Get(string model,bool isSuccess, HttpStatusCode statusCode)
         { 

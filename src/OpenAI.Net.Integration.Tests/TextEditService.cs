@@ -6,7 +6,7 @@ namespace OpenAI.Net.Integration.Tests
 {
     internal class TextEditService : BaseTest
     {
-        [TestCase(ModelTypes.TextDavinciEdit001,true, HttpStatusCode.OK ,TestName = "Get_When_Success")]
+        [TestCase("text-davinci-003", true, HttpStatusCode.OK ,TestName = "Get_When_Success")]
         [TestCase("invalid_model", false, HttpStatusCode.NotFound, TestName = "Get_When_Fail")]
         public async Task Get(string model,bool isSuccess, HttpStatusCode statusCode)
         {

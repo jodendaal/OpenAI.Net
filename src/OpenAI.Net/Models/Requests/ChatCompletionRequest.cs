@@ -6,22 +6,22 @@ namespace OpenAI.Net.Models.Requests
 
     public class ChatCompletionRequest
     {
-        public ChatCompletionRequest(Message message, string model = ModelTypes.GPT35Turbo)
+        public ChatCompletionRequest(Message message, ModelTypes model = null)
             : this(model, message.ToList())
         {
         }
 
-        public ChatCompletionRequest(IList<Message> messages, string model = ModelTypes.GPT35Turbo)
+        public ChatCompletionRequest(IList<Message> messages, ModelTypes model = null)
             :this(model,messages)
         {           
         }
 
-        public ChatCompletionRequest(string model, IList<Message> messages)
+        public ChatCompletionRequest(ModelTypes model, IList<Message> messages)
         {
-            Model = model;
+            Model = model ?? ModelTypes.GPT35Turbo;
             Messages = messages;
         }
-        public ChatCompletionRequest(string model, Message message) : this(model,message.ToList()) { }
+        public ChatCompletionRequest(ModelTypes model, Message message) : this(model,message.ToList()) { }
 
         /// <summary>
         /// The messages to generate chat completions for.<br/>
@@ -34,7 +34,7 @@ namespace OpenAI.Net.Models.Requests
         /// <see href="https://platform.openai.com/docs/api-reference/chat/create#chat/create-model" />
         /// </summary>
         [Required]
-        public string Model { get; set; }
+        public ModelTypes Model { get; set; }
 
         /// <summary>
         /// The maximum number of <a href="https://beta.openai.com/tokenizer">tokens</a> to generate in the answer. <br/> 

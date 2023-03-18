@@ -1,9 +1,8 @@
 ﻿using CodeGenerator;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using OpenAI.Net;
-using OpenAI.Net.Models.Responses;
-using System.Text.Json;
 
 namespace CodeGeneratorTest
 {
@@ -12,6 +11,9 @@ namespace CodeGeneratorTest
         static async Task Main(string[] args)
         {
             using var host = Host.CreateDefaultBuilder(args)
+            .ConfigureAppConfiguration(con => {
+                con.AddUserSecrets<Program>();
+            })
             .ConfigureServices((builder, services) =>
             {
                 services.AddOpenAIServices(options => {
