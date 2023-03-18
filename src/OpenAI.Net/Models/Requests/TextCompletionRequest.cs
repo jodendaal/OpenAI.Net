@@ -128,7 +128,7 @@ namespace OpenAI.Net.Models.Requests
         /// <see href="https://beta.openai.com/docs/api-reference/completions/create#completions/create-logit_bias" />
         /// </summary>
         [JsonPropertyName("logit_bias")]
-        public object? LogitBias { get; set; } = null;
+        public Dictionary<string, int>? LogitBias { get; set; } = null;
 
         /// <summary>
         /// A unique identifier representing your end-user, which can help OpenAI to monitor and detect abuse. <a href="https://beta.openai.com/docs/guides/safety-best-practices/end-user-ids">Learn more</a>.
