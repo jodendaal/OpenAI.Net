@@ -34,21 +34,23 @@ namespace OpenAI.Net.Integration.Tests
             }
         }
 
-        [TestCase(ModelTypes.TextDavinci003, true, HttpStatusCode.OK, null, TestName = "Get_When_Success")]
-        [TestCase(ModelTypes.TextDavinci003, true, HttpStatusCode.OK, true, TestName = "Get_When_Echo_True_Success")]
-        [TestCase("invalid_model", false, HttpStatusCode.NotFound, false, TestName = "Get_When_Fail")]
+        [TestCase(ModelTypes.TextDavinci003, true, HttpStatusCode.OK, null, TestName = "GetExtension_When_Success")]
+        [TestCase(ModelTypes.TextDavinci003, true, HttpStatusCode.OK, true, TestName = "GetExtension_When_Echo_True_Success")]
+        [TestCase("invalid_model", false, HttpStatusCode.NotFound, false, TestName = "GetExtension_When_Fail")]
         public async Task GetExtension(string model, bool isSuccess, HttpStatusCode statusCode, bool? echo)
         {
             var request = new TextCompletionRequest(model, "Say this is a test");
 
-            if (echo.HasValue)
-            {
-                request.Echo = echo.Value;
-            }
 
+            var logitBias = new Dictionary<string, int>
+            {
+                { "50256", -100 }
+            };
             var response = await OpenAIService.TextCompletion.Get(model, "Say this is a test",(o) => {
                 o.MaxTokens = 1024;
                 o.BestOf = 2;
+                o.LogitBias = logitBias;
+                o.Echo = echo ?? false;
             });
           
 
