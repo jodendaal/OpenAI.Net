@@ -4,7 +4,6 @@
 <img src="https://raw.githubusercontent.com/jodendaal/OpenAI.Net/main/src/OpenAI.Net/OpenAILogo.svg" alt="OpenAI" width="300"/>
 
 
-
 # OpenAI.Net
 OpenAI library for .NET
 
@@ -103,54 +102,8 @@ static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy()
 }
 ```
 
-# Supported API's
-### Full support of all current API's
--   [x] [Chat](https://platform.openai.com/docs/api-reference/chat)
-    -   [x] [Create Chat Completion](https://platform.openai.com/docs/api-reference/chat/create)
-    
--   [x] [Audio](https://platform.openai.com/docs/api-reference/audio)
-    -   [x] [Create transcription](https://platform.openai.com/docs/api-reference/audio/create)
-    -   [x] [Create translation](https://platform.openai.com/docs/api-reference/audio/create)
-        
--   [x] [Models](https://platform.openai.com/docs/api-reference/models)
-    -   [x] [List Models](https://platform.openai.com/docs/api-reference/models/list)
-    -   [x] [Retrieve model](https://platform.openai.com/docs/api-reference/models/retrieve)
--   [x] [Completions](https://platform.openai.com/docs/api-reference/completions)
-    -   [x] [Create completion](https://platform.openai.com/docs/api-reference/completions/create) 
-    - [x] [Create completion with streaming](https://platform.openai.com/docs/api-reference/completions#completions/create-stream) 
--   [x] [Edits](https://platform.openai.com/docs/api-reference/edits) 
-    -   [x] [Create edit](https://platform.openai.com/docs/api-reference/edits/create)
--   [x] [Images](https://platform.openai.com/docs/api-reference/images)
-    -   [x] [Create image](https://platform.openai.com/docs/api-reference/images/create) 
-    -   [x] [Create image edit](https://platform.openai.com/docs/api-reference/images/)
-    -   [x] [Create image variation](https://platform.openai.com/docs/api-reference/images/create-variation)
--   [x] [Embeddings](https://platform.openai.com/docs/api-reference/embeddings)
-    -   [x] [Create embeddings](https://platform.openai.com/docs/api-reference/embeddings/create)
--   [x] [Files](https://platform.openai.com/docs/api-reference/files)
-    -   [x] [List files](https://platform.openai.com/docs/api-reference/files/list) 
-    -   [x] [Upload file](https://platform.openai.com/docs/api-reference/files/upload) 
-    -   [x] [Delete file](https://platform.openai.com/docs/api-reference/files/delete) 
-    -   [x] [Retrieve file](https://platform.openai.com/docs/api-reference/files/retrieve) 
-    -   [x] [Retrieve file content](https://platform.openai.com/docs/api-reference/files/retrieve-content) 
 
--   [x] [Fine-tunes](https://platform.openai.com/docs/api-reference/fine-tunes)
-    -   [x] [Create fine-tune](https://platform.openai.com/docs/api-reference/fine-tunes)
-    -   [x] [List fine-tunes](https://platform.openai.com/docs/api-reference/fine-tunes/list)
-    -   [x] [Retrieve fine-tune](https://platform.openai.com/docs/api-reference/fine-tunes/retrieve)
-    -   [x] [Cancel fine-tune](https://platform.openai.com/docs/api-reference/fine-tunes/cancel)
-    -   [x] [List fine-tune events](https://platform.openai.com/docs/api-reference/fine-tunes/events)
-    -   [x] [Delete fine-tune model](https://platform.openai.com/docs/api-reference/fine-tunes/delete-model)
--   [x] [Moderations](https://platform.openai.com/docs/api-reference/moderations)
-    -   [x] [Create moderation](https://platform.openai.com/docs/api-reference/moderations/create)
 
-# Testing
-This project has 100% code coverage with Unit tests and 100% pass rate with [Stryker mutation testing](https://stryker-mutator.io/docs/stryker-net/introduction/). 
-
-See latest Stryker report [here](https://dashboard.stryker-mutator.io/reports/github.com/jodendaal/OpenAI.Net/main#mutant).
-
-We also have Integration tests foreach service.
-
-This should provide confidence in the library going forwards.
 
 
 
@@ -352,6 +305,55 @@ var response = await service.Models.Get("babbage");
 ```csharp
 var response = await service.Moderation.Create("input text", "test");
 ```
+
+# Testing
+This project has 100% code coverage with Unit tests and 100% pass rate with [Stryker mutation testing](https://stryker-mutator.io/docs/stryker-net/introduction/). 
+
+See latest Stryker report [here](https://dashboard.stryker-mutator.io/reports/github.com/jodendaal/OpenAI.Net/main#mutant).
+
+We also have Integration tests foreach service.
+
+This should provide confidence in the library going forwards.
+
+# Supported API's
+### Full support of all current API's
+-   [x] [Chat](https://platform.openai.com/docs/api-reference/chat)
+    -   [x] [Create Chat Completion](https://platform.openai.com/docs/api-reference/chat/create)
+    
+-   [x] [Audio](https://platform.openai.com/docs/api-reference/audio)
+    -   [x] [Create transcription](https://platform.openai.com/docs/api-reference/audio/create)
+    -   [x] [Create translation](https://platform.openai.com/docs/api-reference/audio/create)
+        
+-   [x] [Models](https://platform.openai.com/docs/api-reference/models)
+    -   [x] [List Models](https://platform.openai.com/docs/api-reference/models/list)
+    -   [x] [Retrieve model](https://platform.openai.com/docs/api-reference/models/retrieve)
+-   [x] [Completions](https://platform.openai.com/docs/api-reference/completions)
+    -   [x] [Create completion](https://platform.openai.com/docs/api-reference/completions/create) 
+    - [x] [Create completion with streaming](https://platform.openai.com/docs/api-reference/completions#completions/create-stream) 
+-   [x] [Edits](https://platform.openai.com/docs/api-reference/edits) 
+    -   [x] [Create edit](https://platform.openai.com/docs/api-reference/edits/create)
+-   [x] [Images](https://platform.openai.com/docs/api-reference/images)
+    -   [x] [Create image](https://platform.openai.com/docs/api-reference/images/create) 
+    -   [x] [Create image edit](https://platform.openai.com/docs/api-reference/images/)
+    -   [x] [Create image variation](https://platform.openai.com/docs/api-reference/images/create-variation)
+-   [x] [Embeddings](https://platform.openai.com/docs/api-reference/embeddings)
+    -   [x] [Create embeddings](https://platform.openai.com/docs/api-reference/embeddings/create)
+-   [x] [Files](https://platform.openai.com/docs/api-reference/files)
+    -   [x] [List files](https://platform.openai.com/docs/api-reference/files/list) 
+    -   [x] [Upload file](https://platform.openai.com/docs/api-reference/files/upload) 
+    -   [x] [Delete file](https://platform.openai.com/docs/api-reference/files/delete) 
+    -   [x] [Retrieve file](https://platform.openai.com/docs/api-reference/files/retrieve) 
+    -   [x] [Retrieve file content](https://platform.openai.com/docs/api-reference/files/retrieve-content) 
+
+-   [x] [Fine-tunes](https://platform.openai.com/docs/api-reference/fine-tunes)
+    -   [x] [Create fine-tune](https://platform.openai.com/docs/api-reference/fine-tunes)
+    -   [x] [List fine-tunes](https://platform.openai.com/docs/api-reference/fine-tunes/list)
+    -   [x] [Retrieve fine-tune](https://platform.openai.com/docs/api-reference/fine-tunes/retrieve)
+    -   [x] [Cancel fine-tune](https://platform.openai.com/docs/api-reference/fine-tunes/cancel)
+    -   [x] [List fine-tune events](https://platform.openai.com/docs/api-reference/fine-tunes/events)
+    -   [x] [Delete fine-tune model](https://platform.openai.com/docs/api-reference/fine-tunes/delete-model)
+-   [x] [Moderations](https://platform.openai.com/docs/api-reference/moderations)
+    -   [x] [Create moderation](https://platform.openai.com/docs/api-reference/moderations/create)
 
 # Contributions
 
