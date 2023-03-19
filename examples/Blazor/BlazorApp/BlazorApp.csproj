@@ -8,6 +8,11 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Markdig" Version="0.31.0" />
+    <PackageReference Include="MarkdigExtensions.SyntaxHighlighting" Version="1.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\..\src\OpenAI.Net\OpenAI.Net.csproj" />
   </ItemGroup>
 

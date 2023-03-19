@@ -1,14 +1,15 @@
-﻿@page "/search"
+﻿@page "/textCompletion"
 
-<PageTitle>Search</PageTitle>
+<PageTitle>Text Completion</PageTitle>
 
 @using BlazorApp.Data
 @using OpenAI.Net
 @inject IOpenAIService OpenAIService
 
-<h1>Search OpenAI</h1>
+<div class="content px-4">
+<h1>Text Completion</h1>
 
-<p>This component demonstrates fetching data from a service using the stream API.</p>
+<p>This component demonstrates the text completion using the stream API.</p>
 <p>Stream callbacks : @loopCount</p>
 
 
@@ -16,11 +17,26 @@
     <DataAnnotationsValidator />
     <ValidationSummary />
 
-    <InputText id="name" @bind-Value="searchModel.SearchText" />
-    <InputNumber id="noOfResults" @bind-Value="searchModel.NoOfResults" />
-    <InputNumber id="maxTokens" @bind-Value="searchModel.MaxTokens" />
+    <div class="mb-3">
+        <label for="exampleInputEmail1" class="form-label">Prompt</label>
+        <InputText id="name" @bind-Value="searchModel.SearchText" class="form-control" />
+        <div id="emailHelp" class="form-text">Text to send to OpenAI Text Completion endpoint</div>
+    </div>
 
-    <button type="submit">Search</button>
+    <div class="mb-3">
+        <label for="exampleInputEmail1" class="form-label">No. of results</label>
+        <InputNumber id="noOfResults" @bind-Value="searchModel.NoOfResults" class="form-control" />
+        <div id="emailHelp" class="form-text">How many results to return</div>
+    </div>
+
+    <div class="mb-3">
+        <label for="exampleInputEmail1" class="form-label">Max Tokens</label>
+        <InputNumber id="maxTokens" @bind-Value="searchModel.MaxTokens" class="form-control" />
+        <div id="emailHelp" class="form-text">Max tokens to consume, relates to how long the completion will be, N.B this includes your prompt</div>
+    </div>
+   
+
+    <button type="submit" class="btn btn-primary">Search</button>
 </EditForm>
 
 <table class="table">
@@ -39,7 +55,7 @@
     </tbody>
 </table>
 
-
+</div>
 @code {
     private SearchModel searchModel = new()
     {

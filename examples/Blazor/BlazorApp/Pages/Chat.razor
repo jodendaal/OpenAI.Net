@@ -1,0 +1,278 @@
+﻿@page "/chat"
+
+<PageTitle>Chat</PageTitle>
+@using ColorCode.Styling;
+@using Markdig;
+@using BlazorApp.Data
+@using OpenAI.Net
+@inject IOpenAIService OpenAIService
+@inject IJSRuntime JS
+
+<style>
+    .chat {
+        
+        min-height:calc(100vh);
+        position:relative;
+        flex:1;
+        --tw-bg-opacity: 1;
+        background-color: rgba(52,53,65,var(--tw-bg-opacity));
+    }
+
+    .chat > .input-area 
+    {
+        bottom:10px;
+        position: absolute;
+        width: 80%;
+        left: 10%;
+    }
+
+    .chat > .conversation-area 
+    {
+       
+        width:100%;
+        height: calc(100vh - 70px);
+        overflow-y:scroll;
+    }
+
+    .chat .conversation-item
+    {
+        
+        
+        padding:10px;
+        min-height:40px;
+        --tw-text-opacity: 1;
+        color: rgba(236,236,241,var(--tw-text-opacity));
+       
+        
+    }
+
+    .conversation-area > .ai-reply {
+            --tw-bg-opacity: 1;
+            background-color: rgba(68,70,84,var(--tw-bg-opacity));
+    }
+
+  
+
+       pre{
+                max-width: 100%;
+                white-space: pre-wrap; /* Since CSS 2.1 */
+                white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
+                white-space: -pre-wrap; /* Opera 4-6 */
+                white-space: -o-pre-wrap; /* Opera 7 */
+                word-wrap: break-word; /* Internet Explorer 5.5+ */
+           }
+
+    .chat-container
+    {
+        display:flex;
+    }
+    .converation-context
+    {
+        color:white;
+        flex: 0 0 30%;
+        padding-right:10px;
+        padding-left: 10px;
+        --tw-bg-opacity: 1;
+        background-color: rgba(32,33,35,var(--tw-bg-opacity));
+        overflow-y:hidden;
+    }
+
+    .chat-input{
+        --tw-bg-opacity: 0.5;
+        background-color: rgba(68,70,84,var(--tw-bg-opacity));
+        color:white;
+        
+        border:none;
+        rgba(32,33,35,.5);
+        border-top-color: rgba(32, 33, 35, 0.5);
+        border-right-color: rgba(32, 33, 35, 0.5);
+        border-bottom-color: rgba(32, 33, 35, 0.5);
+        border-left-color: rgba(32, 33, 35, 0.5);
+        outline :none!important;
+    }
+
+    .chat-input:focus {
+        --tw-bg-opacity: 0.5;
+        background-color: rgba(68,70,84,var(--tw-bg-opacity));
+        color: white;
+            border: none;
+            rgba(32,33,35,.5);
+            border-top-color: rgba(32, 33, 35, 0.5);
+            border-right-color: rgba(32, 33, 35, 0.5);
+            border-bottom-color: rgba(32, 33, 35, 0.5);
+            border-left-color: rgba(32, 33, 35, 0.5);
+    }
+
+    .assistant-area  {
+        width: 100%;
+        color: white;
+        height:100%;
+        min-height: calc(100vh - 329px)!important;
+        --tw-bg-opacity: 1;
+        background-color: rgba(68,70,84,var(--tw-bg-opacity));
+        border:none;
+        resize: none;
+        outline:none!important;
+    }
+
+    .assistant-area:focus{
+            color: white;
+            background-color: rgba(68,70,84,var(--tw-bg-opacity));
+            border: none;
+            resize: none;
+        }
+
+    .system-area  {
+        outline: none !important;
+        width:100%;
+        min-height:250px;
+        --tw-bg-opacity: 1;
+        background-color: rgba(68,70,84,var(--tw-bg-opacity));
+        color:white;
+        border: none;
+        resize: none;
+    }
+
+    .system-area:focus{
+            --tw-bg-opacity: 1;
+            background-color: rgba(68,70,84,var(--tw-bg-opacity));
+            color: white;
+            border: none;
+            resize: none;
+        }
+
+    .chat-input-group{
+        height:50px;
+    }
+
+    .chat-input-button {
+        --tw-bg-opacity: 0.5;
+        background-color: rgba(68,70,84,var(--tw-bg-opacity));
+        border:none;
+        color:white;
+
+        
+    }
+
+    .chat-input-button:hover {
+            --tw-text-opacity: 1;
+            color: rgba(172,172,190,var(--tw-text-opacity));
+            --tw-bg-opacity: 1;
+            background-color: rgba(32,33,35,var(--tw-bg-opacity));
+    }
+
+    </style>
+
+<div class="chat-container">
+    <div class="converation-context">
+
+          <EditForm Model="@searchModel">
+            <h5>System</h5>
+            <InputTextArea  title="text" id="name" @bind-Value="@searchModel.System" class="system-area shadow-none" />
+
+            <h5>Assistant</h5>
+            <InputTextArea title="text" id="name" @bind-Value="@searchModel.Assistant" class="assistant-area shadow-none" />
+
+            
+        </EditForm>
+
+    </div>
+
+        <div class="chat">
+
+            <div class="conversation-area" @ref=ChatAreaRef >
+       
+                @foreach (var result in results)
+                {
+                <div class="conversation-item @(result.User == "AI" ? "ai-reply" : "")">
+                        @*<pre>
+                            @result.Message
+                        </pre>*@
+                        <div>
+                        @*@((MarkupString)@Markdown.ToHtml(@result.Message,pipeline:))*@
+                        @((MarkupString)@RenderHtmlContent(@result.Message))
+                        </div>
+
+                    </div>
+                }
+       
+            </div>
+
+            <div class="input-area">
+                    <EditForm Model="@searchModel" OnValidSubmit="@SearchText">
+                    <DataAnnotationsValidator />
+                    <ValidationSummary />
+
+                <div class="input-group chat-input-group">
+                    <InputText title="text" id="name" @bind-Value="searchModel.SearchText" class="form-control chat-input shadow-none" />
+                    <button type="submit" class="chat-input-button"> <i class="oi oi-location"></i></button>
+                    </div>
+
+                    </EditForm>
+            </div>
+
+        </div>
+
+</div>
+
+
+@code {
+    ElementReference ChatAreaRef;
+    private bool isBusy = false;
+    private SearchModel searchModel = new()
+    {
+        MaxTokens =200,
+        NoOfResults =1,
+        SearchText = "write me a simple class that adds 2 numbers together and write a unit text using xunit to test it",
+            //SearchText = "How do I fix my issue?",
+        //System = "You are a helpfull support agent",
+        //Assistant = "Ticket : 1024, Title : Unable to send emails, Content : Unable to connect to SMTP server"
+            System = "You are a code generator, when generating code markdown ensure to include the language e.g c# should start with ```csharp. dont give any explanations or description code only",
+            Assistant = ""
+        };
+    private List<ChatInfo> results = new List<ChatInfo>();
+
+
+    private string RenderHtmlContent(string content) => Markdig.Markdown.ToHtml(
+        markdown: content,
+        pipeline: new MarkdownPipelineBuilder().UseAdvancedExtensions().UseSyntaxHighlighting(StyleDictionary.DefaultDark).Build()
+    );
+   
+
+    private async Task SearchText()
+    {
+        ScrollToEnd();
+        
+        this.isBusy = true;
+        this.results.Add(new ChatInfo() { User = "TimDoesTech", Message = searchModel.SearchText });
+
+
+        var messagesRequest = new List<Message>()
+            {
+                Message.Create(ChatRoleType.System,searchModel.System),
+                Message.Create(ChatRoleType.Assistant, searchModel.Assistant)
+            };
+
+        messagesRequest.Add(Message.Create(ChatRoleType.User, searchModel.SearchText));
+
+        this.results.Add(new ChatInfo() { User = "AI", Message = string.Empty });
+        await foreach (var result in OpenAIService.Chat.GetStream(messagesRequest, o =>
+        {
+            o.N = searchModel.NoOfResults;
+            o.MaxTokens = searchModel.MaxTokens;
+        }))
+        {
+            this.results[results.Count - 1].Message += result.Result!.Choices[0].Delta.Content;
+            StateHasChanged();
+            ScrollToEnd();
+        }
+        searchModel.Assistant += $"\r\n{this.results[results.Count - 1].Message}";
+        searchModel.SearchText = string.Empty;
+        isBusy = false;
+    }
+
+    void ScrollToEnd()
+    {
+        JS.InvokeVoidAsync("scrollToEnd", new object[] { ChatAreaRef });
+    }
+}
