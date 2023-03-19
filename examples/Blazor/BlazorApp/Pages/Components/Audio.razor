@@ -1,0 +1,160 @@
+﻿@using OpenAI.Net;
+@using OpenAI.Net.Models.Requests;
+@using OpenAI.Net.Models;
+@using System.Text;
+@inject IJSRuntime jsRuntime
+@inject IOpenAIService OpenAIService
+<style>
+    #buttons {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+        #buttons button {
+            font-size: 1rem;
+            padding: 1rem;
+            width: calc(50% - 0.25rem);
+        }
+
+
+    .record {
+        background: #0088cc;
+        text-align: center;
+        color: white;
+    }
+
+        .record:hover, .record:focus {
+            box-shadow: inset 0px 0px 10px rgba(255, 255, 255, 1);
+            background: #0ae;
+        }
+
+        .record:active {
+            box-shadow: inset 0px 0px 20px rgba(0,0,0,0.5);
+            transform: translateY(2px);
+        }
+
+    .recording {
+        background: red;
+        text-align: center;
+        color: white;
+    }
+
+    .stop {
+        font-size: 1rem;
+        background: #0088cc;
+        text-align: center;
+        color: white;
+        border: none;
+        transition: all 0.2s;
+        padding: 0.5rem;
+    }
+
+        .stop:hover, .stop:focus {
+            box-shadow: inset 0px 0px 10px rgba(255, 255, 255, 1);
+            background: #0ae;
+        }
+
+        .stop:active {
+            box-shadow: inset 0px 0px 20px rgba(0,0,0,0.5);
+            transform: translateY(2px);
+        }
+
+</style>
+
+<div class="wrapper mt-5">
+    <section class="main-controls">
+        <canvas id="canvas" class="visualizer" height="60"></canvas>
+        <div id="buttons">
+            <button class="@recordButton" disabled="@recording" @onclick=Record>Record</button>
+            <button class="stop" disabled="@notRecording" @onclick=Stop>Stop</button>
+        </div>
+    </section>
+
+    <section class="sound-clips">
+    </section>
+    <audio controls autoplay>
+    </audio>
+
+
+    <div>
+        @transcriptionText
+    </div>
+
+    <button @onclick="GetFile">Get Audioblob</button>
+    <button @onclick="Translate">Translate</button>
+    <button @onclick="Transcribe">Transcribe</button>
+</div>
+
+//https://mbuotidem.github.io/posts/2020-12-24-record-audio-in-blazor-using-mediarecorder-api-and-recorderjs.html
+
+//https://stackoverflow.com/questions/68371516/pass-large-js-blob-to-blazor-byte
+@code {
+    //[Parameter]
+    //public GameResult GameResults { get; set; }
+    //[Parameter]
+    //public bool PlayerIsOwner { get; set; } = false;
+
+    //[Parameter]
+    //public Player Player { get; set; }
+
+    //[Parameter]
+    //public EventCallback<Player> OnPlayerRemovedClicked { get; set; }
+
+    //private async Task PlayerRemovedClicked(Player player)
+    //{
+    //    await OnPlayerRemovedClicked.InvokeAsync(player);
+    //}
+
+    string recordButton = "record";
+    string audioSrc = "";
+    bool recording = false;
+    bool notRecording = true;
+    byte[] data = new byte[0];
+    string transcriptionText = "";
+    private async Task Record()
+    {
+        recordButton = "recording";
+        recording = true;
+        notRecording = false;
+        await jsRuntime.InvokeVoidAsync("MyJSMethods.startRecording");
+    }
+
+    private async Task Stop()
+    {
+        recordButton = "record";
+        recording = false;
+        notRecording = true;
+        await jsRuntime.InvokeVoidAsync("MyJSMethods.stopRecording");
+    }
+
+    private async Task GetFile()
+    {
+        var source = await jsRuntime.InvokeAsync<string>("MyJSMethods.getAudiosrc");
+
+        if (string.IsNullOrEmpty(source) == false)
+        {
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+            var enc1252 = Encoding.GetEncoding(1252);
+            data = enc1252.GetBytes(source);
+            await File.WriteAllBytesAsync(@"c:\temp\testRecording.wav", data);
+        }
+    }
+
+    private async Task Translate()
+    {
+
+    }
+
+    private async Task Transcribe()
+    {
+        var fileContentInfo = new FileContentInfo(data, "test.wav");
+        var request = new CreateTranscriptionRequest(fileContentInfo);
+        var result = await OpenAIService.Audio.GetTranscription(request);
+        if (result.IsSuccess)
+        {
+            transcriptionText = result.Result!.Text;
+        };
+
+    }
+}

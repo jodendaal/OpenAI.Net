@@ -10,6 +10,7 @@
   <ItemGroup>
     <PackageReference Include="Markdig" Version="0.31.0" />
     <PackageReference Include="MarkdigExtensions.SyntaxHighlighting" Version="1.0.3" />
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="6.0.0" />
   </ItemGroup>
 
   <ItemGroup>

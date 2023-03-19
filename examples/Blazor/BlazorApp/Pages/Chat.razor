@@ -1,6 +1,7 @@
 ﻿@page "/chat"
 
 <PageTitle>Chat</PageTitle>
+@using BlazorApp.Pages.Components
 @using ColorCode.Styling;
 @using Markdig;
 @using BlazorApp.Data
@@ -177,7 +178,7 @@
         </EditForm>
 
     </div>
-
+        <Audio></Audio>
         <div class="chat">
 
             <div class="conversation-area" @ref=ChatAreaRef >
@@ -275,4 +276,21 @@
     {
         JS.InvokeVoidAsync("scrollToEnd", new object[] { ChatAreaRef });
     }
+
+    //private async Task Record()
+    //{
+
+    //    recordButton = "recording";
+    //    recording = true;
+    //    notRecording = false;
+    //    await jsRuntime.InvokeVoidAsync("MyJSMethods.startRecording");
+    //}
+
+    //private async Task Stop()
+    //{
+    //    recordButton = "record";
+    //    recording = false;
+    //    notRecording = true;
+    //    await jsRuntime.InvokeVoidAsync("MyJSMethods.stopRecording");
+    //}
 }
