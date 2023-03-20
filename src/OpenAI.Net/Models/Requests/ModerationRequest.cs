@@ -12,7 +12,7 @@
 
         /// <summary>
         /// The input text to classify <br />
-        /// <see href="https://beta.openai.com/docs/api-reference/moderations/create#moderations/create-input" />
+        /// <see href="https://platform.openai.com/docs/api-reference/moderations/create#moderations/create-input" />
         /// </summary>
         public IList<string> Input { get; set; }
 
@@ -22,7 +22,7 @@
         /// This ensures you are always using our most accurate model. <br />
         /// If you use text-moderation-stable, we will provide advanced notice before updating the model. <br />
         /// Accuracy of text-moderation-stable may be slightly lower than for text-moderation-latest. <br />
-        /// <see href="https://beta.openai.com/docs/api-reference/moderations/create#moderations/create-model" />
+        /// <see href="https://platform.openai.com/docs/api-reference/moderations/create#moderations/create-model" />
         /// </summary>
         public string Model { get; set; }
     }

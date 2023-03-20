@@ -11,8 +11,10 @@ namespace OpenAI.Net.Integration.Tests
         public async Task GetTranslation(string model,bool isSuccess, HttpStatusCode statusCode)
         {
 
-            var request = new CreateTranslationRequest(FileContentInfo.Load(@"Audio\Translation.m4a"));
-            request.Model = model;
+            var request = new CreateTranslationRequest(FileContentInfo.Load(@"Audio\Translation.m4a"))
+            {
+                Model = model
+            };
 
             var response = await OpenAIService.Audio.GetTranslation(request);
 
@@ -22,9 +24,9 @@ namespace OpenAI.Net.Integration.Tests
             Assert.That(response.Result?.Text?.Contains("Programming") ?? false, Is.EqualTo(isSuccess), "Should contain the word Programming");
         }
 
-        [TestCase(ModelTypes.Whisper1, true, HttpStatusCode.OK, TestName = "GetTranslationWithExtension_When_Success")]
-        [TestCase("invalid_model", false, HttpStatusCode.NotFound, TestName = "GetTranslationWithExtension_When_Fail")]
-        public async Task GetTranslationWithExtension(string model, bool isSuccess, HttpStatusCode statusCode)
+        [TestCase(true, HttpStatusCode.OK, TestName = "GetTranslationWithExtension_When_Success")]
+        [TestCase(false, HttpStatusCode.NotFound, TestName = "GetTranslationWithExtension_When_Fail")]
+        public async Task GetTranslationWithExtension(bool isSuccess, HttpStatusCode statusCode)
         {
 
             var response = await OpenAIService.Audio.GetTranslation(@"Audio\Translation.m4a");

@@ -20,9 +20,9 @@ namespace OpenAI.Net.Tests.RegistrationExtensions
 
             var fileContent  = imageInfo.Base64ToFileContent();
 
-            Assert.NotNull(fileContent);
-            Assert.NotNull(fileContent.FileName);
-            Assert.NotNull(fileContent.FileContent);
+            Assert.That(fileContent, Is.Not.Null);
+            Assert.That(fileContent.FileName, Is.Not.Null);
+            Assert.That(fileContent.FileContent, Is.Not.Null);
         }
     }
 }

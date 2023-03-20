@@ -13,7 +13,7 @@ namespace OpenAI.Net.Models.Requests
         /// <summary>
         /// The image to edit. Must be a valid PNG file, less than 4MB, and square. <br />
         /// If mask is not provided, image must have transparency, which will be used as the mask.  <br />
-        /// <see href="https://beta.openai.com/docs/api-reference/images/create-edit#images/create-edit-image" />
+        /// <see href="https://platform.openai.com/docs/api-reference/images/create-edit#images/create-edit-image" />
         /// </summary>
         [Required]
         public FileContentInfo Image { get; set; }
@@ -21,7 +21,7 @@ namespace OpenAI.Net.Models.Requests
         /// <summary>
         /// An additional image whose fully transparent areas (e.g. where alpha is zero) indicate where image should be edited.  <br />
         /// Must be a valid PNG file, less than 4MB, and have the same dimensions as image.  <br />
-        /// <see href="https://beta.openai.com/docs/api-reference/images/create-edit#images/create-edit-mask" />
+        /// <see href="https://platform.openai.com/docs/api-reference/images/create-edit#images/create-edit-mask" />
         /// </summary>
         public FileContentInfo Mask { get; set; }
     }

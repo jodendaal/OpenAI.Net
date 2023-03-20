@@ -11,10 +11,10 @@ namespace OpenAI.Net.Integration.Tests
             var message = Message.Create(ChatRoleType.User, prompt);
             var request = new ChatCompletionRequest(message);
 
-            await foreach(var t in OpenAIService.Chat.GetStream(request))
+            await foreach(var response in OpenAIService.Chat.GetStream(request))
             {
-                Console.WriteLine(t?.Result?.Choices[0].Delta?.Content);
-                Assert.True(t.IsSuccess, "Failed to get chat stream", t.ErrorMessage);
+                Console.WriteLine(response?.Result?.Choices[0].Delta?.Content);
+                Assert.True(response?.IsSuccess, "Failed to get chat stream", response?.ErrorMessage);
             }
         }
 
@@ -29,10 +29,10 @@ namespace OpenAI.Net.Integration.Tests
                 Message.Create(ChatRoleType.User, "Where was it played?")
             };
 
-            await foreach (var t in OpenAIService.Chat.GetStream(messages))
+            await foreach (var response in OpenAIService.Chat.GetStream(messages))
             {
-                Console.WriteLine(t?.Result?.Choices[0].Delta?.Content);
-                Assert.True(t.IsSuccess, "Failed to get chat stream", t.ErrorMessage);
+                Console.WriteLine(response?.Result?.Choices[0].Delta?.Content);
+                Assert.True(response?.IsSuccess, "Failed to get chat stream", response?.ErrorMessage);
             }
         }
     }

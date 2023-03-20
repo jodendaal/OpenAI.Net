@@ -19,7 +19,7 @@ namespace OpenAI.Net.Models.OperationResult
         public Exception Exception { get; set; }
         public bool IsSuccess => Exception == null;
 
-        public static implicit operator OperationResult<T>(T? result) => new OperationResult<T>(result);
-        public static implicit operator T(OperationResult<T> result) => result.Result;
+        public static implicit operator OperationResult<T>(T? result) => new(result);
+        public static implicit operator T(OperationResult<T> result) => result.Result!;
     }
 }

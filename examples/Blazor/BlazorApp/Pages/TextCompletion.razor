@@ -76,7 +76,7 @@
             o.MaxTokens = searchModel.MaxTokens;
         }))
         {
-            var index = result.Result.Choices[0].Index;
+            var index = result.Result!.Choices[0].Index;
             results[index] += result.Result.Choices[0].Text;
 
             loopCount++;

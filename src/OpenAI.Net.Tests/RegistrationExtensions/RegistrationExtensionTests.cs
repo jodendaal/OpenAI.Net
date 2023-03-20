@@ -24,17 +24,17 @@ namespace OpenAI.Net.Tests.RegistrationExtensions
 
             var openAIService = serviceProvider.GetService<IOpenAIService>();
 
-            Assert.NotNull(openAIService, "OpenAIService was not resolved from container");
-            Assert.NotNull(openAIService.Models, "OpenAIService.Models was null");
-            Assert.NotNull(openAIService.Images, "OpenAIService.Images was null");
-            Assert.NotNull(openAIService.Files, "OpenAIService.Files was null");
-            Assert.NotNull(openAIService.Embeddings, "OpenAIService.Embeddings was null");
-            Assert.NotNull(openAIService.FineTune, "OpenAIService.FineTune was null");
-            Assert.NotNull(openAIService.TextCompletion, "OpenAIService.TextCompletion was null");
-            Assert.NotNull(openAIService.TextEdit, "OpenAIService.TextEdit was null");
-            Assert.NotNull(openAIService.Moderation, "OpenAIService.Moderation was null");
-            Assert.NotNull(openAIService.Chat, "OpenAIService.Chat was null");
-            Assert.NotNull(openAIService.Audio, "OpenAIService.Audio was null");
+            Assert.That(openAIService, Is.Not.Null, "OpenAIService was not resolved from container");
+            Assert.That(openAIService.Models, Is.Not.Null, "OpenAIService.Models was null");
+            Assert.That(openAIService.Images, Is.Not.Null, "OpenAIService.Images was null");
+            Assert.That(openAIService.Files, Is.Not.Null, "OpenAIService.Files was null");
+            Assert.That(openAIService.Embeddings, Is.Not.Null, "OpenAIService.Embeddings was null");
+            Assert.That(openAIService.FineTune, Is.Not.Null, "OpenAIService.FineTune was null");
+            Assert.That(openAIService.TextCompletion, Is.Not.Null, "OpenAIService.TextCompletion was null");
+            Assert.That(openAIService.TextEdit, Is.Not.Null, "OpenAIService.TextEdit was null");
+            Assert.That(openAIService.Moderation, Is.Not.Null, "OpenAIService.Moderation was null");
+            Assert.That(openAIService.Chat, Is.Not.Null, "OpenAIService.Chat was null");
+            Assert.That(openAIService.Audio, Is.Not.Null, "OpenAIService.Audio was null");
 
             Assert.True(httpClientOptionsCalled, "HttpClientOptions not called");
 
@@ -68,17 +68,17 @@ namespace OpenAI.Net.Tests.RegistrationExtensions
 
             var openAIService = serviceProvider.GetService<IOpenAIService>();
 
-            Assert.NotNull(openAIService, "OpenAIService was not resolved from container");
-            Assert.NotNull(openAIService.Models, "OpenAIService.Models was null");
-            Assert.NotNull(openAIService.Images, "OpenAIService.Images was null");
-            Assert.NotNull(openAIService.Files, "OpenAIService.Files was null");
-            Assert.NotNull(openAIService.Embeddings, "OpenAIService.Embeddings was null");
-            Assert.NotNull(openAIService.FineTune, "OpenAIService.FineTune was null");
-            Assert.NotNull(openAIService.TextCompletion, "OpenAIService.TextCompletion was null");
-            Assert.NotNull(openAIService.TextEdit, "OpenAIService.TextEdit was null");
-            Assert.NotNull(openAIService.Moderation, "OpenAIService.Moderation was null");
-            Assert.NotNull(openAIService.Chat, "OpenAIService.Chat was null");
-            Assert.NotNull(openAIService.Audio, "OpenAIService.Audio was null");
+            Assert.That(openAIService, Is.Not.Null, "OpenAIService was not resolved from container");
+            Assert.That(openAIService.Models, Is.Not.Null, "OpenAIService.Models was null");
+            Assert.That(openAIService.Images, Is.Not.Null, "OpenAIService.Images was null");
+            Assert.That(openAIService.Files, Is.Not.Null, "OpenAIService.Files was null");
+            Assert.That(openAIService.Embeddings, Is.Not.Null, "OpenAIService.Embeddings was null");
+            Assert.That(openAIService.FineTune, Is.Not.Null, "OpenAIService.FineTune was null");
+            Assert.That(openAIService.TextCompletion, Is.Not.Null, "OpenAIService.TextCompletion was null");
+            Assert.That(openAIService.TextEdit, Is.Not.Null, "OpenAIService.TextEdit was null");
+            Assert.That(openAIService.Moderation, Is.Not.Null, "OpenAIService.Moderation was null");
+            Assert.That(openAIService.Chat, Is.Not.Null, "OpenAIService.Chat was null");
+            Assert.That(openAIService.Audio, Is.Not.Null, "OpenAIService.Audio was null");
 
             Assert.True(httpClientOptionsCalled, "HttpClientOptions not called");
 

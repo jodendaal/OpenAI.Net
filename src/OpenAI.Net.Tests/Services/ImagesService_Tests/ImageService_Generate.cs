@@ -40,9 +40,9 @@ namespace OpenAI.Net.Tests.Services.ImagesService_Tests
             var request = new ImageGenerationRequest("A cute baby sea otter") { N = 2, Size = "1024x1024" };
             var response = await service.Generate(request);
            
-            Assert.That(response.Result?.Data?.Count() == 2, Is.EqualTo(isSuccess));
+            Assert.That(response.Result?.Data?.Length == 2, Is.EqualTo(isSuccess));
            
-            Assert.NotNull(jsonRequest);
+            Assert.That(jsonRequest, Is.Not.Null);
 
             AssertResponse(response, isSuccess, errorMessage, responseStatusCode);
         }
@@ -69,9 +69,9 @@ namespace OpenAI.Net.Tests.Services.ImagesService_Tests
             Assert.That(jsonRequest.Contains(@"""n"":2"));
             Assert.That(jsonRequest.Contains(@"""prompt"":""A cute baby sea otter"""));
 
-            Assert.That(response.Result?.Data?.Count() == 2, Is.EqualTo(isSuccess));
+            Assert.That(response.Result?.Data?.Length == 2, Is.EqualTo(isSuccess));
 
-            Assert.NotNull(jsonRequest);
+            Assert.That(jsonRequest, Is.Not.Null);
 
             AssertResponse(response, isSuccess, errorMessage, responseStatusCode);
         }
@@ -100,9 +100,9 @@ namespace OpenAI.Net.Tests.Services.ImagesService_Tests
             Assert.That(jsonRequest.Contains(@"""n"":2"));
             Assert.That(jsonRequest.Contains(@"""prompt"":""A cute baby sea otter"""));
 
-            Assert.That(response.Result?.Data?.Count() == 2, Is.EqualTo(isSuccess));
+            Assert.That(response.Result?.Data?.Length == 2, Is.EqualTo(isSuccess));
 
-            Assert.NotNull(jsonRequest);
+            Assert.That(jsonRequest, Is.Not.Null);
 
             AssertResponse(response, isSuccess, errorMessage, responseStatusCode);
         }

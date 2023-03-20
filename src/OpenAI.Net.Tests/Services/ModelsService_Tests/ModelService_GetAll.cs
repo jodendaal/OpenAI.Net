@@ -70,7 +70,7 @@ namespace OpenAI.Net.Tests.Services.ModelsService_Tests
             var service = new ModelsService(httpClient);
             var response = await service.Get();
 
-            Assert.That(response.Result?.Data?.Count() == 2, Is.EqualTo(isSuccess));
+            Assert.That(response.Result?.Data?.Length == 2, Is.EqualTo(isSuccess));
         }
     }
 }

@@ -206,9 +206,9 @@ namespace OpenAI.Net.Tests.HttpClientTests
             var stringData = await formDataContent.ReadAsStringAsync();
             var fileName = formDataContent.Headers?.ContentDisposition?.FileName?.Replace(@"""", "");
 
-            Assert.NotNull(stringData);
-            Assert.NotNull(bytes.Length > 1);
-            Assert.NotNull(formDataContent);
+            Assert.That(stringData, Is.Not.Null);
+            Assert.That(bytes.Length > 1, Is.True);
+            Assert.That(formDataContent, Is.Not.Null);
             Assert.That(stringData.Contains(@"Content-Disposition: form-data; name=image; filename=""@image.png"";"),Is.EqualTo(true));
             Assert.That(stringData.Contains(@"Content-Disposition: form-data; name=mask; filename=""@image2.png"";"), Is.EqualTo(true));
             Assert.That(stringData.Contains(@"Content-Disposition: form-data; name=prompt"), Is.EqualTo(true));
@@ -229,15 +229,15 @@ namespace OpenAI.Net.Tests.HttpClientTests
             var testNull  = ObjectExtensions.ToHttpContent(null);
             var testNullRead = await testNull.ReadAsStringAsync();
 
-            Assert.NotNull(bytesContent);
+            Assert.That(bytesContent, Is.Not.Null);
             Assert.That(bytesContent.GetType(), Is.EqualTo(typeof(ByteArrayContent)));
             Assert.That(bytesRead, Is.EqualTo(bytesValue));
 
-            Assert.NotNull(stringContent);
+            Assert.That(stringContent, Is.Not.Null);
             Assert.That(stringContent.GetType(), Is.EqualTo(typeof(StringContent)));
             Assert.That(stringRead, Is.EqualTo(stringValue));
 
-            Assert.NotNull(testNull);
+            Assert.That(testNull, Is.Not.Null);
             Assert.That(testNull.GetType(), Is.EqualTo(typeof(StringContent)));
             Assert.That(testNullRead, Is.EqualTo(""));
         }

@@ -39,8 +39,8 @@ namespace OpenAI.Net.Tests.Services.ImagesService_Tests
             var request = new ImageVariationRequest(new Models.FileContentInfo(new byte[] { 1 }, "image.png")) { N = 2, Size = "1024x1024" };
             var response = await service.Variation(request);
 
-            Assert.That(response.Result?.Data?.Count() == 2, Is.EqualTo(isSuccess));
-            Assert.NotNull(jsonRequest);
+            Assert.That(response.Result?.Data?.Length == 2, Is.EqualTo(isSuccess));
+            Assert.That(jsonRequest, Is.Not.Null);
             AssertResponse(response,isSuccess,errorMessage,responseStatusCode);
         }
 
@@ -72,13 +72,13 @@ namespace OpenAI.Net.Tests.Services.ImagesService_Tests
                 o.Size = "1024x1024";
             });
 
-            Assert.NotNull(formFields);
+            Assert.That(formFields, Is.Not.Null);
             Assert.That(formFields.Contains("name=size"));
             Assert.That(formFields.Contains("name=n"));
             Assert.That(formFields.Contains("1024x1024"));
             Assert.That(formFields.Contains("2"));
 
-            Assert.That(response.Result?.Data?.Count() == 2, Is.EqualTo(isSuccess));
+            Assert.That(response.Result?.Data?.Length == 2, Is.EqualTo(isSuccess));
            
             AssertResponse(response, isSuccess, errorMessage, responseStatusCode);
         }
@@ -112,7 +112,7 @@ namespace OpenAI.Net.Tests.Services.ImagesService_Tests
             Assert.That(formDataErrors.Count, Is.EqualTo(0), $"FormData not correct {string.Join(",", formDataErrors.Select(i=> $"{i.Key}={i.Value}"))}");
             
 
-            Assert.That(response.Result?.Data?.Count() == 2, Is.EqualTo(isSuccess));
+            Assert.That(response.Result?.Data?.Length == 2, Is.EqualTo(isSuccess));
 
             AssertResponse(response, isSuccess, errorMessage, responseStatusCode);
         }
