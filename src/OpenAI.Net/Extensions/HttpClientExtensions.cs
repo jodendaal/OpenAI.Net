@@ -70,11 +70,11 @@ namespace OpenAI.Net
         {
             @object.Validate();
 
-            using (HttpRequestMessage req = new HttpRequestMessage(HttpMethod.Post, path))
+            using (HttpRequestMessage requestMessage = new HttpRequestMessage(HttpMethod.Post, path))
             {
-                req.Content = new StringContent(JsonSerializer.Serialize(@object, jsonSerializerOptions), UnicodeEncoding.UTF8, "application/json");
+                requestMessage.Content = new StringContent(JsonSerializer.Serialize(@object, jsonSerializerOptions), UnicodeEncoding.UTF8, "application/json");
                 
-                var response = await httpClient.SendAsync(req, HttpCompletionOption.ResponseHeadersRead);
+                var response = await httpClient.SendAsync(requestMessage, HttpCompletionOption.ResponseHeadersRead);
 
                 if (response.IsSuccessStatusCode)
                 {
@@ -88,8 +88,8 @@ namespace OpenAI.Net
 
                         if (!string.IsNullOrWhiteSpace(line) && line != "[DONE]")
                         {
-                            var t = JsonSerializer.Deserialize<T>(line.Trim(), jsonSerializerOptions);
-                            yield return new OpenAIHttpOperationResult<T, TError>(t, response.StatusCode);
+                            var responseObject = JsonSerializer.Deserialize<T>(line.Trim(), jsonSerializerOptions);
+                            yield return new OpenAIHttpOperationResult<T, TError>(responseObject, response.StatusCode);
                         }
                     }
                 }
