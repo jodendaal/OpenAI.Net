@@ -13,13 +13,6 @@
     <link href="BlazorApp.styles.css" rel="stylesheet" />
  
     <component type="typeof(HeadOutlet)" render-mode="ServerPrerendered" />
-
-    <script type="text/javascript">
-        function scrollToEnd(textarea) {
-            textarea.scrollTop = textarea.scrollHeight;
-        }
-      
-    </script>
 </head>
 <body>
     @RenderBody()
@@ -37,118 +30,57 @@
 
     <script src="_framework/blazor.server.js"></script>
     <script src="https://cdn.rawgit.com/mattdiamond/Recorderjs/08e7abd9/dist/recorder.js"></script>
-    <script>
-        window.recordedData = [];
-        window.MyJSMethods = {
+    <script type="text/javascript">
 
-            startRecording: function () {
-                navigator.getUserMedia({ audio: true }, onSuccess, onError);
+
+        window.ChatGPTMethods = {
+
+            scrollToEnd: function(textarea) {
+                textarea.scrollTop = textarea.scrollHeight;
             },
 
-            stopRecording: function (element) {
-                stop.click();
-            },
+            startRecording: async (stopButtonClass,audioClass) => {
+                
+                return await new Promise((success, error) => {
 
-            getAudiosrc: function (element) {
-            //   let audio = document.querySelector('audio');
+                    navigator.getUserMedia({ audio: true }, (result) =>{
+                        let stop = document.querySelector(`.${stopButtonClass}`);
 
+                        let recorder;
+                        let context;
+                        let audio = document.querySelector(`.${audioClass}`);
+                        stop.disabled = false;
 
-                return window.recordedData;
+                        context = new AudioContext();
+                        let mediaStreamSource = context.createMediaStreamSource(result);
+                        recorder = new Recorder(mediaStreamSource);
+                        recorder.record();
 
-            },
-        }
+                        stop.onclick = function () {
+                            recorder.stop();
 
-        let onError = function (err) {
-            console.log('The following error occurred: ' + err);
-        };
+                            recorder.exportWAV(function (s) {
 
-        let stop = document.querySelector('.stop');
+                                if (audio)
+                                {
+                                    audio.src = window.URL.createObjectURL(s);
+                                }
 
-        let onSuccess = function (stream) {
-            let recorder;
-            let context;
-            let audio = document.querySelector('audio');
-            stop.disabled = false;
-
-            let mainSection = document.querySelector('.main-controls');
-            const canvas = document.querySelector('.visualizer');
-            canvas.width = mainSection.offsetWidth;
-
-            const canvasCtx = canvas.getContext("2d");
-
-            context = new AudioContext();
-            let mediaStreamSource = context.createMediaStreamSource(stream);
-            recorder = new Recorder(mediaStreamSource);
-            recorder.record();
-
-            //visualize(stream, canvas, canvasCtx);
-
-
-            stop.onclick = function () {
-                recorder.stop();
-
-                recorder.exportWAV(function (s) {
-                    debugger;
-                    (new Response(s).arrayBuffer()).then(content=>{
-                        const contentNums = new Uint8Array(content);
-                        const contentCodes = new TextDecoder('windows-1252').decode(contentNums);
-                        window.recordedData = contentCodes;
+                                (new Response(s).arrayBuffer()).then(content => {
+                                    const contentNums = new Uint8Array(content);
+                                    const contentCodes = new TextDecoder('windows-1252').decode(contentNums);
+                                    stop.disabled = true;
+                                    success(contentCodes);
+                                   
+                                });
+                            });
+                        }
+                    }, (e) => {
+                        error(e);
                     });
-                   
-            
-
-
-                    wav = window.URL.createObjectURL(s);
-                    audio.src = window.URL.createObjectURL(s);
-                    let filename = new Date().toISOString().replaceAll(':', "");
-                    let fd = new FormData();
-                    fd.append("file", s, filename);
-                    let xhr = new XMLHttpRequest();
-                    xhr.addEventListener("load", transferComplete);
-                    xhr.addEventListener("error", transferFailed)
-                    xhr.addEventListener("abort", transferFailed)
-                    xhr.open("POST", "api/SaveAudio/Save/", true);
-                    xhr.send(fd);
-
                 });
-
-                stop.disabled = true;
-
-
-                function transferComplete(evt) {
-                    console.log("The transfer is complete.");
-                    //GLOBAL.DotNetReference.invokeMethodAsync('Recognize', filename);
-
-                }
-
-                function transferFailed(evt) {
-                    console.log("An error occurred while transferring the file.");
-
-                    console.log(evt.responseText);
-                    console.log(evt.status);
-                }
-
             }
         }
-
-        recorder.exportWAV(function (s) {
-            wav = window.URL.createObjectURL(s);
-            audio.src = window.URL.createObjectURL(s);
-            let filename = new Date().toISOString().replaceAll(':', "");
-            let fd = new FormData();
-            fd.append("file", s, filename);
-            let xhr = new XMLHttpRequest();
-            xhr.addEventListener("load", transferComplete);
-            xhr.addEventListener("error", transferFailed)
-            xhr.addEventListener("abort", transferFailed)
-            xhr.open("POST", "api/SaveAudio/Save/", true);
-            alert("Audio file created do somthing with it.")
-            //xhr.send(fd);
-        });
-
-
-      
-
     </script>
 
 

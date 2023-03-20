@@ -1,225 +1,103 @@
 ﻿@page "/chat"
 
-<PageTitle>Chat</PageTitle>
-@using BlazorApp.Pages.Components
+
+
 @using ColorCode.Styling;
 @using Markdig;
 @using BlazorApp.Data
+@using Microsoft.JSInterop;
 @using OpenAI.Net
+@using System.Text;
+@using OpenAI.Net.Models;
+@using OpenAI.Net.Models.Requests;
 @inject IOpenAIService OpenAIService
 @inject IJSRuntime JS
 
-<style>
-    .chat {
-        
-        min-height:calc(100vh);
-        position:relative;
-        flex:1;
-        --tw-bg-opacity: 1;
-        background-color: rgba(52,53,65,var(--tw-bg-opacity));
-    }
-
-    .chat > .input-area 
-    {
-        bottom:10px;
-        position: absolute;
-        width: 80%;
-        left: 10%;
-    }
-
-    .chat > .conversation-area 
-    {
-       
-        width:100%;
-        height: calc(100vh - 70px);
-        overflow-y:scroll;
-    }
-
-    .chat .conversation-item
-    {
-        
-        
-        padding:10px;
-        min-height:40px;
-        --tw-text-opacity: 1;
-        color: rgba(236,236,241,var(--tw-text-opacity));
-       
-        
-    }
-
-    .conversation-area > .ai-reply {
-            --tw-bg-opacity: 1;
-            background-color: rgba(68,70,84,var(--tw-bg-opacity));
-    }
-
-  
-
-       pre{
-                max-width: 100%;
-                white-space: pre-wrap; /* Since CSS 2.1 */
-                white-space: -moz-pre-wrap; /* Mozilla, since 1999 */
-                white-space: -pre-wrap; /* Opera 4-6 */
-                white-space: -o-pre-wrap; /* Opera 7 */
-                word-wrap: break-word; /* Internet Explorer 5.5+ */
-           }
-
-    .chat-container
-    {
-        display:flex;
-    }
-    .converation-context
-    {
-        color:white;
-        flex: 0 0 30%;
-        padding-right:10px;
-        padding-left: 10px;
-        --tw-bg-opacity: 1;
-        background-color: rgba(32,33,35,var(--tw-bg-opacity));
-        overflow-y:hidden;
-    }
-
-    .chat-input{
-        --tw-bg-opacity: 0.5;
-        background-color: rgba(68,70,84,var(--tw-bg-opacity));
-        color:white;
-        
-        border:none;
-        rgba(32,33,35,.5);
-        border-top-color: rgba(32, 33, 35, 0.5);
-        border-right-color: rgba(32, 33, 35, 0.5);
-        border-bottom-color: rgba(32, 33, 35, 0.5);
-        border-left-color: rgba(32, 33, 35, 0.5);
-        outline :none!important;
-    }
-
-    .chat-input:focus {
-        --tw-bg-opacity: 0.5;
-        background-color: rgba(68,70,84,var(--tw-bg-opacity));
-        color: white;
-            border: none;
-            rgba(32,33,35,.5);
-            border-top-color: rgba(32, 33, 35, 0.5);
-            border-right-color: rgba(32, 33, 35, 0.5);
-            border-bottom-color: rgba(32, 33, 35, 0.5);
-            border-left-color: rgba(32, 33, 35, 0.5);
-    }
-
-    .assistant-area  {
-        width: 100%;
-        color: white;
-        height:100%;
-        min-height: calc(100vh - 329px)!important;
-        --tw-bg-opacity: 1;
-        background-color: rgba(68,70,84,var(--tw-bg-opacity));
-        border:none;
-        resize: none;
-        outline:none!important;
-    }
-
-    .assistant-area:focus{
-            color: white;
-            background-color: rgba(68,70,84,var(--tw-bg-opacity));
-            border: none;
-            resize: none;
-        }
-
-    .system-area  {
-        outline: none !important;
-        width:100%;
-        min-height:250px;
-        --tw-bg-opacity: 1;
-        background-color: rgba(68,70,84,var(--tw-bg-opacity));
-        color:white;
-        border: none;
-        resize: none;
-    }
-
-    .system-area:focus{
-            --tw-bg-opacity: 1;
-            background-color: rgba(68,70,84,var(--tw-bg-opacity));
-            color: white;
-            border: none;
-            resize: none;
-        }
-
-    .chat-input-group{
-        height:50px;
-    }
-
-    .chat-input-button {
-        --tw-bg-opacity: 0.5;
-        background-color: rgba(68,70,84,var(--tw-bg-opacity));
-        border:none;
-        color:white;
-
-        
-    }
-
-    .chat-input-button:hover {
-            --tw-text-opacity: 1;
-            color: rgba(172,172,190,var(--tw-text-opacity));
-            --tw-bg-opacity: 1;
-            background-color: rgba(32,33,35,var(--tw-bg-opacity));
-    }
-
-    </style>
 
 <div class="chat-container">
+
     <div class="converation-context">
 
-          <EditForm Model="@searchModel">
+        <EditForm Model="@searchModel" class="converation-context-form">
             <h5>System</h5>
-            <InputTextArea  title="text" id="name" @bind-Value="@searchModel.System" class="system-area shadow-none" />
+            <InputTextArea  title="system"  @bind-Value="@searchModel.System" class="system-area" />
 
             <h5>Assistant</h5>
-            <InputTextArea title="text" id="name" @bind-Value="@searchModel.Assistant" class="assistant-area shadow-none" />
-
-            
+            <InputTextArea title="assistant" @bind-Value="@searchModel.Assistant" class="assistant-area" />
         </EditForm>
 
     </div>
-        <Audio></Audio>
-        <div class="chat">
-
-            <div class="conversation-area" @ref=ChatAreaRef >
        
-                @foreach (var result in results)
-                {
+    <div class="chat">
+
+        <div class="conversation-area" @ref=ChatAreaRef >
+       
+            @foreach (var result in results)
+            {
                 <div class="conversation-item @(result.User == "AI" ? "ai-reply" : "")">
-                        @*<pre>
-                            @result.Message
-                        </pre>*@
-                        <div>
-                        @*@((MarkupString)@Markdown.ToHtml(@result.Message,pipeline:))*@
-                        @((MarkupString)@RenderHtmlContent(@result.Message))
-                        </div>
-
+                    <div>
+                            @((MarkupString)@RenderHtmlContent(@result.Message))
                     </div>
-                }
+                </div>
+            }
        
-            </div>
-
-            <div class="input-area">
-                    <EditForm Model="@searchModel" OnValidSubmit="@SearchText">
-                    <DataAnnotationsValidator />
-                    <ValidationSummary />
-
-                <div class="input-group chat-input-group">
-                    <InputText title="text" id="name" @bind-Value="searchModel.SearchText" class="form-control chat-input shadow-none" />
-                    <button type="submit" class="chat-input-button"> <i class="oi oi-location"></i></button>
-                    </div>
-
-                    </EditForm>
-            </div>
-
         </div>
 
+        <div class="input-area">
+        
+        @* <div>
+        <audio controls autoplay class="audio-control @(showAudioPlayBack ? "" : "hidden")">
+        </audio>
+        </div>*@
+            <EditForm Model="@searchModel" OnValidSubmit="@SearchText">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            @if (!string.IsNullOrWhiteSpace(errorText))
+            {
+                <div class="error-area">
+                    <div class="error-text">@errorText</div>
+                </div>
+            }
+
+            @if (!string.IsNullOrWhiteSpace(statusText))
+            {
+                <div class="loading-area">
+                    <div class="loading-text">@statusText</div>
+                    <div class="lds-facebook"><div></div><div></div><div></div></div>
+                </div>
+            }
+
+            <div class="input-group chat-input-group">
+                    <InputText title="prompt" id="name" @bind-Value="searchModel.SearchText" class="form-control chat-input shadow-none" />
+                @if (recording)
+                {
+                    <button type="button" class="stop" disabled="@recording == true">Stop Recording</button>
+                }
+                else
+                {
+                    <button title="record" type="button" @onclick="Record" class="chat-input-button"> <i class="oi oi-microphone"></i></button>
+                }
+
+                    <button title="generate-image" type="button" @onclick="GenerateImage" class="chat-input-button" disabled="@isBusy"> <i class="oi oi-image"></i></button>
+
+                    <button title="send" type="submit" class="chat-input-button" disabled="@isBusy"> <i class="oi oi-location"></i></button>
+                   
+            </div>
+
+            </EditForm>
+        </div>
+    </div>
 </div>
 
 
 @code {
     ElementReference ChatAreaRef;
+    private string? errorText = "";
+    private string statusText = "";
     private bool isBusy = false;
+    bool recording = false;
+    bool showAudioPlayBack = false;
     private SearchModel searchModel = new()
     {
         MaxTokens =200,
@@ -238,14 +116,20 @@
         markdown: content,
         pipeline: new MarkdownPipelineBuilder().UseAdvancedExtensions().UseSyntaxHighlighting(StyleDictionary.DefaultDark).Build()
     );
-   
+
 
     private async Task SearchText()
     {
+        await SendTextCompletionRequest(searchModel.SearchText);
+    }
+
+    private async Task SendTextCompletionRequest(string text)
+    {
+        searchModel.SearchText = string.Empty;
         ScrollToEnd();
-        
-        this.isBusy = true;
-        this.results.Add(new ChatInfo() { User = "TimDoesTech", Message = searchModel.SearchText });
+
+        this.setIsProcessing(true);
+        this.results.Add(new ChatInfo() { User = "TimDoesTech", Message = text });
 
 
         var messagesRequest = new List<Message>()
@@ -254,43 +138,142 @@
                 Message.Create(ChatRoleType.Assistant, searchModel.Assistant)
             };
 
-        messagesRequest.Add(Message.Create(ChatRoleType.User, searchModel.SearchText));
+        messagesRequest.Add(Message.Create(ChatRoleType.User, text));
 
         this.results.Add(new ChatInfo() { User = "AI", Message = string.Empty });
-        await foreach (var result in OpenAIService.Chat.GetStream(messagesRequest, o =>
+
+        try
         {
-            o.N = searchModel.NoOfResults;
-            o.MaxTokens = searchModel.MaxTokens;
-        }))
-        {
-            this.results[results.Count - 1].Message += result.Result!.Choices[0].Delta.Content;
-            StateHasChanged();
-            ScrollToEnd();
+            await foreach (var result in OpenAIService.Chat.GetStream(messagesRequest, o =>
+            {
+                o.N = searchModel.NoOfResults;
+                o.MaxTokens = searchModel.MaxTokens;
+            }))
+            {
+                this.results[results.Count - 1].Message += result.Result!.Choices[0].Delta.Content;
+                StateHasChanged();
+                ScrollToEnd();
+            }
         }
+        catch (Exception ex)
+        {
+            errorText = $"An error occured : {ex.Message}";
+        }
+
         searchModel.Assistant += $"\r\n{this.results[results.Count - 1].Message}";
-        searchModel.SearchText = string.Empty;
-        isBusy = false;
+
+        this.setIsProcessing(false);
+    }
+
+    void OnAudioTextUpdated(string text)
+    {
+        searchModel.SearchText = text;
     }
 
     void ScrollToEnd()
     {
-        JS.InvokeVoidAsync("scrollToEnd", new object[] { ChatAreaRef });
+        JS.InvokeVoidAsync("ChatGPTMethods.scrollToEnd", new object[] { ChatAreaRef });
     }
 
-    //private async Task Record()
-    //{
+    private async Task Record()
+    {
+        setshowAudioPlayBack(false);
+        setIsRecording(true);
 
-    //    recordButton = "recording";
-    //    recording = true;
-    //    notRecording = false;
-    //    await jsRuntime.InvokeVoidAsync("MyJSMethods.startRecording");
-    //}
+        var audioWindows1252EncodedData = await JS.InvokeAsync<string>("ChatGPTMethods.startRecording", "stop", "audio-control");
 
-    //private async Task Stop()
-    //{
-    //    recordButton = "record";
-    //    recording = false;
-    //    notRecording = true;
-    //    await jsRuntime.InvokeVoidAsync("MyJSMethods.stopRecording");
-    //}
+        setIsRecording(false);
+
+        if (string.IsNullOrEmpty(audioWindows1252EncodedData) == false)
+        {
+            setshowAudioPlayBack(true);
+            var audioData = ConvertAudioData(audioWindows1252EncodedData);
+            await Transcribe(audioData);
+        }
+    }
+
+    private void setshowAudioPlayBack(bool value)
+    {
+        this.showAudioPlayBack = value;
+        StateHasChanged();
+    }
+
+    private void setIsRecording(bool value)
+    {
+        this.recording = value;
+        StateHasChanged();
+    }
+
+    private void setIsProcessing(bool value,string statusMessage = "Generating")
+    {
+        this.statusText = value ? statusMessage : "";
+        this.isBusy = value;
+        StateHasChanged();
+    }
+
+    private byte[] ConvertAudioData(string windows1252EncodedData)
+    {
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+        var enc1252 = Encoding.GetEncoding(1252);
+        return enc1252.GetBytes(windows1252EncodedData);
+    }
+
+    private async Task Transcribe(byte[] audioData)
+    {
+        setIsProcessing(true,"Transcribing Text");
+        var fileContentInfo = new FileContentInfo(audioData, "transcription.wav");
+        var request = new CreateTranscriptionRequest(fileContentInfo);
+        var result = await OpenAIService.Audio.GetTranscription(request);
+        if (result.IsSuccess)
+        {
+            var transcriptionText = result.Result!.Text;
+            OnAudioTextUpdated(transcriptionText);
+            setIsProcessing(false);
+        }
+        else
+        {
+            errorText = result.ErrorResponse?.Error?.Message;
+        }
+    }
+
+    private async Task Translate(byte[] audioData)
+    {
+        setIsProcessing(true,"Translating Text");
+        var fileContentInfo = new FileContentInfo(audioData, "translation.wav");
+        var request = new CreateTranslationRequest(fileContentInfo);
+        var result = await OpenAIService.Audio.GetTranslation(request);
+        if (result.IsSuccess)
+        {
+            var transcriptionText = result.Result!.Text;
+            OnAudioTextUpdated(transcriptionText);
+            setIsProcessing(false);
+
+        }
+        else
+        {
+            errorText = result.ErrorResponse?.Error?.Message;
+        }
+    }
+
+    private async Task GenerateImage()
+    {
+        setIsProcessing(true, "Generating Image");
+
+        var imageResponse = await OpenAIService.Images.Generate(searchModel.SearchText,1);
+        if (imageResponse.IsSuccess)
+        {
+            this.results.Add(new ChatInfo() 
+            { 
+                User = "AI",
+                Message = $@"<img src=""{imageResponse?.Result?.Data[0].Url}"" alt=""drawing"" width=""400"" />" 
+            });
+        }
+        else
+        {
+            errorText = imageResponse.ErrorResponse?.Error?.Message;
+
+
+        }
+        setIsProcessing(false);
+    }
 }
