@@ -1,0 +1,279 @@
+﻿@page "/chat"
+
+
+
+@using ColorCode.Styling;
+@using Markdig;
+@using BlazorApp.Data
+@using Microsoft.JSInterop;
+@using OpenAI.Net
+@using System.Text;
+@using OpenAI.Net.Models;
+@using OpenAI.Net.Models.Requests;
+@inject IOpenAIService OpenAIService
+@inject IJSRuntime JS
+
+
+<div class="chat-container">
+
+    <div class="converation-context">
+
+        <EditForm Model="@searchModel" class="converation-context-form">
+            <h5>System</h5>
+            <InputTextArea  title="system"  @bind-Value="@searchModel.System" class="system-area" />
+
+            <h5>Assistant</h5>
+            <InputTextArea title="assistant" @bind-Value="@searchModel.Assistant" class="assistant-area" />
+        </EditForm>
+
+    </div>
+       
+    <div class="chat">
+
+        <div class="conversation-area" @ref=ChatAreaRef >
+       
+            @foreach (var result in results)
+            {
+                <div class="conversation-item @(result.User == "AI" ? "ai-reply" : "")">
+                    <div>
+                            @((MarkupString)@RenderHtmlContent(@result.Message))
+                    </div>
+                </div>
+            }
+       
+        </div>
+
+        <div class="input-area">
+        
+        @* <div>
+        <audio controls autoplay class="audio-control @(showAudioPlayBack ? "" : "hidden")">
+        </audio>
+        </div>*@
+            <EditForm Model="@searchModel" OnValidSubmit="@SearchText">
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+
+            @if (!string.IsNullOrWhiteSpace(errorText))
+            {
+                <div class="error-area">
+                    <div class="error-text">@errorText</div>
+                </div>
+            }
+
+            @if (!string.IsNullOrWhiteSpace(statusText))
+            {
+                <div class="loading-area">
+                    <div class="loading-text">@statusText</div>
+                    <div class="lds-facebook"><div></div><div></div><div></div></div>
+                </div>
+            }
+
+            <div class="input-group chat-input-group">
+                    <InputText title="prompt" id="name" @bind-Value="searchModel.SearchText" class="form-control chat-input shadow-none" />
+                @if (recording)
+                {
+                    <button type="button" class="stop" disabled="@recording == true">Stop Recording</button>
+                }
+                else
+                {
+                    <button title="record" type="button" @onclick="Record" class="chat-input-button"> <i class="oi oi-microphone"></i></button>
+                }
+
+                    <button title="generate-image" type="button" @onclick="GenerateImage" class="chat-input-button" disabled="@isBusy"> <i class="oi oi-image"></i></button>
+
+                    <button title="send" type="submit" class="chat-input-button" disabled="@isBusy"> <i class="oi oi-location"></i></button>
+                   
+            </div>
+
+            </EditForm>
+        </div>
+    </div>
+</div>
+
+
+@code {
+    ElementReference ChatAreaRef;
+    private string? errorText = "";
+    private string statusText = "";
+    private bool isBusy = false;
+    bool recording = false;
+    bool showAudioPlayBack = false;
+    private SearchModel searchModel = new()
+    {
+        MaxTokens =200,
+        NoOfResults =1,
+        SearchText = "write me a simple class that adds 2 numbers together and write a unit text using xunit to test it",
+            //SearchText = "How do I fix my issue?",
+        //System = "You are a helpfull support agent",
+        //Assistant = "Ticket : 1024, Title : Unable to send emails, Content : Unable to connect to SMTP server"
+            System = "You are a code generator, when generating code markdown ensure to include the language e.g c# should start with ```csharp. dont give any explanations or description code only",
+            Assistant = ""
+        };
+    private List<ChatInfo> results = new List<ChatInfo>();
+
+
+    private string RenderHtmlContent(string content) => Markdig.Markdown.ToHtml(
+        markdown: content,
+        pipeline: new MarkdownPipelineBuilder().UseAdvancedExtensions().UseSyntaxHighlighting(StyleDictionary.DefaultDark).Build()
+    );
+
+
+    private async Task SearchText()
+    {
+        await SendTextCompletionRequest(searchModel.SearchText);
+    }
+
+    private async Task SendTextCompletionRequest(string text)
+    {
+        searchModel.SearchText = string.Empty;
+        ScrollToEnd();
+
+        this.setIsProcessing(true);
+        this.results.Add(new ChatInfo() { User = "TimDoesTech", Message = text });
+
+
+        var messagesRequest = new List<Message>()
+            {
+                Message.Create(ChatRoleType.System,searchModel.System),
+                Message.Create(ChatRoleType.Assistant, searchModel.Assistant)
+            };
+
+        messagesRequest.Add(Message.Create(ChatRoleType.User, text));
+
+        this.results.Add(new ChatInfo() { User = "AI", Message = string.Empty });
+
+        try
+        {
+            await foreach (var result in OpenAIService.Chat.GetStream(messagesRequest, o =>
+            {
+                o.N = searchModel.NoOfResults;
+                o.MaxTokens = searchModel.MaxTokens;
+            }))
+            {
+                this.results[results.Count - 1].Message += result.Result!.Choices[0].Delta.Content;
+                StateHasChanged();
+                ScrollToEnd();
+            }
+        }
+        catch (Exception ex)
+        {
+            errorText = $"An error occured : {ex.Message}";
+        }
+
+        searchModel.Assistant += $"\r\n{this.results[results.Count - 1].Message}";
+
+        this.setIsProcessing(false);
+    }
+
+    void OnAudioTextUpdated(string text)
+    {
+        searchModel.SearchText = text;
+    }
+
+    void ScrollToEnd()
+    {
+        JS.InvokeVoidAsync("ChatGPTMethods.scrollToEnd", new object[] { ChatAreaRef });
+    }
+
+    private async Task Record()
+    {
+        setshowAudioPlayBack(false);
+        setIsRecording(true);
+
+        var audioWindows1252EncodedData = await JS.InvokeAsync<string>("ChatGPTMethods.startRecording", "stop", "audio-control");
+
+        setIsRecording(false);
+
+        if (string.IsNullOrEmpty(audioWindows1252EncodedData) == false)
+        {
+            setshowAudioPlayBack(true);
+            var audioData = ConvertAudioData(audioWindows1252EncodedData);
+            await Transcribe(audioData);
+        }
+    }
+
+    private void setshowAudioPlayBack(bool value)
+    {
+        this.showAudioPlayBack = value;
+        StateHasChanged();
+    }
+
+    private void setIsRecording(bool value)
+    {
+        this.recording = value;
+        StateHasChanged();
+    }
+
+    private void setIsProcessing(bool value,string statusMessage = "Generating")
+    {
+        this.statusText = value ? statusMessage : "";
+        this.isBusy = value;
+        StateHasChanged();
+    }
+
+    private byte[] ConvertAudioData(string windows1252EncodedData)
+    {
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+        var enc1252 = Encoding.GetEncoding(1252);
+        return enc1252.GetBytes(windows1252EncodedData);
+    }
+
+    private async Task Transcribe(byte[] audioData)
+    {
+        setIsProcessing(true,"Transcribing Text");
+        var fileContentInfo = new FileContentInfo(audioData, "transcription.wav");
+        var request = new CreateTranscriptionRequest(fileContentInfo);
+        var result = await OpenAIService.Audio.GetTranscription(request);
+        if (result.IsSuccess)
+        {
+            var transcriptionText = result.Result!.Text;
+            OnAudioTextUpdated(transcriptionText);
+            setIsProcessing(false);
+        }
+        else
+        {
+            errorText = result.ErrorResponse?.Error?.Message;
+        }
+    }
+
+    private async Task Translate(byte[] audioData)
+    {
+        setIsProcessing(true,"Translating Text");
+        var fileContentInfo = new FileContentInfo(audioData, "translation.wav");
+        var request = new CreateTranslationRequest(fileContentInfo);
+        var result = await OpenAIService.Audio.GetTranslation(request);
+        if (result.IsSuccess)
+        {
+            var transcriptionText = result.Result!.Text;
+            OnAudioTextUpdated(transcriptionText);
+            setIsProcessing(false);
+
+        }
+        else
+        {
+            errorText = result.ErrorResponse?.Error?.Message;
+        }
+    }
+
+    private async Task GenerateImage()
+    {
+        setIsProcessing(true, "Generating Image");
+
+        var imageResponse = await OpenAIService.Images.Generate(searchModel.SearchText,1);
+        if (imageResponse.IsSuccess)
+        {
+            this.results.Add(new ChatInfo() 
+            { 
+                User = "AI",
+                Message = $@"<img src=""{imageResponse?.Result?.Data[0].Url}"" alt=""drawing"" width=""400"" />" 
+            });
+        }
+        else
+        {
+            errorText = imageResponse.ErrorResponse?.Error?.Message;
+
+
+        }
+        setIsProcessing(false);
+    }
+}

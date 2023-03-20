@@ -12,5 +12,10 @@ namespace BlazorApp.Data
 
         [Required]
         public int MaxTokens { get; set; } = 200;
+
+        public string System { get; set; }
+
+        public string Assistant { get; set; }
     }
+         
 }

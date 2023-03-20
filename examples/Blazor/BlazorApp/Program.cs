@@ -17,6 +17,12 @@ namespace BlazorApp
                 o.ApiKey = builder.Configuration["OpenAI:ApiKey"];
             });
 
+            builder.Services.AddSignalR(o =>
+            {
+                o.EnableDetailedErrors = true;
+                o.MaximumReceiveMessageSize = long.MaxValue;
+            });
+
             // Add services to the container.
             builder.Services.AddRazorPages();
             builder.Services.AddServerSideBlazor();

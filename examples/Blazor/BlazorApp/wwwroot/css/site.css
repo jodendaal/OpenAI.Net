@@ -18,6 +18,7 @@ a, .btn-link {
     border-color: #1861ac;
 }
 
+
 .content {
     padding-top: 1.1rem;
 }
@@ -61,4 +62,25 @@ a, .btn-link {
 
     .blazor-error-boundary::after {
         content: "An error has occurred."
+    }
+
+* {
+    scrollbar-width: thin;
+    scrollbar-color: blue orange;
+}
+
+    /* Works on Chrome, Edge, and Safari */
+    *::-webkit-scrollbar {
+        width: 5px;
+        padding-right:3px;
+    }
+
+    *::-webkit-scrollbar-track {
+        background-color: gray;
+    }
+
+    *::-webkit-scrollbar-thumb {
+        background-color: rgba(32,33,35,var(--tw-bg-opacity));
+        border-radius: 20px;
+        border: 3px solid rgba(32,33,35,var(--tw-bg-opacity));
     }

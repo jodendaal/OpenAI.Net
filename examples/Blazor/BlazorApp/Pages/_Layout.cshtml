@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css" />
     <link href="css/site.css" rel="stylesheet" />
     <link href="BlazorApp.styles.css" rel="stylesheet" />
+ 
     <component type="typeof(HeadOutlet)" render-mode="ServerPrerendered" />
 </head>
 <body>
@@ -28,5 +29,60 @@
     </div>
 
     <script src="_framework/blazor.server.js"></script>
+    <script src="https://cdn.rawgit.com/mattdiamond/Recorderjs/08e7abd9/dist/recorder.js"></script>
+    <script type="text/javascript">
+
+
+        window.ChatGPTMethods = {
+
+            scrollToEnd: function(textarea) {
+                textarea.scrollTop = textarea.scrollHeight;
+            },
+
+            startRecording: async (stopButtonClass,audioClass) => {
+                
+                return await new Promise((success, error) => {
+
+                    navigator.getUserMedia({ audio: true }, (result) =>{
+                        let stop = document.querySelector(`.${stopButtonClass}`);
+
+                        let recorder;
+                        let context;
+                        let audio = document.querySelector(`.${audioClass}`);
+                        stop.disabled = false;
+
+                        context = new AudioContext();
+                        let mediaStreamSource = context.createMediaStreamSource(result);
+                        recorder = new Recorder(mediaStreamSource);
+                        recorder.record();
+
+                        stop.onclick = function () {
+                            recorder.stop();
+
+                            recorder.exportWAV(function (s) {
+
+                                if (audio)
+                                {
+                                    audio.src = window.URL.createObjectURL(s);
+                                }
+
+                                (new Response(s).arrayBuffer()).then(content => {
+                                    const contentNums = new Uint8Array(content);
+                                    const contentCodes = new TextDecoder('windows-1252').decode(contentNums);
+                                    stop.disabled = true;
+                                    success(contentCodes);
+                                   
+                                });
+                            });
+                        }
+                    }, (e) => {
+                        error(e);
+                    });
+                });
+            }
+        }
+    </script>
+
+
 </body>
 </html>
