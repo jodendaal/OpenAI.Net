@@ -16,7 +16,7 @@ namespace OpenAI.Net.Models.OperationResult
 
         public HttpStatusCode StatusCode { get; set; }
 
-        public static implicit operator HttpOperationResult<T>(T? result) => new HttpOperationResult<T>(result,HttpStatusCode.OK);
-        public static implicit operator T(HttpOperationResult<T> result) => result.Result;
+        public static implicit operator HttpOperationResult<T>(T? result) => new(result,HttpStatusCode.OK);
+        public static implicit operator T(HttpOperationResult<T> result) => result.Result!;
     }
 }

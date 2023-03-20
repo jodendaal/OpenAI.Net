@@ -52,7 +52,7 @@ namespace OpenAI.Net.Tests.Services.ChatCompletionService_Tests
                 await foreach (var response in service.GetStream(request))
                 {
                     AssertResponse(response,isSuccess,errorMessage,responseStatusCode);
-                    Assert.That(response.Result?.Choices?.Count() == 1, Is.EqualTo(isSuccess));
+                    Assert.That(response.Result?.Choices?.Length == 1, Is.EqualTo(isSuccess));
 
                     itemCount++;
                 }
@@ -69,7 +69,7 @@ namespace OpenAI.Net.Tests.Services.ChatCompletionService_Tests
             Assert.That(itemCount, Is.EqualTo(expectedItemCount));
 
 
-                Assert.NotNull(jsonRequest);
+                Assert.That(jsonRequest, Is.Not.Null);
 
                 Assert.That(jsonRequest.Contains("best_of"), Is.EqualTo(false), "Serialzation options are incorrect, null values should not be serialised");
         }
@@ -110,7 +110,7 @@ namespace OpenAI.Net.Tests.Services.ChatCompletionService_Tests
                 }))
                 {
                     AssertResponse(response, isSuccess, errorMessage, responseStatusCode);
-                    Assert.That(response.Result?.Choices?.Count() == 1, Is.EqualTo(isSuccess));
+                    Assert.That(response.Result?.Choices?.Length == 1, Is.EqualTo(isSuccess));
 
                     itemCount++;
                 }
@@ -126,7 +126,7 @@ namespace OpenAI.Net.Tests.Services.ChatCompletionService_Tests
             Assert.That(itemCount, Is.EqualTo(expectedItemCount));
 
 
-            Assert.NotNull(jsonRequest);
+            Assert.That(jsonRequest, Is.Not.Null);
 
             Assert.That(jsonRequest.Contains("best_of"), Is.EqualTo(false), "Serialzation options are incorrect, null values should not be serialised");
         }
@@ -167,7 +167,7 @@ namespace OpenAI.Net.Tests.Services.ChatCompletionService_Tests
                 }))
                 {
                     AssertResponse(response, isSuccess, errorMessage, responseStatusCode);
-                    Assert.That(response.Result?.Choices?.Count() == 1, Is.EqualTo(isSuccess));
+                    Assert.That(response.Result?.Choices?.Length == 1, Is.EqualTo(isSuccess));
 
                     itemCount++;
                 }
@@ -183,7 +183,7 @@ namespace OpenAI.Net.Tests.Services.ChatCompletionService_Tests
             Assert.That(itemCount, Is.EqualTo(expectedItemCount));
 
 
-            Assert.NotNull(jsonRequest);
+            Assert.That(jsonRequest, Is.Not.Null);
 
             Assert.That(jsonRequest.Contains("best_of"), Is.EqualTo(false), "Serialzation options are incorrect, null values should not be serialised");
         }
@@ -224,7 +224,7 @@ namespace OpenAI.Net.Tests.Services.ChatCompletionService_Tests
                 }))
                 {
                     AssertResponse(response, isSuccess, errorMessage, responseStatusCode);
-                    Assert.That(response.Result?.Choices?.Count() == 1, Is.EqualTo(isSuccess));
+                    Assert.That(response.Result?.Choices?.Length == 1, Is.EqualTo(isSuccess));
 
                     itemCount++;
                 }
@@ -240,7 +240,7 @@ namespace OpenAI.Net.Tests.Services.ChatCompletionService_Tests
             Assert.That(itemCount, Is.EqualTo(expectedItemCount));
 
 
-            Assert.NotNull(jsonRequest);
+            Assert.That(jsonRequest, Is.Not.Null);
 
             Assert.That(jsonRequest.Contains("best_of"), Is.EqualTo(false), "Serialzation options are incorrect, null values should not be serialised");
         }

@@ -41,8 +41,8 @@ namespace OpenAI.Net.Tests.Services.ImagesService_Tests
             var response = await service.Edit(request);
 
        
-            Assert.That(response.Result?.Data?.Count() == 2, Is.EqualTo(isSuccess));
-            Assert.NotNull(jsonRequest);
+            Assert.That(response.Result?.Data?.Length == 2, Is.EqualTo(isSuccess));
+            Assert.That(jsonRequest, Is.Not.Null);
             AssertResponse(response, isSuccess, errorMessage, responseStatusCode);
         }
 
@@ -70,7 +70,7 @@ namespace OpenAI.Net.Tests.Services.ImagesService_Tests
             });
 
 
-            Assert.That(response.Result?.Data?.Count() == 2, Is.EqualTo(isSuccess));
+            Assert.That(response.Result?.Data?.Length == 2, Is.EqualTo(isSuccess));
             Assert.That(formDataErrors.Count, Is.EqualTo(0), $"FormData not correct {string.Join(",", formDataErrors.Select(i => $"{i.Key}={i.Value}"))}");
             AssertResponse(response, isSuccess, errorMessage, responseStatusCode);
         }
@@ -98,7 +98,7 @@ namespace OpenAI.Net.Tests.Services.ImagesService_Tests
             });
 
             Assert.That(formDataErrors.Count, Is.EqualTo(0), $"FormData not correct {string.Join(",", formDataErrors.Select(i => $"{i.Key}={i.Value}"))}");
-            Assert.That(response.Result?.Data?.Count() == 2, Is.EqualTo(isSuccess));
+            Assert.That(response.Result?.Data?.Length == 2, Is.EqualTo(isSuccess));
             AssertResponse(response, isSuccess, errorMessage, responseStatusCode);
         }
 
@@ -126,7 +126,7 @@ namespace OpenAI.Net.Tests.Services.ImagesService_Tests
             });
 
             Assert.That(formDataErrors.Count, Is.EqualTo(0), $"FormData not correct {string.Join(",", formDataErrors.Select(i => $"{i.Key}={i.Value}"))}");
-            Assert.That(response.Result?.Data?.Count() == 2, Is.EqualTo(isSuccess));
+            Assert.That(response.Result?.Data?.Length == 2, Is.EqualTo(isSuccess));
             AssertResponse(response, isSuccess, errorMessage, responseStatusCode);
         }
 
@@ -152,7 +152,7 @@ namespace OpenAI.Net.Tests.Services.ImagesService_Tests
             });
 
             Assert.That(formDataErrors.Count, Is.EqualTo(0), $"FormData not correct {string.Join(",", formDataErrors.Select(i => $"{i.Key}={i.Value}"))}");
-            Assert.That(response.Result?.Data?.Count() == 2, Is.EqualTo(isSuccess));
+            Assert.That(response.Result?.Data?.Length == 2, Is.EqualTo(isSuccess));
             
             AssertResponse(response, isSuccess, errorMessage, responseStatusCode);
         }

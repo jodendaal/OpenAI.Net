@@ -5,7 +5,7 @@ namespace BlazorApp.Data
     public class SearchModel
     {
         [Required]
-        public string SearchText { get; set; }
+        public string SearchText { get; set; } = "";
 
         [Required]
         public int NoOfResults { get; set; } = 2;
@@ -13,9 +13,9 @@ namespace BlazorApp.Data
         [Required]
         public int MaxTokens { get; set; } = 200;
 
-        public string System { get; set; }
+        public string System { get; set; } = "";
 
-        public string Assistant { get; set; }
+        public string Assistant { get; set; } = "";
     }
          
 }

@@ -17,12 +17,12 @@ namespace ConsoleApp
             })
             .Build();
 
-            var openAi = host.Services.GetService<IOpenAIService>();
+            var openAi = host.Services.GetService<IOpenAIService>()!;
             var response = await openAi.TextCompletion.Get("How long until we reach mars?");
 
             if (response.IsSuccess)
             {
-                foreach(var result in response.Result.Choices)
+                foreach(var result in response.Result!.Choices)
                 {
                     Console.WriteLine(result.Text);
                 }

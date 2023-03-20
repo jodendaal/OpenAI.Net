@@ -66,7 +66,7 @@ namespace OpenAI.Net.Tests.Services.TextCompletionService_Tests
                 await foreach (var response in service.GetStream(request))
                 {
                     AssertResponse(response,isSuccess,errorMessage,responseStatusCode);
-                    Assert.That(response.Result?.Choices?.Count() == 1, Is.EqualTo(isSuccess));
+                    Assert.That(response.Result?.Choices?.Length == 1, Is.EqualTo(isSuccess));
 
                     itemCount++;
                 }
@@ -85,7 +85,7 @@ namespace OpenAI.Net.Tests.Services.TextCompletionService_Tests
 
             if (modelName != null)
             {
-                Assert.NotNull(jsonRequest);
+                Assert.That(jsonRequest, Is.Not.Null);
 
                 Assert.That(jsonRequest.Contains("best_of"), Is.EqualTo(false), "Serialzation options are incorrect, null values should not be serialised");
                 Assert.That(jsonRequest.Contains("model", StringComparison.OrdinalIgnoreCase), Is.EqualTo(true), "Serialzation options are incorrect, camel case should be used");
@@ -125,7 +125,7 @@ namespace OpenAI.Net.Tests.Services.TextCompletionService_Tests
                 await foreach (var response in service.GetStream(request))
                 {
                     AssertResponse(response, isSuccess, errorMessage, responseStatusCode);
-                    Assert.That(response.Result?.Choices?.Count() == 1, Is.EqualTo(isSuccess));
+                    Assert.That(response.Result?.Choices?.Length == 1, Is.EqualTo(isSuccess));
 
                     itemCount++;
                 }
@@ -144,7 +144,7 @@ namespace OpenAI.Net.Tests.Services.TextCompletionService_Tests
 
             if (modelName != null)
             {
-                Assert.NotNull(jsonRequest);
+                Assert.That(jsonRequest, Is.Not.Null);
 
                 Assert.That(jsonRequest.Contains("best_of"), Is.EqualTo(false), "Serialzation options are incorrect, null values should not be serialised");
                 Assert.That(jsonRequest.Contains("model", StringComparison.OrdinalIgnoreCase), Is.EqualTo(true), "Serialzation options are incorrect, camel case should be used");
@@ -185,7 +185,7 @@ namespace OpenAI.Net.Tests.Services.TextCompletionService_Tests
                 }))
                 {
                     AssertResponse(response, isSuccess, errorMessage, responseStatusCode);
-                    Assert.That(response.Result?.Choices?.Count() == 1, Is.EqualTo(isSuccess));
+                    Assert.That(response.Result?.Choices?.Length == 1, Is.EqualTo(isSuccess));
 
                     itemCount++;
                 }
@@ -204,7 +204,7 @@ namespace OpenAI.Net.Tests.Services.TextCompletionService_Tests
 
             if (modelName != null)
             {
-                Assert.NotNull(jsonRequest);
+                Assert.That(jsonRequest, Is.Not.Null);
 
                 Assert.That(jsonRequest.Contains("best_of"), Is.EqualTo(false), "Serialzation options are incorrect, null values should not be serialised");
                 Assert.That(jsonRequest.Contains("model", StringComparison.OrdinalIgnoreCase), Is.EqualTo(true), "Serialzation options are incorrect, camel case should be used");
@@ -245,7 +245,7 @@ namespace OpenAI.Net.Tests.Services.TextCompletionService_Tests
                 }))
                 {
                     AssertResponse(response, isSuccess, errorMessage, responseStatusCode);
-                    Assert.That(response.Result?.Choices?.Count() == 1, Is.EqualTo(isSuccess));
+                    Assert.That(response.Result?.Choices?.Length == 1, Is.EqualTo(isSuccess));
 
                     itemCount++;
                 }
@@ -264,7 +264,7 @@ namespace OpenAI.Net.Tests.Services.TextCompletionService_Tests
 
             if (modelName != null)
             {
-                Assert.NotNull(jsonRequest);
+                Assert.That(jsonRequest, Is.Not.Null);
 
                 Assert.That(jsonRequest.Contains("best_of"), Is.EqualTo(false), "Serialzation options are incorrect, null values should not be serialised");
                 Assert.That(jsonRequest.Contains("model", StringComparison.OrdinalIgnoreCase), Is.EqualTo(true), "Serialzation options are incorrect, camel case should be used");
@@ -307,7 +307,7 @@ namespace OpenAI.Net.Tests.Services.TextCompletionService_Tests
                 }))
                 {
                     AssertResponse(response, isSuccess, errorMessage, responseStatusCode);
-                    Assert.That(response.Result?.Choices?.Count() == 1, Is.EqualTo(isSuccess));
+                    Assert.That(response.Result?.Choices?.Length == 1, Is.EqualTo(isSuccess));
 
                     itemCount++;
                 }
@@ -326,7 +326,7 @@ namespace OpenAI.Net.Tests.Services.TextCompletionService_Tests
 
             if (modelName != null)
             {
-                Assert.NotNull(jsonRequest);
+                Assert.That(jsonRequest, Is.Not.Null);
 
                 Assert.That(jsonRequest.Contains("best_of"), Is.EqualTo(false), "Serialzation options are incorrect, null values should not be serialised");
                 Assert.That(jsonRequest.Contains("model", StringComparison.OrdinalIgnoreCase), Is.EqualTo(true), "Serialzation options are incorrect, camel case should be used");
@@ -369,7 +369,7 @@ namespace OpenAI.Net.Tests.Services.TextCompletionService_Tests
                 }))
                 {
                     AssertResponse(response, isSuccess, errorMessage, responseStatusCode);
-                    Assert.That(response.Result?.Choices?.Count() == 1, Is.EqualTo(isSuccess));
+                    Assert.That(response.Result?.Choices?.Length == 1, Is.EqualTo(isSuccess));
 
                     itemCount++;
                 }
@@ -388,7 +388,7 @@ namespace OpenAI.Net.Tests.Services.TextCompletionService_Tests
 
             if (modelName != null)
             {
-                Assert.NotNull(jsonRequest);
+                Assert.That(jsonRequest, Is.Not.Null);
 
                 Assert.That(jsonRequest.Contains("best_of"), Is.EqualTo(false), "Serialzation options are incorrect, null values should not be serialised");
                 Assert.That(jsonRequest.Contains("model", StringComparison.OrdinalIgnoreCase), Is.EqualTo(true), "Serialzation options are incorrect, camel case should be used");

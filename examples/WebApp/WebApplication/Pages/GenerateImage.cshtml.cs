@@ -10,7 +10,7 @@ namespace WebApplication.Pages
         private readonly IOpenAIService _openAIService;
 
         public List<string> Results { get; set; } = new List<string>();
-        public string ErrorMessage { get; set; }
+        public string? ErrorMessage { get; set; }
         public GenerateImageModel(ILogger<GenerateImageModel> logger,IOpenAIService openAIService)
         {
             _logger = logger;
@@ -33,7 +33,7 @@ namespace WebApplication.Pages
             });
             if(response.IsSuccess)
             {
-                Results = response.Result.Data.Select(i=> i.Url).ToList();
+                Results = response.Result!.Data.Select(i=> i.Url).ToList();
             }
             else
             {

@@ -6,7 +6,7 @@ namespace OpenAI.Net.Tests.Services.ChatCompletionService_Tests
 {
     internal class ChatCompletionService_Get : BaseServiceTest
     {
-        const string responseJson = @"{""id"":""chatcmpl-6tjUTDUidlAZv7bkF9kZjXPmj1ECZ"",
+        const string _responseJson = @"{""id"":""chatcmpl-6tjUTDUidlAZv7bkF9kZjXPmj1ECZ"",
                                     ""object"":""chat.completion"",""created"":1678740925,
                                     ""model"":""gpt-3.5-turbo-0301"",
                                     ""usage"":{""prompt_tokens"":12,""completion_tokens"":7,""total_tokens"":19},
@@ -19,7 +19,7 @@ namespace OpenAI.Net.Tests.Services.ChatCompletionService_Tests
         {
         }
 
-        [TestCase(true, HttpStatusCode.OK, responseJson, null, Description = "Successfull Request", TestName = "Get_When_Success")]
+        [TestCase(true, HttpStatusCode.OK, _responseJson, null, Description = "Successfull Request", TestName = "Get_When_Success")]
         [TestCase(false, HttpStatusCode.BadRequest, ErrorResponseJson, "an error occured", Description = "Failed Request", TestName = "Get_When_Fail")]
         public async Task Get(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
         {
@@ -34,15 +34,15 @@ namespace OpenAI.Net.Tests.Services.ChatCompletionService_Tests
             var request = new ChatCompletionRequest(message);
             var response = await service.Get(request);
 
-            Assert.That(response.Result?.Choices?.Count() == 1, Is.EqualTo(isSuccess));
+            Assert.That(response.Result?.Choices?.Length == 1, Is.EqualTo(isSuccess));
 
             AssertResponse(response, isSuccess, errorMessage, responseStatusCode);
 
-            Assert.NotNull(jsonRequest);
+            Assert.That(jsonRequest, Is.Not.Null);
             Assert.That(jsonRequest.Contains("model", StringComparison.OrdinalIgnoreCase), Is.EqualTo(true), "Serialzation options are incorrect, camel case should be used");
         }
 
-        [TestCase(true, HttpStatusCode.OK, responseJson, null, Description = "Successfull Request", TestName = "GetList_When_Success")]
+        [TestCase(true, HttpStatusCode.OK, _responseJson, null, Description = "Successfull Request", TestName = "GetList_When_Success")]
         [TestCase(false, HttpStatusCode.BadRequest, ErrorResponseJson, "an error occured", Description = "Failed Request", TestName = "GetList_When_Fail")]
         public async Task GetList(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
         {
@@ -57,15 +57,15 @@ namespace OpenAI.Net.Tests.Services.ChatCompletionService_Tests
             var request = new ChatCompletionRequest(message.ToList());
             var response = await service.Get(request);
 
-            Assert.That(response.Result?.Choices?.Count() == 1, Is.EqualTo(isSuccess));
+            Assert.That(response.Result?.Choices?.Length == 1, Is.EqualTo(isSuccess));
 
             AssertResponse(response, isSuccess, errorMessage, responseStatusCode);
 
-            Assert.NotNull(jsonRequest);
+            Assert.That(jsonRequest, Is.Not.Null);
             Assert.That(jsonRequest.Contains("model", StringComparison.OrdinalIgnoreCase), Is.EqualTo(true), "Serialzation options are incorrect, camel case should be used");
         }
 
-        [TestCase(true, HttpStatusCode.OK, responseJson, null, Description = "Successfull Request", TestName = "GetWithMessageListExtrension_When_Success")]
+        [TestCase(true, HttpStatusCode.OK, _responseJson, null, Description = "Successfull Request", TestName = "GetWithMessageListExtrension_When_Success")]
         [TestCase(false, HttpStatusCode.BadRequest, ErrorResponseJson, "an error occured", Description = "Failed Request", TestName = "GetWithMessageListExtrension_When_Fail")]
         public async Task GetWithMessageListExtrension(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
         {
@@ -82,16 +82,16 @@ namespace OpenAI.Net.Tests.Services.ChatCompletionService_Tests
                 options.TopP = 10;
             });
 
-            Assert.That(response.Result?.Choices?.Count() == 1, Is.EqualTo(isSuccess));
+            Assert.That(response.Result?.Choices?.Length == 1, Is.EqualTo(isSuccess));
 
             AssertResponse(response, isSuccess, errorMessage, responseStatusCode);
 
-            Assert.NotNull(jsonRequest);
+            Assert.That(jsonRequest, Is.Not.Null);
             Assert.That(jsonRequest.Contains("model", StringComparison.OrdinalIgnoreCase), Is.EqualTo(true), "Serialzation options are incorrect, camel case should be used");
             Assert.That(jsonRequest.Contains(@"""top_p"":10", StringComparison.OrdinalIgnoreCase), Is.EqualTo(true), "Options where not applied for TopP");
         }
 
-        [TestCase(true, HttpStatusCode.OK, responseJson, null, Description = "Successfull Request", TestName = "GetWithMessageExtension_When_Success")]
+        [TestCase(true, HttpStatusCode.OK, _responseJson, null, Description = "Successfull Request", TestName = "GetWithMessageExtension_When_Success")]
         [TestCase(false, HttpStatusCode.BadRequest, ErrorResponseJson, "an error occured", Description = "Failed Request", TestName = "GetWithMessageExtension_When_Fail")]
         public async Task GetWithMessageExtension(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
         {
@@ -108,16 +108,16 @@ namespace OpenAI.Net.Tests.Services.ChatCompletionService_Tests
                 options.TopP = 10;
             });
 
-            Assert.That(response.Result?.Choices?.Count() == 1, Is.EqualTo(isSuccess));
+            Assert.That(response.Result?.Choices?.Length == 1, Is.EqualTo(isSuccess));
 
             AssertResponse(response, isSuccess, errorMessage, responseStatusCode);
 
-            Assert.NotNull(jsonRequest);
+            Assert.That(jsonRequest, Is.Not.Null);
             Assert.That(jsonRequest.Contains("model", StringComparison.OrdinalIgnoreCase), Is.EqualTo(true), "Serialzation options are incorrect, camel case should be used");
             Assert.That(jsonRequest.Contains(@"""top_p"":10", StringComparison.OrdinalIgnoreCase), Is.EqualTo(true), "Options where not applied for TopP");
         }
 
-        [TestCase(true, HttpStatusCode.OK, responseJson, null, Description = "Successfull Request", TestName = "GetWithUserMessageExtension_When_Success")]
+        [TestCase(true, HttpStatusCode.OK, _responseJson, null, Description = "Successfull Request", TestName = "GetWithUserMessageExtension_When_Success")]
         [TestCase(false, HttpStatusCode.BadRequest, ErrorResponseJson, "an error occured", Description = "Failed Request", TestName = "GetWithUserMessageExtension_When_Fail")]
         public async Task GetWithUserMessageExtension(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
         {
@@ -133,16 +133,16 @@ namespace OpenAI.Net.Tests.Services.ChatCompletionService_Tests
                 options.TopP = 10;
             });
 
-            Assert.That(response.Result?.Choices?.Count() == 1, Is.EqualTo(isSuccess));
+            Assert.That(response.Result?.Choices?.Length == 1, Is.EqualTo(isSuccess));
 
             AssertResponse(response, isSuccess, errorMessage, responseStatusCode);
 
-            Assert.NotNull(jsonRequest);
+            Assert.That(jsonRequest, Is.Not.Null);
             Assert.That(jsonRequest.Contains("model", StringComparison.OrdinalIgnoreCase), Is.EqualTo(true), "Serialzation options are incorrect, camel case should be used");
             Assert.That(jsonRequest.Contains(@"""top_p"":10", StringComparison.OrdinalIgnoreCase), Is.EqualTo(true), "Options where not applied for TopP");
         }
 
-        [TestCase(true, HttpStatusCode.OK, responseJson, null, Description = "Successfull Request", TestName = "GetWithModel_When_Success")]
+        [TestCase(true, HttpStatusCode.OK, _responseJson, null, Description = "Successfull Request", TestName = "GetWithModel_When_Success")]
         [TestCase(false, HttpStatusCode.BadRequest, ErrorResponseJson, "an error occured", Description = "Failed Request", TestName = "GetWithModel_When_Fail")]
         public async Task GetWithModel(bool isSuccess, HttpStatusCode responseStatusCode, string responseJson, string errorMessage)
         {
@@ -157,11 +157,11 @@ namespace OpenAI.Net.Tests.Services.ChatCompletionService_Tests
             var request = new ChatCompletionRequest(ModelTypes.GPT35Turbo, message);
             var response = await service.Get(request);
 
-            Assert.That(response.Result?.Choices?.Count() == 1, Is.EqualTo(isSuccess));
+            Assert.That(response.Result?.Choices?.Length == 1, Is.EqualTo(isSuccess));
 
             AssertResponse(response, isSuccess, errorMessage, responseStatusCode);
 
-            Assert.NotNull(jsonRequest);
+            Assert.That(jsonRequest, Is.Not.Null);
             Assert.That(jsonRequest.Contains("model", StringComparison.OrdinalIgnoreCase), Is.EqualTo(true), "Serialzation options are incorrect, camel case should be used");
         }
 
@@ -170,7 +170,7 @@ namespace OpenAI.Net.Tests.Services.ChatCompletionService_Tests
         [TestCase(true, ChatRoleType.System, TestName = "CreateMessage_When_Success_System")]
         [TestCase(true, ChatRoleType.Assistant, TestName = "CreateMessage_When_Success_Assistant")]
         [TestCase(false, "unknown", TestName = "CreateMessage_When_Fail_UnknownRole")]
-        public async Task CreateMessage(bool isSuccess, string role)
+        public void CreateMessage(bool isSuccess, string role)
         {
             if (isSuccess)
             {

@@ -31,9 +31,9 @@ namespace OpenAI.Net.Tests.Services.TextEditService_Tests
             var response = await service.Get(request);
 
          
-            Assert.That(response.Result?.Choices?.Count() == 1, Is.EqualTo(isSuccess));
+            Assert.That(response.Result?.Choices?.Length == 1, Is.EqualTo(isSuccess));
            
-            Assert.NotNull(jsonRequest);
+            Assert.That(jsonRequest, Is.Not.Null);
             Assert.That(jsonRequest.Contains("best_of"), Is.EqualTo(false), "Serialzation options are incorrect, null values should not be serialised");
             Assert.That(jsonRequest.Contains("model", StringComparison.OrdinalIgnoreCase), Is.EqualTo(true), "Serialzation options are incorrect, camel case should be used");
             AssertResponse(response, isSuccess, errorMessage, responseStatusCode);
@@ -60,9 +60,9 @@ namespace OpenAI.Net.Tests.Services.TextEditService_Tests
             Assert.That(jsonRequest.Contains(@"""top_p"":0.1"));
             Assert.That(jsonRequest.Contains(@"""temperature"":100"));
 
-            Assert.That(response.Result?.Choices?.Count() == 1, Is.EqualTo(isSuccess));
+            Assert.That(response.Result?.Choices?.Length == 1, Is.EqualTo(isSuccess));
 
-            Assert.NotNull(jsonRequest);
+            Assert.That(jsonRequest, Is.Not.Null);
             Assert.That(jsonRequest.Contains("best_of"), Is.EqualTo(false), "Serialzation options are incorrect, null values should not be serialised");
             Assert.That(jsonRequest.Contains("model", StringComparison.OrdinalIgnoreCase), Is.EqualTo(true), "Serialzation options are incorrect, camel case should be used");
             AssertResponse(response, isSuccess, errorMessage, responseStatusCode);
@@ -89,9 +89,9 @@ namespace OpenAI.Net.Tests.Services.TextEditService_Tests
             Assert.That(jsonRequest.Contains(@"""top_p"":0.1"));
             Assert.That(jsonRequest.Contains(@"""temperature"":100"));
 
-            Assert.That(response.Result?.Choices?.Count() == 1, Is.EqualTo(isSuccess));
+            Assert.That(response.Result?.Choices?.Length == 1, Is.EqualTo(isSuccess));
 
-            Assert.NotNull(jsonRequest);
+            Assert.That(jsonRequest, Is.Not.Null);
             Assert.That(jsonRequest.Contains("best_of"), Is.EqualTo(false), "Serialzation options are incorrect, null values should not be serialised");
             Assert.That(jsonRequest.Contains("model", StringComparison.OrdinalIgnoreCase), Is.EqualTo(true), "Serialzation options are incorrect, camel case should be used");
             AssertResponse(response, isSuccess, errorMessage, responseStatusCode);

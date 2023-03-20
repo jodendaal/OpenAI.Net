@@ -13,17 +13,17 @@ namespace OpenAI.Net.Models.Requests
         }
         public TextCompletionRequest(string model, string prompt) : this(model, prompt.ToList()) { }
 
-        /// <summary>
+        // <summary>
         /// The prompt(s) to generate completions for, encoded as a string, array of strings, array of tokens, or array of token arrays. <br/>
-        /// Note that<|endoftext|> is the document separator that the model sees during training, so if a prompt is not specified the model will generate as if from the beginning of a new document.<br/>
+        /// Note that&lt;|endoftext|&gt; is the document separator that the model sees during training, so if a prompt is not specified the model will generate as if from the beginning of a new document.<br/>
         /// <see href="https://platform.openai.com/docs/api-reference/completions/create#completions/create-prompt" />
-        /// </summary>
+        // </summary>
         public IList<string> Prompt { get; set; }
 
-        /// <summary>
+        // <summary>
         /// ID of the model to use.<br/>
         /// <see href="https://platform.openai.com/docs/api-reference/completions/create#completions/create-model" />
-        /// </summary>
+        // </summary>
         [Required]
         public string Model { get; set; }
 

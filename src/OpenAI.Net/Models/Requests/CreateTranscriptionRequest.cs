@@ -11,10 +11,10 @@ namespace OpenAI.Net.Models.Requests
             Model = model;
         }
 
-        /// <summary>
+        // <summary>
         /// The audio file to transcribe, in one of these formats: mp3, mp4, mpeg, mpga, m4a, wav, or webm. <br/>
         /// <see href="https://platform.openai.com/docs/api-reference/audio/create#audio/create-file" />
-        /// </summary>
+        // </summary>
         [Required]
 
         public FileContentInfo File { get; set; }
@@ -22,33 +22,34 @@ namespace OpenAI.Net.Models.Requests
         // <summary>
         /// ID of the model to use. Only whisper-1 is currently available. <br/>
         /// <see href="https://platform.openai.com/docs/api-reference/audio/create#audio/create-model" />
-        ///</summary>
+        // </summary>
         [Required]
         public string Model { get; set; }
 
         // <summary>
         /// An optional text to guide the model's style or continue a previous audio segment. The <a href="https://platform.openai.com/docs/guides/speech-to-text/prompting">prompt</a> should match the audio language. <br/>
         /// <see href="https://platform.openai.com/docs/api-reference/audio/create#audio/create-prompt" />
-        ///</summary>
+        // </summary>
         public string? Prompt { get; set; }
 
         // <summary>
         /// The format of the transcript output, in one of these options: json, text, srt, verbose_json, or vtt. <br/>
         /// <see href="https://platform.openai.com/docs/api-reference/audio/create#audio/create-response_format" />
-        ///</summary>
+        // </summary>
 
         [JsonPropertyName("response_format")]
         public string? ResponseFormat { get; set; }
 
         // <summary>
         /// The sampling temperature, between 0 and 1. Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic. If set to 0, the model will use <a href="https://en.wikipedia.org/wiki/Log_probability">log probability</a> to automatically increase the temperature until certain thresholds are hit. <br/>
-        /// <see href="ht
+        /// <see href="https://platform.openai.com/docs/api-reference/audio/create#audio/create-temperature" />
+        // </summary>
         public double? Temperature { get; set; }
 
         // <summary>
         /// The language of the input audio. Supplying the input language in <a href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes">ISO-639-1</a> format will improve accuracy and latency. <br/>
         /// <see href="https://platform.openai.com/docs/api-reference/audio/create#audio/create-language" />
-        ///</summary>
+        // </summary>
         public string? Language { get; set; }
 
     }

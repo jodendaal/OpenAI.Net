@@ -20,12 +20,12 @@ namespace CodeGeneratorTest
             })
             .Build();
 
-            var openAi = host.Services.GetService<IOpenAIService>();
+            var openAi = host.Services.GetRequiredService<IOpenAIService>();
             var response = await openAi.Models.Get();
 
             if (response.IsSuccess)
             {
-                var classText = ClassGenerator.GenerateModelsLookup(response.Result);
+                var classText = ClassGenerator.GenerateModelsLookup(response.Result!);
                 Console.WriteLine(classText);
                 File.WriteAllText("ModelTypes.cs", classText);
             }

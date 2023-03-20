@@ -10,7 +10,7 @@ namespace WebApplication.Pages
         private readonly IOpenAIService _openAIService;
 
         public List<string> Results { get; set; } = new List<string>();
-        public string ErrorMessage { get; set; }
+        public string ErrorMessage { get; set; } = "";
         public IndexModel(ILogger<IndexModel> logger,IOpenAIService openAIService)
         {
             _logger = logger;
@@ -36,7 +36,7 @@ namespace WebApplication.Pages
             });
             if(response.IsSuccess)
             {
-                Results = response.Result.Choices.Select(i=> i.Text).ToList();
+                Results = response.Result!.Choices.Select(i=> i.Text).ToList();
             }
             else
             {
