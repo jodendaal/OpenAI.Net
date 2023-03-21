@@ -9,7 +9,7 @@ using WireMock.Server;
 
 namespace OpenAI.Net.Acceptance.Tests
 {
-    public class BaseTest
+    public class BaseTest : IDisposable
     {
         public readonly JsonSerializerOptions JsonSerializerOptions = new JsonSerializerOptions()
         {
@@ -56,6 +56,11 @@ namespace OpenAI.Net.Acceptance.Tests
         {
             var fixture = new Fixture();
             return fixture.Create<T>();
+        }
+
+        public void Dispose()
+        {
+            this.WireMockServer.Dispose();
         }
     }
 
