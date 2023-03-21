@@ -1,0 +1,46 @@
+﻿.chat-input-group {
+    height: 50px;
+}
+
+.chat-input, ::deep .chat-input {
+    --tw-bg-opacity: 0.5;
+    background-color: rgba(68,70,84,var(--tw-bg-opacity));
+    color: white;
+    border: none;
+    border-top-color: rgba(32, 33, 35, 0.5);
+    border-right-color: rgba(32, 33, 35, 0.5);
+    border-bottom-color: rgba(32, 33, 35, 0.5);
+    border-left-color: rgba(32, 33, 35, 0.5);
+    outline: none !important;
+}
+
+.chat-input:focus, ::deep .chat-input:focus {
+    --tw-bg-opacity: 0.5;
+    background-color: rgba(68,70,84,var(--tw-bg-opacity));
+    color: white;
+    border: none;
+    border-top-color: rgba(32, 33, 35, 0.5);
+    border-right-color: rgba(32, 33, 35, 0.5);
+    border-bottom-color: rgba(32, 33, 35, 0.5);
+    border-left-color: rgba(32, 33, 35, 0.5);
+}
+
+.chat-input-button {
+    --tw-bg-opacity: 0.5;
+    background-color: rgba(68,70,84,var(--tw-bg-opacity));
+    border: none;
+    color: white;
+}
+
+.chat-input-button:hover {
+    --tw-text-opacity: 1;
+    color: rgba(172,172,190,var(--tw-text-opacity));
+    --tw-bg-opacity: 1;
+    background-color: rgba(32,33,35,var(--tw-bg-opacity));
+}
+
+.stop {
+    background-color: red;
+    color: white;
+    font-weight: bold;
+}
