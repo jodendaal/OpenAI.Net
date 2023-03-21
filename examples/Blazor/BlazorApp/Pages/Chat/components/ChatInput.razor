@@ -1,0 +1,44 @@
+﻿@using BlazorApp.Data;
+
+<EditForm Model="@SearchModel" OnValidSubmit="@OnGenerateTextCompletionSubmitted">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="input-group chat-input-group">
+        <InputText title="prompt" id="name" @bind-Value="SearchModel.SearchText" class="form-control chat-input shadow-none" />
+        @if (IsRecording)
+        {
+            <button type="button" class="stop" disabled="@IsRecording == true">Stop Recording</button>
+        }
+        else
+        {
+            <button title="record" type="button" @onclick="OnRecordClickedClicked" class="chat-input-button"> <i class="oi oi-microphone"></i></button>
+        }
+
+        <button title="generate-image" type="button" @onclick="OnGenerateTextCompletionSubmitted" class="chat-input-button" disabled="@IsBusy"> <i class="oi oi-image"></i></button>
+
+        <button title="send" type="submit" class="chat-input-button" disabled="@IsBusy"> <i class="oi oi-location"></i></button>
+
+    </div>
+
+</EditForm>
+
+@code {
+    [Parameter]
+    public SearchModel SearchModel { get; set; }
+
+    [Parameter]
+    public bool IsBusy { get; set; }
+
+    [Parameter]
+    public bool IsRecording { get; set; }
+    
+    [Parameter]
+    public EventCallback OnGenerateImageClicked { get; set; }
+
+    [Parameter]
+    public EventCallback OnGenerateTextCompletionSubmitted { get; set; }
+
+    [Parameter]
+    public EventCallback OnRecordClickedClicked { get; set; }
+}

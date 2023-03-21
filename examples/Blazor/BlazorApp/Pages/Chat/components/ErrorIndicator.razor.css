@@ -1,0 +1,10 @@
+﻿.error-area {
+    background: #00000054;
+    border-radius: 30px;
+    margin: auto;
+}
+
+    .error-area .error-text {
+        color: red;
+        font-size: 20px;
+    }

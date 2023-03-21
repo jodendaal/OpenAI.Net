@@ -1,0 +1,12 @@
+﻿@if (!string.IsNullOrWhiteSpace(ErrorText))
+{
+    <div class="error-area">
+        <div class="error-text">@ErrorText</div>
+    </div>
+}
+
+
+@code {
+    [Parameter]
+    public string? ErrorText { get; set; }
+}

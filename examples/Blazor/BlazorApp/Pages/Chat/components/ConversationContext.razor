@@ -1,0 +1,17 @@
+﻿@using BlazorApp.Data;
+<div class="converation-context">
+
+    <EditForm Model="@SearchModel" class="converation-context-form">
+        <h5>System</h5>
+        <InputTextArea title="system" @bind-Value="@SearchModel.System" class="system-area" />
+
+        <h5>Assistant</h5>
+        <InputTextArea title="assistant" @bind-Value="@SearchModel.Assistant" class="assistant-area" />
+    </EditForm>
+</div>
+
+
+@code {
+    [Parameter]
+    public SearchModel SearchModel { get; set; }
+}

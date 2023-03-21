@@ -1,0 +1,12 @@
+﻿@if (!string.IsNullOrWhiteSpace(StatusText))
+{
+    <div class="loading-area">
+        <div class="loading-text">@StatusText</div>
+        <div class="lds-facebook"><div></div><div></div><div></div></div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public string? StatusText { get; set; }
+}

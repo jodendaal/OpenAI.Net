@@ -1,0 +1,206 @@
+﻿@page "/chat"
+
+@using BlazorApp.Pages.Chat.components
+@using ColorCode.Styling;
+@using Markdig;
+@using BlazorApp.Data
+@using Microsoft.JSInterop;
+@using OpenAI.Net
+@using System.Text;
+@using OpenAI.Net.Models;
+@using OpenAI.Net.Models.Requests;
+@inject IOpenAIService OpenAIService
+@inject IJSRuntime JS
+
+
+<div class="chat-container">
+
+    <ConversationContext SearchModel="@SearchModel"></ConversationContext>
+         
+    <div class="chat">
+            
+        <Conversation Results="@ConversationHistory"></Conversation>
+
+        <div class="input-area">
+            <ErrorIndicator ErrorText="@ErrorText"></ErrorIndicator>
+            <LoadingIndicator StatusText="@StatusText"></LoadingIndicator>
+
+            <ChatInput 
+                SearchModel="@SearchModel"
+                OnGenerateTextCompletionSubmitted="@OnTextCompletionSubmitted"
+                OnGenerateImageClicked="OnGenerateImageClicked"
+                OnRecordClickedClicked="OnRecordClicked"
+                IsBusy="@IsBusy"
+                IsRecording="@IsRecording">
+            </ChatInput>
+
+        </div>
+
+    </div>
+</div>
+
+
+@code {
+    private string? ErrorText = "";
+    private string StatusText = "";
+    private bool IsBusy = false;
+    bool IsRecording = false;
+    private List<ChatInfo> ConversationHistory = new List<ChatInfo>();
+
+    private SearchModel SearchModel = new()
+    {
+        MaxTokens =200,
+        NoOfResults =1,
+        SearchText = "write me a simple class that adds 2 numbers together and write a unit text using xunit to test it",
+            //SearchText = "How do I fix my issue?",
+        //System = "You are a helpfull support agent",
+        //Assistant = "Ticket : 1024, Title : Unable to send emails, Content : Unable to connect to SMTP server"
+            System = "You are a code generator, when generating code markdown ensure to include the language e.g c# should start with ```csharp. dont give any explanations or description code only",
+            Assistant = ""
+        };
+   
+
+    private async Task OnTextCompletionSubmitted()
+    {
+        await SendTextCompletionRequest(SearchModel.SearchText);
+    }
+
+    private async Task OnGenerateImageClicked()
+    {
+        setIsProcessing(true, "Generating Image");
+
+        var imageResponse = await OpenAIService.Images.Generate(SearchModel.SearchText, 1);
+        if (imageResponse.IsSuccess)
+        {
+            this.ConversationHistory.Add(new ChatInfo()
+                {
+                    User = "AI",
+                    Message = $@"<img src=""{imageResponse?.Result?.Data[0].Url}"" alt=""drawing"" width=""400"" />"
+                });
+        }
+        else
+        {
+            this.ErrorText = imageResponse.ErrorResponse?.Error?.Message;
+        }
+        this.setIsProcessing(false);
+    }
+
+    private async Task OnRecordClicked()
+    {
+        this.setIsRecording(true);
+
+        var audioWindows1252EncodedData = await JS.InvokeAsync<string>("ChatGPTMethods.startRecording", "stop", "audio-control");
+
+        this.setIsRecording(false);
+
+        if (string.IsNullOrEmpty(audioWindows1252EncodedData) == false)
+        {
+            var audioData = this.ConvertAudioData(audioWindows1252EncodedData);
+            await this.Transcribe(audioData);
+        }
+    }
+
+    private async Task SendTextCompletionRequest(string text)
+    {
+        SearchModel.SearchText = string.Empty;
+
+        this.setIsProcessing(true);
+        this.ConversationHistory.Add(new ChatInfo() { User = "TimDoesTech", Message = text });
+
+
+        var messagesRequest = new List<Message>()
+            {
+                Message.Create(ChatRoleType.System,SearchModel.System),
+                Message.Create(ChatRoleType.Assistant, SearchModel.Assistant)
+            };
+
+        messagesRequest.Add(Message.Create(ChatRoleType.User, text));
+
+        this.ConversationHistory.Add(new ChatInfo() { User = "AI", Message = string.Empty });
+
+        try
+        {
+            await foreach (var result in OpenAIService.Chat.GetStream(messagesRequest, o =>
+            {
+                o.N = SearchModel.NoOfResults;
+                o.MaxTokens = SearchModel.MaxTokens;
+            }))
+            {
+                this.ConversationHistory[ConversationHistory.Count - 1].Message += result.Result!.Choices[0].Delta.Content;
+                StateHasChanged();
+            }
+        }
+        catch (Exception ex)
+        {
+            ErrorText = $"An error occured : {ex.Message}";
+        }
+
+        SearchModel.Assistant += $"\r\n{this.ConversationHistory[ConversationHistory.Count - 1].Message}";
+
+        this.setIsProcessing(false);
+    }
+
+    void OnAudioTextUpdated(string text)
+    {
+        this.SearchModel.SearchText = text;
+    }
+
+    private byte[] ConvertAudioData(string windows1252EncodedData)
+    {
+        Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+        var enc1252 = Encoding.GetEncoding(1252);
+        return enc1252.GetBytes(windows1252EncodedData);
+    }
+
+    private async Task Transcribe(byte[] audioData)
+    {
+        this.setIsProcessing(true, "Transcribing Text");
+        var fileContentInfo = new FileContentInfo(audioData, "transcription.wav");
+        var request = new CreateTranscriptionRequest(fileContentInfo);
+        var result = await OpenAIService.Audio.GetTranscription(request);
+        if (result.IsSuccess)
+        {
+            var transcriptionText = result.Result!.Text;
+            this.OnAudioTextUpdated(transcriptionText);
+            this.setIsProcessing(false);
+        }
+        else
+        {
+            this.ErrorText = result.ErrorResponse?.Error?.Message;
+        }
+    }
+
+    private async Task Translate(byte[] audioData)
+    {
+        setIsProcessing(true,"Translating Text");
+        var fileContentInfo = new FileContentInfo(audioData, "translation.wav");
+        var request = new CreateTranslationRequest(fileContentInfo);
+        var result = await OpenAIService.Audio.GetTranslation(request);
+        if (result.IsSuccess)
+        {
+            var transcriptionText = result.Result!.Text;
+            this.OnAudioTextUpdated(transcriptionText);
+            this.setIsProcessing(false);
+
+        }
+        else
+        {
+            this.ErrorText = result.ErrorResponse?.Error?.Message;
+        }
+    }
+
+   
+
+    private void setIsRecording(bool value)
+    {
+        this.IsRecording = value;
+        this.StateHasChanged();
+    }
+
+    private void setIsProcessing(bool value, string statusMessage = "Generating")
+    {
+        this.StatusText = value ? statusMessage : "";
+        this.IsBusy = value;
+        this.StateHasChanged();
+    }
+}

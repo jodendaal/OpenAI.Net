@@ -1,0 +1,46 @@
+﻿@using BlazorApp.Data;
+@using ColorCode.Styling;
+@using Markdig;
+@inject IJSRuntime JS
+
+<div class="conversation-area" @ref=ChatAreaRef>
+
+    @foreach (var result in Results)
+    {
+        <div class="conversation-item @(result.User == "AI" ? "ai-reply" : "")">
+            <div>
+                @((MarkupString)@RenderHtmlContent(@result.Message))
+            </div>
+        </div>
+    }
+
+</div>
+
+
+
+@code {
+    [Parameter]
+    public List<ChatInfo> Results { get; set; } = new List<ChatInfo>();
+    
+    private ElementReference ChatAreaRef;
+
+    private string RenderHtmlContent(string content) => Markdig.Markdown.ToHtml(
+       markdown: content,
+       pipeline: new MarkdownPipelineBuilder()
+       .UseAdvancedExtensions()
+       .UseSyntaxHighlighting(StyleDictionary.DefaultDark)
+       .Build()
+       );
+
+    private void ScrollToEnd()
+    {
+        JS.InvokeVoidAsync("ChatGPTMethods.scrollToEnd", new object[] { ChatAreaRef });
+    }
+
+
+    protected override Task OnAfterRenderAsync(bool firstRender)
+    {
+        ScrollToEnd();
+        return base.OnAfterRenderAsync(firstRender);
+    }
+}
