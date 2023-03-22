@@ -5,13 +5,9 @@
 
 
 # OpenAI.Net
-OpenAI library for .NET
+Our .NET OpenAI library is designed for easy integration with the OpenAI API using C#. As a community-maintained library, we ensure it's kept up-to-date and fully tested, supporting .NET Core 6.0 and above.
 
-C# .NET library for use with the OpenAI API. 
-
-This is community-maintained library.
-
-This library supports .net core 6.0 and above.
+With an intuitive API, our library simplifies the process of working with OpenAI's powerful natural language processing tools. Plus, we handle HTTP client usage to prevent socket exhaustion and DNS update failures, ensuring a smooth and reliable experience for developers. Our library also supports the OpenAI streaming API, allowing developers to process and analyze large volumes of data in real-time.
 
 Youtube tutorial : [Creating your own ChatGPT clone with .NET: A Step-by-Step Guide](https://www.youtube.com/watch?v=hRkVGSMijjs&t=51s)
 
@@ -108,6 +104,15 @@ static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy()
 
 
 # Examples
+
+### Models Types
+
+Models type strings can be found in ModelTypes class.
+
+```csharp
+ModelTypes.GPT35Turbo
+```
+<img src="https://raw.githubusercontent.com/jodendaal/OpenAI.Net/AcceptanceTests/ModelTypes.png" alt="ModelTypes" width="300"/>
 
 ### Completion
 
