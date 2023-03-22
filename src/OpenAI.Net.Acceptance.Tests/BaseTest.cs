@@ -1,11 +1,7 @@
 ﻿using AutoFixture;
 using AutoFixture.Dsl;
-using AutoFixture.Kernel;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using OpenAI.Net.Models.Requests;
-using OpenAI.Net.Models.Responses;
-using System;
 using System.Linq.Expressions;
 using System.Text.Json;
 using WireMock.RequestBuilders;
@@ -21,7 +17,7 @@ namespace OpenAI.Net.Acceptance.Tests
             DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull,
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase
         };
-        public readonly WireMockServer WireMockServer;
+        public readonly WireMockServer? WireMockServer;
         public TestConfig Config { get; private set; }
 
         private IServiceProvider _serviceProvider;
@@ -65,7 +61,12 @@ namespace OpenAI.Net.Acceptance.Tests
 
         public void ConfigureWireMockPostJson<TReqeust,TResponse>(string path,TReqeust reqeust,TResponse response)
         {
-            this.WireMockServer.Given(
+            var body = (response is string) ? response as string :
+                     JsonSerializer.Serialize(
+                response,
+                this.JsonSerializerOptions);
+
+            this.WireMockServer?.Given(
               Request.Create()
               .WithPath(path)
               .WithHeader("Authorization", $"Bearer {Config.Apikey}")
@@ -77,18 +78,19 @@ namespace OpenAI.Net.Acceptance.Tests
                   this.JsonSerializerOptions)))
               .RespondWith(
                  Response.Create()
-            .WithBody(
-                     (response is string) ? response as string :
-                     JsonSerializer.Serialize(
-                response,
-                this.JsonSerializerOptions)));
+              .WithBody(body??""));
         }
 
         public void ConfigureWireMockPostForm<TReqeust, TResponse>(string path, TReqeust reqeust, TResponse response)//QQQ Come back this this and check if we can validate header and contents
         {
-            var formData = reqeust.ToMultipartFormDataContent();
+            var body = (response is string) ? response as string :
+                    JsonSerializer.Serialize(
+               response,
+               this.JsonSerializerOptions);
 
-            this.WireMockServer.Given(
+            var formData = reqeust?.ToMultipartFormDataContent();
+
+            this.WireMockServer?.Given(
               Request.Create()
               .WithPath(path)
               .WithHeader("Authorization", $"Bearer {Config.Apikey}")
@@ -100,17 +102,19 @@ namespace OpenAI.Net.Acceptance.Tests
                
               .RespondWith(
                  Response.Create()
-            .WithBody(
-                     (response is string) ? response as string :
-                     JsonSerializer.Serialize(
-                response,
-                this.JsonSerializerOptions)));
+              .WithBody(body ?? ""));
         }
 
 
         public void ConfigureWireMockDelete<TResponse>(string path, TResponse response)
         {
-            this.WireMockServer.Given(
+
+            var body = (response is string) ? response as string :
+                    JsonSerializer.Serialize(
+               response,
+               this.JsonSerializerOptions);
+
+            this.WireMockServer?.Given(
               Request.Create()
               .WithPath(path)
               .WithHeader("Authorization", $"Bearer {Config.Apikey}")
@@ -118,16 +122,17 @@ namespace OpenAI.Net.Acceptance.Tests
               .UsingDelete())
               .RespondWith(
                  Response.Create()
-            .WithBody(
-                     (response is string) ? response as string :
-                     JsonSerializer.Serialize(
-                response,
-                this.JsonSerializerOptions)));
+              .WithBody(body ?? ""));
         }
 
         public void ConfigureWireMockGet<TResponse>(string path, TResponse response)
         {
-            this.WireMockServer.Given(
+            var body = (response is string) ? response as string :
+                   JsonSerializer.Serialize(
+              response,
+              this.JsonSerializerOptions);
+
+            this.WireMockServer?.Given(
               Request.Create()
               .WithPath(path)
               .WithHeader("Authorization", $"Bearer {Config.Apikey}")
@@ -135,25 +140,21 @@ namespace OpenAI.Net.Acceptance.Tests
               .UsingGet())
               .RespondWith(
                  Response.Create()
-            .WithBody(
-                     (response is string) ? response as string :
-                     JsonSerializer.Serialize(
-                response,
-                this.JsonSerializerOptions)));
+              .WithBody(body ?? ""));
         }
 
         public void Dispose()
         {
-            this.WireMockServer.Dispose();
+            this.WireMockServer?.Dispose();
         }
     }
 
 
     public class TestConfig
     {
-        public string Apikey { get;  set; }
-        public string ApiUrl { get;  set; }
-        public string OrganizationId { get;  set; }
+        public string? Apikey { get;  set; }
+        public string? ApiUrl { get;  set; }
+        public string? OrganizationId { get;  set; }
     }
 
     public static class AutoFixtureExtensions

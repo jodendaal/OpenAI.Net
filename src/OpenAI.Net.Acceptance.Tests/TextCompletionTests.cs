@@ -1,13 +1,8 @@
-﻿using AutoFixture;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using OpenAI.Net.Models.Requests;
 using OpenAI.Net.Models.Responses;
 using System.Text.Json;
-using WireMock.RequestBuilders;
-using WireMock.ResponseBuilders;
 using FluentAssertions;
-using static System.Net.Mime.MediaTypeNames;
-using WireMock;
 
 namespace OpenAI.Net.Acceptance.Tests
 {

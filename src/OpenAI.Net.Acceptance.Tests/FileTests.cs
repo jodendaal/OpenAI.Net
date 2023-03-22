@@ -1,6 +1,5 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
-using OpenAI.Net.Models;
 using OpenAI.Net.Models.Requests;
 using OpenAI.Net.Models.Responses;
 using OpenAI.Net.Models.Responses.Common;
