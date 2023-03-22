@@ -14,7 +14,7 @@ namespace OpenAI.Net.Acceptance.Tests
     public class TextCompletionTests : BaseTest
     {
         [Test]
-        public async Task TextCompletion()
+        public async Task Get()
         {
             var textCompletionRequest = CreateObjectWithRandomData<TextCompletionRequest>();
             var textCompletionResponse = CreateObjectWithRandomData<TextCompletionResponse>();
@@ -29,7 +29,7 @@ namespace OpenAI.Net.Acceptance.Tests
         }
 
         [Test]
-        public async Task TextCompletionStream()
+        public async Task GetStream()
         {
             var textCompletionRequest = CreateObjectWithRandomData<TextCompletionRequest>();
             textCompletionRequest.Stream = true;

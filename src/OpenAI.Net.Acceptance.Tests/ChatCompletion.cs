@@ -10,7 +10,7 @@ namespace OpenAI.Net.Acceptance.Tests
     internal class ChatCompletionTests : BaseTest
     {
         [Test]
-        public async Task ChatCompletion()
+        public async Task Get()
         {
             var fixture = new Fixture();
 
@@ -33,7 +33,7 @@ namespace OpenAI.Net.Acceptance.Tests
         }
 
         [Test]
-        public async Task ChatCompletionStream()
+        public async Task GetStream()
         {
             var fixture = new Fixture();
 

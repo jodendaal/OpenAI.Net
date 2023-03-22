@@ -5,6 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using OpenAI.Net.Models.Requests;
 using OpenAI.Net.Models.Responses;
+using System;
 using System.Linq.Expressions;
 using System.Text.Json;
 using WireMock.RequestBuilders;
@@ -70,9 +71,68 @@ namespace OpenAI.Net.Acceptance.Tests
               .WithHeader("Authorization", $"Bearer {Config.Apikey}")
               .WithHeader("OpenAI-Organization", $"{Config.OrganizationId}")
               .WithHeader("Content-Type", "application/json; charset=utf-8")
+              .UsingPost()
               .WithBody(JsonSerializer.Serialize(
                   reqeust,
                   this.JsonSerializerOptions)))
+              .RespondWith(
+                 Response.Create()
+            .WithBody(
+                     (response is string) ? response as string :
+                     JsonSerializer.Serialize(
+                response,
+                this.JsonSerializerOptions)));
+        }
+
+        public void ConfigureWireMockPostForm<TReqeust, TResponse>(string path, TReqeust reqeust, TResponse response)//QQQ Come back this this and check if we can validate header and contents
+        {
+            var formData = reqeust.ToMultipartFormDataContent();
+
+            this.WireMockServer.Given(
+              Request.Create()
+              .WithPath(path)
+              .WithHeader("Authorization", $"Bearer {Config.Apikey}")
+              .WithHeader("OpenAI-Organization", $"{Config.OrganizationId}")
+              .UsingPost()
+              //.WithHeader("Content-Type", "multipart/form-data")
+              //.WithBody(formData)
+              )
+               
+              .RespondWith(
+                 Response.Create()
+            .WithBody(
+                     (response is string) ? response as string :
+                     JsonSerializer.Serialize(
+                response,
+                this.JsonSerializerOptions)));
+        }
+
+
+        public void ConfigureWireMockDelete<TResponse>(string path, TResponse response)
+        {
+            this.WireMockServer.Given(
+              Request.Create()
+              .WithPath(path)
+              .WithHeader("Authorization", $"Bearer {Config.Apikey}")
+              .WithHeader("OpenAI-Organization", $"{Config.OrganizationId}")
+              .UsingDelete())
+              .RespondWith(
+                 Response.Create()
+            .WithBody(
+                     (response is string) ? response as string :
+                     JsonSerializer.Serialize(
+                response,
+                this.JsonSerializerOptions)));
+        }
+
+        public void ConfigureWireMockGet<TResponse>(string path, TResponse response)
+        {
+            this.WireMockServer.Given(
+              Request.Create()
+              .WithPath(path)
+              .WithHeader("Authorization", $"Bearer {Config.Apikey}")
+              .WithHeader("OpenAI-Organization", $"{Config.OrganizationId}")
+              .UsingGet())
               .RespondWith(
                  Response.Create()
             .WithBody(
