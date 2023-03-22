@@ -25,6 +25,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CodeGenerator", "..\tools\C
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tools", "tools", "{971AFD4E-95A0-4C8A-8F7B-9EF06BBC2EB9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenAI.Net.Acceptance.Tests", "OpenAI.Net.Acceptance.Tests\OpenAI.Net.Acceptance.Tests.csproj", "{48C7B7D6-4575-4519-97F7-20FB56171AE4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +59,10 @@ Global
 		{3B8C6A07-E57B-400C-A594-06087706C210}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{3B8C6A07-E57B-400C-A594-06087706C210}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3B8C6A07-E57B-400C-A594-06087706C210}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48C7B7D6-4575-4519-97F7-20FB56171AE4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48C7B7D6-4575-4519-97F7-20FB56171AE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48C7B7D6-4575-4519-97F7-20FB56171AE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48C7B7D6-4575-4519-97F7-20FB56171AE4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -69,6 +75,7 @@ Global
 		{03D6F4D5-71C8-4079-9766-9113B69285F2} = {76AB2D50-53EE-424E-A066-9109D940D181}
 		{BCBB5FEC-8D08-48B6-B628-5AB8B93960CB} = {76AB2D50-53EE-424E-A066-9109D940D181}
 		{3B8C6A07-E57B-400C-A594-06087706C210} = {971AFD4E-95A0-4C8A-8F7B-9EF06BBC2EB9}
+		{48C7B7D6-4575-4519-97F7-20FB56171AE4} = {62AD684A-9FEC-401A-850F-93E460A9220A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EC2BD365-8E89-496D-9021-E3F00C1D0DE2}

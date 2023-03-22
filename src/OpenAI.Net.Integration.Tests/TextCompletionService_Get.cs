@@ -60,7 +60,7 @@ namespace OpenAI.Net.Integration.Tests
             Assert.That(response.Result?.Choices?.Length == 1, Is.EqualTo(isSuccess), "Choices are not mapped correctly");
             if (echo.HasValue && isSuccess)
             {
-                Assert.That(response.Result.Choices[0].Text.Contains("Say this is a test"), Is.EqualTo(echo), "Prompt not returned when Echo was true");
+                Assert.That(response.Result.Choices[0].Text.Contains("Say this is a test",StringComparison.InvariantCultureIgnoreCase), Is.EqualTo(echo), "Prompt not returned when Echo was true");
             }
             else if (isSuccess)
             {

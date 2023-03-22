@@ -84,6 +84,10 @@ jobs:
     - name: Execute unit tests
       run: dotnet test src/OpenAI.Net.Tests/OpenAI.Net.Tests.csproj --configuration Release /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
       
+    # Execute Acceptance tests in the solution
+    - name: Execute acceptance tests
+      run: dotnet test src/OpenAI.Net.Acceptance.Tests/OpenAI.Net.Acceptance.Tests.csproj --configuration Release
+
     # Install Stryker
     - name: Install Stryker
       run: dotnet tool install dotnet-stryker --tool-path src/OpenAI.Net.Tests

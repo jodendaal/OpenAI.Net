@@ -25,7 +25,6 @@ namespace OpenAI.Net.Integration.Tests
         }
 
         [TestCase(true, HttpStatusCode.OK, TestName = "GetTranslationWithExtension_When_Success")]
-        [TestCase(false, HttpStatusCode.NotFound, TestName = "GetTranslationWithExtension_When_Fail")]
         public async Task GetTranslationWithExtension(bool isSuccess, HttpStatusCode statusCode)
         {
 

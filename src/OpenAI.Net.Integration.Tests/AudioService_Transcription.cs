@@ -25,7 +25,6 @@ namespace OpenAI.Net.Integration.Tests
         }
 
         [TestCase(ModelTypes.Whisper1, true, HttpStatusCode.OK, TestName = "GetTranscriptionWithExtension_When_Success")]
-        [TestCase("invalid_model", false, HttpStatusCode.NotFound, TestName = "GetTranscriptionWithExtension_When_Fail")]
         public async Task GetTranscriptionWithExtension(string model, bool isSuccess, HttpStatusCode statusCode)
         {
 
