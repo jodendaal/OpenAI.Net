@@ -47,7 +47,7 @@ namespace OpenAI.Net.Acceptance.Tests
         {
             var textCompletionRequest = CreateObjectWithRandomData<TextCompletionRequest>();
             var textCompletionResponse = CreateObjectWithRandomData<TextCompletionResponse>();
-
+            textCompletionRequest.Stream = true;
             var responseJson = JsonSerializer.Serialize(textCompletionResponse,this.JsonSerializerOptions);
             //Remove any line feeds in json , must be jsonl (json line format)
             responseJson = responseJson.Replace("\r\n", "").Replace("\n", "");

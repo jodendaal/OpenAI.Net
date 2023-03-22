@@ -47,7 +47,9 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="6.0.0" />
   </ItemGroup>
-
+  <ItemGroup>
+    <InternalsVisibleTo Include="OpenAI.Net.Acceptance.Tests" />
+  </ItemGroup>
   <ItemGroup>
     <None Update="logo.png">
       <Pack>True</Pack>
