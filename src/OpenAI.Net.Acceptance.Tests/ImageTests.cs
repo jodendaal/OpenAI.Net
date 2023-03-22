@@ -28,7 +28,7 @@ namespace OpenAI.Net.Acceptance.Tests
             var request = CreateObjectWithRandomData<ImageEditRequest>();
             var responseObject = CreateObjectWithRandomData<ImageGenerationResponse>();
 
-            ConfigureWireMockPostForm("/v1/images/edits", request, responseObject);
+            ConfigureWireMockPostMultipartFormData("/v1/images/edits", request, responseObject);
 
             var response = await OpenAIService.Images.Edit(request);
 
@@ -43,7 +43,7 @@ namespace OpenAI.Net.Acceptance.Tests
             var request = CreateObjectWithRandomData<ImageVariationRequest>();
             var responseObject = CreateObjectWithRandomData<ImageGenerationResponse>();
 
-            ConfigureWireMockPostForm("/v1/images/variations", request, responseObject);
+            ConfigureWireMockPostMultipartFormData("/v1/images/variations", request, responseObject);
 
             var response = await OpenAIService.Images.Variation(request);
 

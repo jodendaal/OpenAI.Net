@@ -69,7 +69,7 @@ namespace OpenAI.Net.Acceptance.Tests
             var textCompletionRequest = CreateObjectWithRandomData<FileUploadRequest>();
             var textCompletionResponse = CreateObjectWithRandomData<FileInfoResponse>();
 
-            ConfigureWireMockPostForm("/v1/files", textCompletionRequest, textCompletionResponse);
+            ConfigureWireMockPostMultipartFormData("/v1/files", textCompletionRequest, textCompletionResponse);
 
             var response = await OpenAIService.Files.Upload(textCompletionRequest);
 

@@ -81,7 +81,7 @@ namespace OpenAI.Net.Acceptance.Tests
               .WithBody(body??""));
         }
 
-        public void ConfigureWireMockPostForm<TReqeust, TResponse>(string path, TReqeust reqeust, TResponse response)//QQQ Come back this this and check if we can validate header and contents
+        public void ConfigureWireMockPostMultipartFormData<TReqeust, TResponse>(string path, TReqeust reqeust, TResponse response)//QQQ Come back this this and check if we can validate header and contents
         {
             var body = (response is string) ? response as string :
                     JsonSerializer.Serialize(

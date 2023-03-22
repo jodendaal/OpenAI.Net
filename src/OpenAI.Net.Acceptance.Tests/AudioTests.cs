@@ -13,7 +13,7 @@ namespace OpenAI.Net.Acceptance.Tests
             var request = CreateObjectWithRandomData<CreateTranscriptionRequest>();
             var responseObject = CreateObjectWithRandomData<AudioReponse>();
 
-            ConfigureWireMockPostForm("/v1/audio/transcriptions", request, responseObject);
+            ConfigureWireMockPostMultipartFormData("/v1/audio/transcriptions", request, responseObject);
 
             var response = await OpenAIService.Audio.GetTranscription(request);
 
@@ -28,7 +28,7 @@ namespace OpenAI.Net.Acceptance.Tests
             var request = CreateObjectWithRandomData<CreateTranslationRequest>();
             var responseObject = CreateObjectWithRandomData<AudioReponse>();
 
-            ConfigureWireMockPostForm("/v1/audio/translations", request, responseObject);
+            ConfigureWireMockPostMultipartFormData("/v1/audio/translations", request, responseObject);
 
             var response = await OpenAIService.Audio.GetTranslation(request);
 
