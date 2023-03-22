@@ -19,21 +19,7 @@ namespace OpenAI.Net.Acceptance.Tests
             var textCompletionRequest = CreateObjectWithRandomData<TextCompletionRequest>();
             var textCompletionResponse = CreateObjectWithRandomData<TextCompletionResponse>();
 
-            this.WireMockServer.Given(
-               Request.Create()
-               .WithPath("/v1/completions")
-               .WithHeader("Authorization", $"Bearer {Config.Apikey}")
-               .WithHeader("OpenAI-Organization", $"{Config.OrganizationId}")
-               .WithHeader("Content-Type", "application/json; charset=utf-8")
-               .WithBody(JsonSerializer.Serialize(
-                   textCompletionRequest,
-                   this.JsonSerializerOptions)))
-               .RespondWith(
-                   Response.Create()
-               .WithBody(JsonSerializer.Serialize(
-                   textCompletionResponse,
-                   this.JsonSerializerOptions)));
-
+            ConfigureWireMockPostJson("/v1/completions", textCompletionRequest, textCompletionResponse);
 
             var response  = await OpenAIService.TextCompletion.Get(textCompletionRequest);
 
@@ -46,33 +32,30 @@ namespace OpenAI.Net.Acceptance.Tests
         public async Task TextCompletionStream()
         {
             var textCompletionRequest = CreateObjectWithRandomData<TextCompletionRequest>();
-            var textCompletionResponse = CreateObjectWithRandomData<TextCompletionResponse>();
             textCompletionRequest.Stream = true;
-            var responseJson = JsonSerializer.Serialize(textCompletionResponse,this.JsonSerializerOptions);
-            //Remove any line feeds in json , must be jsonl (json line format)
-            responseJson = responseJson.Replace("\r\n", "").Replace("\n", "");
 
-            var responseBody = $"{responseJson}\r\n{responseJson}\r\ndata: [DONE]";
+            var textCompletionResponseList = CreateObjectWithRandomData<List<TextCompletionResponse>>();
 
-            this.WireMockServer.Given(
-               Request.Create()
-               .WithPath("/v1/completions")
-               .WithHeader("Authorization", $"Bearer {Config.Apikey}")
-               .WithHeader("OpenAI-Organization", $"{Config.OrganizationId}")
-               .WithHeader("Content-Type", "application/json; charset=utf-8")
-               .WithBody(JsonSerializer.Serialize(
-                   textCompletionRequest,
-                   this.JsonSerializerOptions)))
-               .RespondWith(
-                  Response.Create()
-               .WithBody(responseBody));
+            var responseBody = "data: ";
+            foreach (var response in textCompletionResponseList)
+            {
+                var json = JsonSerializer.Serialize(response, this.JsonSerializerOptions).Replace("\r\n", "").Replace("\n", "");
+                responseBody += $"{json}\r\n";
+            }
+            responseBody += "[DONE]";
 
+            ConfigureWireMockPostJson("/v1/completions", textCompletionRequest, responseBody);
 
+            int index = 0;
             await foreach (var response in OpenAIService.TextCompletion.GetStream(textCompletionRequest))
             {
                 response.IsSuccess.Should().BeTrue();
+                response.Result.Should().BeEquivalentTo(textCompletionResponseList[index]);
+                response.Result?.Choices.Should().HaveCountGreaterThan(0);
+                index++;
             }
-        }
 
+            index.Should().Be(textCompletionResponseList.Count);
+        }
     }
 }

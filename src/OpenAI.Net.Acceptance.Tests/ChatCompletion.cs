@@ -1,11 +1,9 @@
 ﻿using AutoFixture;
 using FluentAssertions;
-using Microsoft.Extensions.Primitives;
 using NUnit.Framework;
 using OpenAI.Net.Models.Requests;
 using OpenAI.Net.Models.Responses;
-using WireMock.RequestBuilders;
-using WireMock.ResponseBuilders;
+using System.Text.Json;
 
 namespace OpenAI.Net.Acceptance.Tests
 {
@@ -25,27 +23,52 @@ namespace OpenAI.Net.Acceptance.Tests
             var chatCompletionRequest = fixture.Create<ChatCompletionRequest>();
             var chatCompletionResponse = fixture.Create<ChatCompletionResponse>();
 
-            this.WireMockServer.Given(
-               Request.Create()
-               .WithPath("/v1/chat/completions")
-               .WithHeader("Authorization", $"Bearer {Config.Apikey}")
-               .WithHeader("OpenAI-Organization", $"{Config.OrganizationId}")
-               .WithHeader("Content-Type", "application/json; charset=utf-8")
-               .WithBody(System.Text.Json.JsonSerializer.Serialize(
-                   chatCompletionRequest,
-                   this.JsonSerializerOptions)))
-               .RespondWith(
-                   Response.Create()
-               .WithBody(System.Text.Json.JsonSerializer.Serialize(
-                   chatCompletionResponse,
-                   this.JsonSerializerOptions)));
-
+            ConfigureWireMockPostJson("/v1/chat/completions", chatCompletionRequest, chatCompletionResponse);
 
             var response = await OpenAIService.Chat.Get(chatCompletionRequest);
 
             response.IsSuccess.Should().BeTrue();
             response.Result?.Choices.Should().HaveCountGreaterThan(1);
             response.Result.Should().BeEquivalentTo(chatCompletionResponse);
+        }
+
+        [Test]
+        public async Task ChatCompletionStream()
+        {
+            var fixture = new Fixture();
+
+            fixture.Customizations.Add(
+                new ElementsBuilder<Message>(
+                     Message.Create(ChatRoleType.Assistant, fixture.Create<string>()),
+                     Message.Create(ChatRoleType.User, fixture.Create<string>()),
+                     Message.Create(ChatRoleType.System, fixture.Create<string>())));
+
+            var chatCompletionRequest = fixture.Create<ChatCompletionRequest>();
+            chatCompletionRequest.Stream = true;
+
+            var chatCompletionResponseList = fixture.Create<List<ChatStreamCompletionResponse>>();
+
+
+            var responseBody = "data: ";
+            foreach (var response in chatCompletionResponseList)
+            {
+                var json = JsonSerializer.Serialize(response, this.JsonSerializerOptions).Replace("\r\n", "").Replace("\n", "");
+                responseBody += $"{json}\r\n";
+            }
+            responseBody += "[DONE]";
+
+            ConfigureWireMockPostJson("/v1/chat/completions", chatCompletionRequest, responseBody);
+
+            int index = 0;
+            await foreach (var response in OpenAIService.Chat.GetStream(chatCompletionRequest))
+            {
+                response.IsSuccess.Should().BeTrue();
+                response.Result.Should().BeEquivalentTo(chatCompletionResponseList[index]);
+                response.Result?.Choices.Should().HaveCountGreaterThan(0);
+                index++;
+            }
+
+            index.Should().Be(chatCompletionResponseList.Count);
         }
     }
 }
