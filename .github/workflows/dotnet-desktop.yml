@@ -64,6 +64,9 @@ jobs:
       uses: actions/checkout@v3
       with:
         fetch-depth: 0
+      env: 
+        Apikey: ${{ secrets.Apikey }}
+        ApiUrl: ${{ secrets.ApiUrl }}
 
     # Install the .NET Core workload
     - name: Install .NET Core
@@ -88,7 +91,7 @@ jobs:
     - name: Execute acceptance tests
       run: dotnet test src/OpenAI.Net.Acceptance.Tests/OpenAI.Net.Acceptance.Tests.csproj --configuration Release
 
-    # Execute Acceptance tests in the solution
+    # Execute Integration tests in the solution
     - name: Execute Integration Tests 
       run: dotnet test src/OpenAI.Net.Integration.Tests/OpenAI.Net.Integration.Tests.csproj --configuration Release
 
