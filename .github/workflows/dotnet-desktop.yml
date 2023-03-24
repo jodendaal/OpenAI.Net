@@ -93,8 +93,8 @@ jobs:
     - name: Execute Integration Tests 
       run: dotnet test src/OpenAI.Net.Integration.Tests/OpenAI.Net.Integration.Tests.csproj --configuration Release
       env: 
-        Apikey: ${{ secrets.Apikey }}
-        ApiUrl: ${{ secrets.ApiUrl }}
+        Apikey: ${{ secrets.APIKEY }}
+        ApiUrl: ${{ secrets.APIURL }}
 
     # Install Stryker
     - name: Install Stryker
