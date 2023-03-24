@@ -12,6 +12,7 @@ namespace OpenAI.Net.Integration.Tests
         {
             var configuration = new ConfigurationBuilder()
             .AddUserSecrets<BaseTest>()
+            .AddEnvironmentVariables()
             .Build();
 
             Config = new TestConfig(configuration);
