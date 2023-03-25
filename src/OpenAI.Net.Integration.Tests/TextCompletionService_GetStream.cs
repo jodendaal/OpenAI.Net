@@ -21,9 +21,9 @@ namespace OpenAI.Net.Integration.Tests
 
             var request = new TextCompletionRequest(ModelTypes.TextDavinci003, multipleQuestions) { MaxTokens = 1024, N = null};
 
-            await foreach(var t in OpenAIService.TextCompletion.GetStream(request))
+            await foreach(var response in OpenAIService.TextCompletion.GetStream(request))
             {
-                Console.WriteLine(t?.Result?.Choices[0].Text);
+                Assert.That(response.IsSuccess);
             }
         }
     }

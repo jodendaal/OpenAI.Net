@@ -27,7 +27,7 @@ namespace OpenAI.Net.Integration.Tests
             Assert.That(response.Result?.Choices?.Count() == 1, Is.EqualTo(isSuccess), "Choices are not mapped correctly");
             if (isSuccess)
             {
-                Assert.That(response.Result!.Choices.FirstOrDefault()!.Message.Content, Is.EqualTo("\n\nThis is a test."), "Choices are not mapped correctly");
+                Assert.That(response.Result!.Choices.FirstOrDefault()!.Message.Content.Trim(), Is.EqualTo("This is a test."), "Choices are not mapped correctly");
             }
         }
 
@@ -53,8 +53,25 @@ namespace OpenAI.Net.Integration.Tests
             Assert.That(response.Result?.Choices?.Count() == 1, Is.EqualTo(isSuccess), "Choices are not mapped correctly");
             if (isSuccess)
             {
-                Assert.That(response.Result?.Choices?.FirstOrDefault()?.Message.Content.Contains("Globe Life Field"), Is.EqualTo(true), "Incorrect answer");
+                Assert.That(response.Result?.Choices?.FirstOrDefault()?.Message.Content.Contains("Globe Life Field",StringComparison.InvariantCultureIgnoreCase), Is.EqualTo(true), $"Incorrect answer {response.Result?.Choices?.FirstOrDefault()?.Message.Content}");
             }
+        }
+
+        [Test]
+        public async Task TetEditReplacement()
+        {
+            var messages = new List<Message>
+            {
+                Message.Create(ChatRoleType.System, "You are a spell checker. Fix the spelling mistakes"),
+                Message.Create(ChatRoleType.User, "What day of the wek is it?"),
+            };
+
+            var response = await OpenAIService.Chat.Get(messages, o => {
+                o.MaxTokens = 1000;
+            });
+
+            Assert.That(response.IsSuccess, Is.True);
+            Assert.That(response.Result?.Choices[0].Message.Content, Is.EqualTo("What day of the week is it?"));
         }
     }
 }

@@ -92,5 +92,16 @@ namespace OpenAI.Net.Integration.Tests
                 Assert.That(response?.Result?.Choices?.Length == 2, Is.EqualTo(isSuccess), "Choices are not mapped correctly");
             });
         }
+      
+        [Test]
+        public async Task GetWithDefaultModel()
+        {
+            var request = new TextCompletionRequest(OpenAIDefaults.TextCompletionModel, "Say this is a test");
+            var response = await OpenAIService.TextCompletion.Get(request);
+
+            Assert.That(response.IsSuccess, Is.EqualTo(true), "Request failed");
+            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+            Assert.That(response.Result?.Choices?.Length == 1, Is.EqualTo(true), "Choices are not mapped correctly");
+        }
     }
 }
