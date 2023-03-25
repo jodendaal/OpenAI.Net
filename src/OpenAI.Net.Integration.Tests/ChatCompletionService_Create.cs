@@ -53,7 +53,7 @@ namespace OpenAI.Net.Integration.Tests
             Assert.That(response.Result?.Choices?.Count() == 1, Is.EqualTo(isSuccess), "Choices are not mapped correctly");
             if (isSuccess)
             {
-                Assert.That(response.Result?.Choices?.FirstOrDefault()?.Message.Content.Contains("Globe Life Field"), Is.EqualTo(true), "Incorrect answer");
+                Assert.That(response.Result?.Choices?.FirstOrDefault()?.Message.Content.Contains("Globe Life Field",StringComparison.InvariantCultureIgnoreCase), Is.EqualTo(true), $"Incorrect answer {response.Result?.Choices?.FirstOrDefault()?.Message.Content}");
             }
         }
 
