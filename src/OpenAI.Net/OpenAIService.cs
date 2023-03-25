@@ -7,7 +7,6 @@ namespace OpenAI.Net
         public IModelsService Models { get; }
         public ITextCompletionService TextCompletion { get; }
 
-        public ITextEditService TextEdit { get; }
         public IImageService Images { get; }
         public IFilesService Files { get; }
         public IFineTuneService FineTune { get; }
@@ -19,7 +18,6 @@ namespace OpenAI.Net
         public OpenAIService(
             IModelsService modelsService, 
             ITextCompletionService textCompletionService,
-            ITextEditService textEditService,
             IImageService imageService,
             IFilesService filesService,
             IFineTuneService fineTuneService,
@@ -30,7 +28,6 @@ namespace OpenAI.Net
         {
             Models = modelsService;
             TextCompletion = textCompletionService;
-            TextEdit = textEditService;
             Images = imageService;
             Files = filesService;
             FineTune = fineTuneService;

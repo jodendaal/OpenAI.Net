@@ -16,11 +16,6 @@ namespace OpenAI.Net
         public ITextCompletionService TextCompletion { get; }
 
         /// <summary>
-        /// <inheritdoc cref="ITextEditService"/>
-        /// </summary>
-        public ITextEditService TextEdit { get; }
-
-        /// <summary>
         /// <inheritdoc cref="IImageService"/>
         /// </summary>
         public IImageService Images { get; }

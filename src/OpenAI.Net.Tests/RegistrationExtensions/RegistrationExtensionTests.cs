@@ -31,7 +31,6 @@ namespace OpenAI.Net.Tests.RegistrationExtensions
             Assert.That(openAIService.Embeddings, Is.Not.Null, "OpenAIService.Embeddings was null");
             Assert.That(openAIService.FineTune, Is.Not.Null, "OpenAIService.FineTune was null");
             Assert.That(openAIService.TextCompletion, Is.Not.Null, "OpenAIService.TextCompletion was null");
-            Assert.That(openAIService.TextEdit, Is.Not.Null, "OpenAIService.TextEdit was null");
             Assert.That(openAIService.Moderation, Is.Not.Null, "OpenAIService.Moderation was null");
             Assert.That(openAIService.Chat, Is.Not.Null, "OpenAIService.Chat was null");
             Assert.That(openAIService.Audio, Is.Not.Null, "OpenAIService.Audio was null");
@@ -75,7 +74,6 @@ namespace OpenAI.Net.Tests.RegistrationExtensions
             Assert.That(openAIService.Embeddings, Is.Not.Null, "OpenAIService.Embeddings was null");
             Assert.That(openAIService.FineTune, Is.Not.Null, "OpenAIService.FineTune was null");
             Assert.That(openAIService.TextCompletion, Is.Not.Null, "OpenAIService.TextCompletion was null");
-            Assert.That(openAIService.TextEdit, Is.Not.Null, "OpenAIService.TextEdit was null");
             Assert.That(openAIService.Moderation, Is.Not.Null, "OpenAIService.Moderation was null");
             Assert.That(openAIService.Chat, Is.Not.Null, "OpenAIService.Chat was null");
             Assert.That(openAIService.Audio, Is.Not.Null, "OpenAIService.Audio was null");
