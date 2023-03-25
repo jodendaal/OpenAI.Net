@@ -13,8 +13,8 @@ namespace OpenAI.Net.Integration.Tests
 
             await foreach(var response in OpenAIService.Chat.GetStream(request))
             {
-                Console.WriteLine(response?.Result?.Choices[0].Delta?.Content);
                 Assert.True(response?.IsSuccess, "Failed to get chat stream", response?.ErrorMessage);
+                Assert.That(!string.IsNullOrWhiteSpace(response?.Result?.Choices[0].Delta?.Content), Is.True);
             }
         }
 
@@ -31,8 +31,8 @@ namespace OpenAI.Net.Integration.Tests
 
             await foreach (var response in OpenAIService.Chat.GetStream(messages))
             {
-                Console.WriteLine(response?.Result?.Choices[0].Delta?.Content);
                 Assert.True(response?.IsSuccess, "Failed to get chat stream", response?.ErrorMessage);
+                Assert.That(!string.IsNullOrWhiteSpace(response?.Result?.Choices[0].Delta?.Content),Is.True);
             }
         }
     }

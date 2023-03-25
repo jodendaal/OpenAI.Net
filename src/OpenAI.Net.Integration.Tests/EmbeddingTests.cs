@@ -12,7 +12,7 @@ namespace OpenAI.Net.Integration.Tests
             var response = await OpenAIService.Embeddings.Create(request);
 
             Assert.That(response.IsSuccess, Is.True);
-            Assert.That(response.Result.Data.Count, Is.GreaterThanOrEqualTo(1));
+            Assert.That(response.Result?.Data?.Count(), Is.GreaterThanOrEqualTo(1));
         }
     }
 }
