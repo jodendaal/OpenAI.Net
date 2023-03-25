@@ -11,8 +11,6 @@ namespace OpenAI.Net.Integration.Tests
         [TestCase("invalid_model", false, HttpStatusCode.NotFound,TestName = "GetById_When_Invalid_Model_Fail")]
         public async Task GetById(string model,bool isSuccess, HttpStatusCode statusCode)
         {
-            
-
             var response = await OpenAIService.Models.Get(model);
 
             Assert.That(response.IsSuccess, Is.EqualTo(isSuccess), "Request failed");
@@ -23,10 +21,8 @@ namespace OpenAI.Net.Integration.Tests
         [TestCase(true, HttpStatusCode.OK)]
         public async Task GetAll(bool isSuccess, HttpStatusCode statusCode)
         {
-            
-
             var response = await OpenAIService.Models.Get();
-            Console.WriteLine(JsonConvert.SerializeObject(response.Result.Data));
+            
             Assert.That(response.IsSuccess, Is.EqualTo(isSuccess), "Request failed");
             Assert.That(response.StatusCode, Is.EqualTo(statusCode));
             Assert.That(response.Result?.Data.Count() > 0, Is.EqualTo(isSuccess), "Choices are not mapped correctly");
@@ -36,7 +32,7 @@ namespace OpenAI.Net.Integration.Tests
         public async Task ValidateModelTypesModel(bool isSuccess, HttpStatusCode statusCode)
         {
             var response = await OpenAIService.Models.Get();
-            var allModels = response?.Result.Data.Select(i => i.Id).ToList();
+            var allModels = response?.Result?.Data.Select(i => i.Id).ToList()!;
             var definedModelTypes = typeof(ModelTypes).GetFields(BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy).Select(fieldInfo => fieldInfo.GetRawConstantValue()?.ToString());
 
             var invalidModelTypes = definedModelTypes.Where(model => !allModels.Contains(model)).ToList();

@@ -71,7 +71,7 @@ namespace OpenAI.Net.Integration.Tests
             });
 
             Assert.That(response.IsSuccess, Is.True);
-            Assert.That(response.Result.Choices[0].Message.Content, Is.EqualTo("What day of the week is it?"));
+            Assert.That(response.Result?.Choices[0].Message.Content, Is.EqualTo("What day of the week is it?"));
         }
     }
 }
