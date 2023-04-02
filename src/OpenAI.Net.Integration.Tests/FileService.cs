@@ -49,14 +49,14 @@ namespace OpenAI.Net.Integration.Tests
             Assert.That(response.IsSuccess, Is.EqualTo(true), "Request failed");
             Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK));
 
-            await Task.Delay(2000);
+            await Task.Delay(5000);
 
             var retrieveFileResponse = await OpenAIService.Files.Get(response?.Result?.Id);
             Assert.That(retrieveFileResponse.IsSuccess, Is.EqualTo(true), "Request failed");
             Assert.That(retrieveFileResponse.StatusCode, Is.EqualTo(HttpStatusCode.OK));
             Assert.That(response.Result.Id, Is.EqualTo(retrieveFileResponse?.Result?.Id));
 
-            await Task.Delay(2000);
+            await Task.Delay(5000);
             var deleteResponse = await OpenAIService.Files.Delete(response?.Result?.Id);
 
             Assert.That(deleteResponse.IsSuccess, Is.EqualTo(true), "Request failed");
