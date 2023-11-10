@@ -14,7 +14,6 @@ namespace OpenAI.Net.Models.Responses
 
         [JsonPropertyName("b64_json")]
         public string Base64 { get; set; }
-
         [JsonPropertyName("revised_prompt")]
         public string RevisedPrompt { get; set; }
     }
