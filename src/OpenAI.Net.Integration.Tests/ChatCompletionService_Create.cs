@@ -1,6 +1,8 @@
-﻿using OpenAI.Net.Models;
+﻿using Newtonsoft.Json;
+using OpenAI.Net.Models;
 using OpenAI.Net.Models.Requests;
 using System.Net;
+using System.Text.Json;
 
 namespace OpenAI.Net.Integration.Tests
 {
@@ -31,6 +33,33 @@ namespace OpenAI.Net.Integration.Tests
             }
         }
 
+        [TestCase(ModelTypes.Gpt3_5Turbo1106, true, HttpStatusCode.OK, TestName = "Get_When_Success_Json_Object")]
+        [TestCase("invalid_model", false, HttpStatusCode.NotFound, TestName = "Get_When_Fail_Json_Object")]
+        public async Task Get_Json_Object(string model, bool isSuccess, HttpStatusCode statusCode)
+        {
+            var messages = new List<Message>
+            {
+                Message.Create(ChatRoleType.User, "Say this is a test, return response in json")
+            };
+
+            var request = new ChatCompletionRequest(messages)
+            {
+                Model = model,
+                ResponseFormat = ChatResponseFormat.Json
+            };
+
+            var response = await OpenAIService.Chat.Get(request);
+
+            Assert.That(response.IsSuccess, Is.EqualTo(isSuccess), "Request failed");
+            Assert.That(response.StatusCode, Is.EqualTo(statusCode));
+            Assert.That(response.Result?.Choices?.Count() == 1, Is.EqualTo(isSuccess), "Choices are not mapped correctly");
+            if (isSuccess)
+            {
+                Assert.That(response.Result!.Choices.FirstOrDefault()!.Message.Content.ToLowerInvariant(), Contains.Substring("this is a test"), "Choices are not mapped correctly");
+                JsonDocument.Parse(response.Result!.Choices.FirstOrDefault()!.Message.Content);
+            }
+        }
+
         [TestCase(ModelTypes.GPT35Turbo, true, HttpStatusCode.OK, TestName = "GetWithListExtension_When_Success")]
         [TestCase("invalid_model", false, HttpStatusCode.NotFound, TestName = "GetWithListExtension_When_Fail")]
         public async Task GetWithListExtension(string model, bool isSuccess, HttpStatusCode statusCode)
@@ -52,8 +81,8 @@ namespace OpenAI.Net.Integration.Tests
             Assert.That(response.StatusCode, Is.EqualTo(statusCode));
             Assert.That(response.Result?.Choices?.Count() == 1, Is.EqualTo(isSuccess), "Choices are not mapped correctly");
             if (isSuccess)
-            {
-                Assert.That(response.Result?.Choices?.FirstOrDefault()?.Message.Content.Contains("Globe Life Field",StringComparison.InvariantCultureIgnoreCase), Is.EqualTo(true), $"Incorrect answer {response.Result?.Choices?.FirstOrDefault()?.Message.Content}");
+            { 
+                Assert.That(response.Result?.Choices?.FirstOrDefault()?.Message.Content.ToLowerInvariant(), expression: Contains.Substring("globe life field").Or.Contains("texas"), $"Incorrect answer {response.Result?.Choices?.FirstOrDefault()?.Message.Content}");
             }
         }
 

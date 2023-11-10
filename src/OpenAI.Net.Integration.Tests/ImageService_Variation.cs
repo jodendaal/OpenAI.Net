@@ -71,7 +71,7 @@ namespace OpenAI.Net.Integration.Tests
             Assert.That(response.StatusCode, Is.EqualTo(statusCode));
             Assert.That(response.Result?.Data?.Count() == 1, Is.EqualTo(isSuccess), "Data is not mapped correctly");
             Assert.That(response.Result?.Data?[0].Url?.Contains("https://"), isSuccess ? Is.EqualTo(isSuccess) : Is.EqualTo(null), "Choice text not set");
-            Assert.That(response.ErrorResponse?.Error?.Message?.Contains("is not one of ['256x256', '512x512', '1024x1024']"), isSuccess ? Is.EqualTo(null) : Is.EqualTo(true), "Error message not returned");
+            Assert.That(response.ErrorResponse?.Error?.Message, isSuccess ? Is.EqualTo(null) : Contains.Substring("is not one of ['256x256', '512x512', '1024x1024']"), "Error message not returned");
         }
     }
 }

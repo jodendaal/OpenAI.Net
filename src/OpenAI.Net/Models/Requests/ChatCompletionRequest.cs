@@ -1,4 +1,8 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.VisualBasic;
+using OpenAI.Net.Models.Responses;
+using System;
+using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Text.Json.Serialization;
 
 namespace OpenAI.Net.Models.Requests
@@ -124,7 +128,17 @@ namespace OpenAI.Net.Models.Requests
         /// A unique identifier representing your end-user, which can help OpenAI to monitor and detect abuse. <a href="https://platform.openai.com/docs/guides/safety-best-practices/end-user-ids">Learn more</a>.
         /// </summary>
         public string User { get; set; }
-    }
+
+        /// <summary>
+        /// An object specifying the format that the model must output. <br/>
+        /// Setting to { "type": "json_object" }
+        /// enables JSON mode, which guarantees the message the model generates is valid JSON. <br/>
+        /// Important: when using JSON mode, you must also instruct the model to produce JSON yourself via a system or user message.Without this, the model may generate an unending stream of whitespace until the generation reaches the token limit, resulting in a long-running and seemingly "stuck" request.Also note that the message content may be partially cut off if finish_reason= "length", which indicates the generation exceeded max_tokens or the conversation exceeded the max context length. <br/>
+        /// <see href="https://platform.openai.com/docs/api-reference/completions/create#completions/create-logit_bias" />
+        /// </summary>
+        [JsonPropertyName("response_format")]
+        public object? ResponseFormat { get; set; }
+}
 }
 
 namespace OpenAI.Net
@@ -132,23 +146,19 @@ namespace OpenAI.Net
     public class Message
     {
         private static readonly string[] _validRoles = new string[] { ChatRoleType.User, ChatRoleType.System, ChatRoleType.Assistant };
-
         private Message(string role, string content)
         {
             Role = role;
             Content = content;
         }
-
         public string Role { get; init; }
         public string Content { get; init; }
-
         public static Message Create(string role, string content)
         {
             if (!_validRoles.Contains(role))
             {
                 throw new ArgumentException($"Role must be one of the following ${string.Join(",", _validRoles)}", nameof(role));
             }
-
             return new Message(role, content);
         }
     }

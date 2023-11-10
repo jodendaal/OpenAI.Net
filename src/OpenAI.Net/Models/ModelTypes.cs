@@ -1,6 +1,6 @@
 namespace OpenAI.Net
 {
-    public static class ModelTypes
+    public class ModelTypes
     {
         public const string Ada = "ada";
         public const string AdaCodeSearchCode = "ada-code-search-code";
@@ -8,14 +8,14 @@ namespace OpenAI.Net
         public const string AdaSearchDocument = "ada-search-document";
         public const string AdaSearchQuery = "ada-search-query";
         public const string AdaSimilarity = "ada-similarity";
-        public const string Ada_20200503 = "ada:2020-05-03";
         public const string Babbage = "babbage";
+        public const string Babbage002 = "babbage-002";
         public const string BabbageCodeSearchCode = "babbage-code-search-code";
         public const string BabbageCodeSearchText = "babbage-code-search-text";
         public const string BabbageSearchDocument = "babbage-search-document";
         public const string BabbageSearchQuery = "babbage-search-query";
         public const string BabbageSimilarity = "babbage-similarity";
-        public const string Babbage_20200503 = "babbage:2020-05-03";
+        public const string CanaryTts = "canary-tts";
         public const string CodeDavinciEdit001 = "code-davinci-edit-001";
         public const string CodeSearchAdaCode001 = "code-search-ada-code-001";
         public const string CodeSearchAdaText001 = "code-search-ada-text-001";
@@ -26,30 +26,34 @@ namespace OpenAI.Net
         public const string CurieSearchDocument = "curie-search-document";
         public const string CurieSearchQuery = "curie-search-query";
         public const string CurieSimilarity = "curie-similarity";
-        public const string Curie_20200503 = "curie:2020-05-03";
-        public const string Cushman_20200503 = "cushman:2020-05-03";
+        public const string DallE2 = "dall-e-2";
+        public const string DallE3 = "dall-e-3";
         public const string Davinci = "davinci";
-        public const string DavinciIf_3_0_0 = "davinci-if:3.0.0";
+        public const string Davinci002 = "davinci-002";
         public const string DavinciInstructBeta = "davinci-instruct-beta";
-        public const string DavinciInstructBeta_2_0_0 = "davinci-instruct-beta:2.0.0";
         public const string DavinciSearchDocument = "davinci-search-document";
         public const string DavinciSearchQuery = "davinci-search-query";
         public const string DavinciSimilarity = "davinci-similarity";
-        public const string Davinci_20200503 = "davinci:2020-05-03";
-        public const string IfCurieV2 = "if-curie-v2";
-        public const string IfDavinciV2 = "if-davinci-v2";
-        public const string IfDavinci_3_0_0 = "if-davinci:3.0.0";
+        public const string GPT35Turbo = "gpt-3.5-turbo";
+        public const string Gpt3_5Turbo0301 = "gpt-3.5-turbo-0301";
+        public const string Gpt3_5Turbo0613 = "gpt-3.5-turbo-0613";
+        public const string Gpt3_5Turbo1106 = "gpt-3.5-turbo-1106";
+        public const string Gpt3_5Turbo16k = "gpt-3.5-turbo-16k";
+        public const string Gpt3_5Turbo16k0613 = "gpt-3.5-turbo-16k-0613";
+        public const string Gpt3_5TurboInstruct = "gpt-3.5-turbo-instruct";
+        public const string Gpt3_5TurboInstruct0914 = "gpt-3.5-turbo-instruct-0914";
+        public const string Gpt4 = "gpt-4";
+        public const string Gpt40314 = "gpt-4-0314";
+        public const string Gpt40613 = "gpt-4-0613";
+        public const string Gpt41106Preview = "gpt-4-1106-preview";
+        public const string Gpt4VisionPreview = "gpt-4-vision-preview";
         public const string TextAda001 = "text-ada-001";
-        public const string TextAda_001 = "text-ada:001";
         public const string TextBabbage001 = "text-babbage-001";
-        public const string TextBabbage_001 = "text-babbage:001";
         public const string TextCurie001 = "text-curie-001";
-        public const string TextCurie_001 = "text-curie:001";
         public const string TextDavinci001 = "text-davinci-001";
         public const string TextDavinci002 = "text-davinci-002";
         public const string TextDavinci003 = "text-davinci-003";
         public const string TextDavinciEdit001 = "text-davinci-edit-001";
-        public const string TextDavinci_001 = "text-davinci:001";
         public const string TextEmbeddingAda002 = "text-embedding-ada-002";
         public const string TextSearchAdaDoc001 = "text-search-ada-doc-001";
         public const string TextSearchAdaQuery001 = "text-search-ada-query-001";
@@ -63,8 +67,10 @@ namespace OpenAI.Net
         public const string TextSimilarityBabbage001 = "text-similarity-babbage-001";
         public const string TextSimilarityCurie001 = "text-similarity-curie-001";
         public const string TextSimilarityDavinci001 = "text-similarity-davinci-001";
-        public const string GPT35Turbo = "gpt-3.5-turbo";
+        public const string Tts1 = "tts-1";
+        public const string Tts11106 = "tts-1-1106";
+        public const string Tts1Hd = "tts-1-hd";
+        public const string Tts1Hd1106 = "tts-1-hd-1106";
         public const string Whisper1 = "whisper-1";
-        
     }
 }
