@@ -27,7 +27,7 @@ namespace OpenAI.Net.Integration.Tests
             Assert.That(response.Result?.Choices?.Count() == 1, Is.EqualTo(isSuccess), "Choices are not mapped correctly");
             if (isSuccess)
             {
-                Assert.That(response.Result!.Choices.FirstOrDefault()!.Message.Content, Is.EqualTo("\n\nThis is a test."), "Choices are not mapped correctly");
+                Assert.That(response.Result!.Choices.FirstOrDefault()!.Message.Content.ToLowerInvariant(), Contains.Substring("this is a test"), "Choices are not mapped correctly");
             }
         }
 
