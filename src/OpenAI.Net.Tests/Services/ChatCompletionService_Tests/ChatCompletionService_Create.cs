@@ -189,5 +189,12 @@ namespace OpenAI.Net.Tests.Services.ChatCompletionService_Tests
                 Assert.That($"Role must be one of the following ${string.Join(",", validTypes)} (Parameter 'role')", Is.EqualTo(exception.Message));
             }
         }
+
+        [Test]
+        public void ChatResponseFormatTests()
+        {
+            Assert.That(ChatResponseFormat.Text.Type, Is.EqualTo("text" ));
+            Assert.That(ChatResponseFormat.Json.Type, Is.EqualTo("json_object"));
+        }
     }
 }
