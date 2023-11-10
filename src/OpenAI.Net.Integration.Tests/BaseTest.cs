@@ -1,5 +1,9 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Polly;
+using Polly.CircuitBreaker;
+using Polly.Extensions.Http;
+using System.Net;
 
 namespace OpenAI.Net.Integration.Tests
 {
@@ -18,7 +22,12 @@ namespace OpenAI.Net.Integration.Tests
             Config = new TestConfig(configuration);
 
             var serviceCollection = new ServiceCollection();
-            serviceCollection.AddOpenAIServices(Config.Apikey);
+            serviceCollection.AddOpenAIServices(options => {
+                options.ApiKey = Config.Apikey;
+            },
+            (httpClientOptions) => {
+                httpClientOptions.AddPolicyHandler(GetRetryPolicy());
+            });
             _serviceProvider  =serviceCollection.BuildServiceProvider();
         }
 
@@ -28,6 +37,16 @@ namespace OpenAI.Net.Integration.Tests
             {
                 return _serviceProvider.GetRequiredService<IOpenAIService>();
             }
+        }
+
+        static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy()
+        {
+            var policy = Policy<HttpResponseMessage>
+                .HandleResult(response => response.StatusCode == HttpStatusCode.TooManyRequests)
+                .OrTransientHttpError();
+
+            return policy
+                .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(30));
         }
     }
 

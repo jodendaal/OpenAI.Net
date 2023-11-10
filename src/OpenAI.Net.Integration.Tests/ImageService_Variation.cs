@@ -6,13 +6,6 @@ namespace OpenAI.Net.Integration.Tests
 {
     internal class ImageService_Variation : BaseTest
     {
-        [SetUp]
-        public void Init()
-        {
-            /* ... */
-            Thread.Sleep(5000);
-        }
-            
         [TestCase(true, HttpStatusCode.OK, "256x256",TestName = "Variation_When_Success")]
         [TestCase(false, HttpStatusCode.BadRequest, "32x32", TestName = "Variation_When_Invalid_Size_Fail")]
         public async Task Variation(bool isSuccess,HttpStatusCode statusCode, string size)
