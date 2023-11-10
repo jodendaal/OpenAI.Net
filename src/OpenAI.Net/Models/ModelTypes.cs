@@ -9,7 +9,6 @@ namespace OpenAI.Net
         public const string AdaSearchQuery = "ada-search-query";
         public const string AdaSimilarity = "ada-similarity";
         public const string Ada_20200503 = "ada:2020-05-03";
-        public const string AudioTranscribe001 = "audio-transcribe-001";
         public const string Babbage = "babbage";
         public const string BabbageCodeSearchCode = "babbage-code-search-code";
         public const string BabbageCodeSearchText = "babbage-code-search-text";
@@ -17,8 +16,6 @@ namespace OpenAI.Net
         public const string BabbageSearchQuery = "babbage-search-query";
         public const string BabbageSimilarity = "babbage-similarity";
         public const string Babbage_20200503 = "babbage:2020-05-03";
-        public const string CodeCushman001 = "code-cushman-001";
-        public const string CodeDavinci002 = "code-davinci-002";
         public const string CodeDavinciEdit001 = "code-davinci-edit-001";
         public const string CodeSearchAdaCode001 = "code-search-ada-code-001";
         public const string CodeSearchAdaText001 = "code-search-ada-text-001";
@@ -52,8 +49,6 @@ namespace OpenAI.Net
         public const string TextDavinci002 = "text-davinci-002";
         public const string TextDavinci003 = "text-davinci-003";
         public const string TextDavinciEdit001 = "text-davinci-edit-001";
-        public const string TextDavinciInsert001 = "text-davinci-insert-001";
-        public const string TextDavinciInsert002 = "text-davinci-insert-002";
         public const string TextDavinci_001 = "text-davinci:001";
         public const string TextEmbeddingAda002 = "text-embedding-ada-002";
         public const string TextSearchAdaDoc001 = "text-search-ada-doc-001";

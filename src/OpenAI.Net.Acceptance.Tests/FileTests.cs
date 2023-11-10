@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
+using OpenAI.Net.Models;
 using OpenAI.Net.Models.Requests;
 using OpenAI.Net.Models.Responses;
 using OpenAI.Net.Models.Responses.Common;
@@ -35,18 +36,18 @@ namespace OpenAI.Net.Acceptance.Tests
             response.Result.Should().BeEquivalentTo(responseObject);
         }
 
-        //[Test]//QQQ
-        //public async Task GetContent()
-        //{
-        //    var responseObject = CreateObjectWithRandomData<FileContentInfo>();
-        //    var fileId = "1";
-        //    ConfigureWireMockGet($"/v1/files/{fileId}/content", responseObject);
+        [Test]
+        public async Task GetContent()
+        {
+            var responseObject = CreateObjectWithRandomData<FileContentInfo>();
+            var fileId = "1";
+            ConfigureWireMockGetBytes($"/v1/files/{fileId}/content", responseObject);
 
-        //    var response = await OpenAIService.Files.GetContent(fileId);
+            var response = await OpenAIService.Files.GetContent(fileId);
 
-        //    response.IsSuccess.Should().BeTrue();
-        //    response.Result.Should().BeEquivalentTo(responseObject);
-        //}
+            response.IsSuccess.Should().BeTrue();
+            response.Result.Should().BeEquivalentTo(responseObject);
+        }
 
 
         [Test]
@@ -74,7 +75,6 @@ namespace OpenAI.Net.Acceptance.Tests
             var response = await OpenAIService.Files.Upload(textCompletionRequest);
 
             response.IsSuccess.Should().BeTrue();
-           // response.Result?.Choices.Should().HaveCountGreaterThan(1);
             response.Result.Should().BeEquivalentTo(textCompletionResponse);
         }
     }

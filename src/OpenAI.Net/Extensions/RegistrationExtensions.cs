@@ -14,7 +14,6 @@ namespace OpenAI.Net
 
             OpenAIDefaults.ApiUrl = optionsInstance.ApiUrl;
             OpenAIDefaults.TextCompletionModel = optionsInstance.Defaults.TextCompletionModel;
-            OpenAIDefaults.TextEditModel = optionsInstance.Defaults.TextEditModel;
             OpenAIDefaults.EmbeddingsModel = optionsInstance.Defaults.EmbeddingsModel;
 
             services.AddOpenAIServices(optionsInstance.ApiKey, optionsInstance.OrganizationId, optionsInstance.ApiUrl, httpClientBuilderOptions);
@@ -36,7 +35,6 @@ namespace OpenAI.Net
 
             ConfigureHttpClientBuilder(services.AddHttpClient<IModelsService, ModelsService>(configureClient), httpClientOptions);
             ConfigureHttpClientBuilder(services.AddHttpClient<ITextCompletionService, TextCompletionService>(configureClient), httpClientOptions);
-            ConfigureHttpClientBuilder(services.AddHttpClient<ITextEditService, TextEditService>(configureClient), httpClientOptions);
             ConfigureHttpClientBuilder(services.AddHttpClient<IImageService, ImageService>(configureClient), httpClientOptions);
             ConfigureHttpClientBuilder(services.AddHttpClient<IFilesService, FilesService>(configureClient), httpClientOptions);
             ConfigureHttpClientBuilder(services.AddHttpClient<IFineTuneService, FineTuneService>(configureClient), httpClientOptions);

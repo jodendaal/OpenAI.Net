@@ -2,6 +2,7 @@
 using AutoFixture.Dsl;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using OpenAI.Net.Models;
 using System.Linq.Expressions;
 using System.Text.Json;
 using WireMock.RequestBuilders;
@@ -81,7 +82,7 @@ namespace OpenAI.Net.Acceptance.Tests
               .WithBody(body??""));
         }
 
-        public void ConfigureWireMockPostMultipartFormData<TReqeust, TResponse>(string path, TReqeust reqeust, TResponse response)//QQQ Come back this this and check if we can validate header and contents
+        public void ConfigureWireMockPostMultipartFormData<TReqeust, TResponse>(string path, TReqeust reqeust, TResponse response)
         {
             var body = (response is string) ? response as string :
                     JsonSerializer.Serialize(
@@ -89,17 +90,16 @@ namespace OpenAI.Net.Acceptance.Tests
                this.JsonSerializerOptions);
 
             var formData = reqeust?.ToMultipartFormDataContent();
-
+      
             this.WireMockServer?.Given(
               Request.Create()
               .WithPath(path)
               .WithHeader("Authorization", $"Bearer {Config.Apikey}")
               .WithHeader("OpenAI-Organization", $"{Config.OrganizationId}")
+              .WithHeader("Content-Type", "multipart/form-data; boundary=*")
+              .WithHeader("Content-Length", $"{formData?.Headers.ContentLength}")
               .UsingPost()
-              //.WithHeader("Content-Type", "multipart/form-data")
-              //.WithBody(formData)
               )
-               
               .RespondWith(
                  Response.Create()
               .WithBody(body ?? ""));
@@ -141,6 +141,21 @@ namespace OpenAI.Net.Acceptance.Tests
               .RespondWith(
                  Response.Create()
               .WithBody(body ?? ""));
+        }
+
+        public void ConfigureWireMockGetBytes(string path, FileContentInfo response)
+        {
+            this.WireMockServer?.Given(
+              Request.Create()
+              .WithPath(path)
+              .WithHeader("Authorization", $"Bearer {Config.Apikey}")
+              .WithHeader("OpenAI-Organization", $"{Config.OrganizationId}")
+              .UsingGet())
+              .RespondWith(
+                 Response.Create()
+              .WithHeader("Content-Disposition", $@"attachment; filename=""{response.FileName}""")
+              .WithBody(response.FileContent)
+              );
         }
 
         public void Dispose()

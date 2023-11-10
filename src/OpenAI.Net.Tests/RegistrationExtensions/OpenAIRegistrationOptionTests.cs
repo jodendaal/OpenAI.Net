@@ -13,7 +13,6 @@ namespace OpenAI.Net.Tests.RegistrationExtensions
             Assert.That(registrationOption.OrganizationId, Is.EqualTo(null));
             Assert.That(registrationOption.ApiKey, Is.EqualTo(null));
 
-            Assert.That(registrationOption.Defaults.TextEditModel, Is.EqualTo(OpenAIDefaults.TextEditModel));
             Assert.That(registrationOption.Defaults.TextCompletionModel, Is.EqualTo(OpenAIDefaults.TextCompletionModel));
         }
     }

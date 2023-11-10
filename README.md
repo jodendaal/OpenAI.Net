@@ -191,10 +191,15 @@ var response = await OpenAIService.Audio.GetTranslation(@"Audio\Translation.m4a"
 
 ### Text Edit
 ```csharp
-var response = await service.TextEdit.Get("Fix the spelling mistakes", "What day of the wek is it?", (o =>{
-    o.TopP = 0.1;
-    o.Temperature = 100;
-}));
+var messages = new List<Message>
+{
+    Message.Create(ChatRoleType.System, "You are a spell checker. Fix the spelling mistakes"),
+    Message.Create(ChatRoleType.User, "What day of the wek is it?"),
+};
+
+var response = await OpenAIService.Chat.Get(messages, o => {
+    o.MaxTokens = 1000;
+});
 ```
 
 ### Image Edit
@@ -335,8 +340,6 @@ This should provide confidence in the library going forwards.
 -   [x] [Completions](https://platform.openai.com/docs/api-reference/completions)
     -   [x] [Create completion](https://platform.openai.com/docs/api-reference/completions/create) 
     - [x] [Create completion with streaming](https://platform.openai.com/docs/api-reference/completions#completions/create-stream) 
--   [x] [Edits](https://platform.openai.com/docs/api-reference/edits) 
-    -   [x] [Create edit](https://platform.openai.com/docs/api-reference/edits/create)
 -   [x] [Images](https://platform.openai.com/docs/api-reference/images)
     -   [x] [Create image](https://platform.openai.com/docs/api-reference/images/create) 
     -   [x] [Create image edit](https://platform.openai.com/docs/api-reference/images/)
