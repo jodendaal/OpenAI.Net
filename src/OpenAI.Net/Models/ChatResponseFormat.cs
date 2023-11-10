@@ -2,7 +2,7 @@
 {
     public static class ChatResponseFormat
     {
-        public static readonly object Text = new { type = "text" };
-        public static readonly object Json = new { type = "json_object" };
+        public static readonly ChatResponseFormatType Text = new ChatResponseFormatType() { Type = "text" };
+        public static readonly ChatResponseFormatType Json = new ChatResponseFormatType() { Type = "json_object" };
     }
 }

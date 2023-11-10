@@ -1,8 +1,4 @@
-﻿using Microsoft.VisualBasic;
-using OpenAI.Net.Models.Responses;
-using System;
-using System.ComponentModel.DataAnnotations;
-using System.IO;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 
 namespace OpenAI.Net.Models.Requests
@@ -137,7 +133,7 @@ namespace OpenAI.Net.Models.Requests
         /// <see href="https://platform.openai.com/docs/api-reference/completions/create#completions/create-logit_bias" />
         /// </summary>
         [JsonPropertyName("response_format")]
-        public object? ResponseFormat { get; set; }
+        public ChatResponseFormatType? ResponseFormat { get; set; }
 }
 }
 
@@ -168,5 +164,10 @@ namespace OpenAI.Net
         public const string User = "user";
         public const string System = "system";
         public const string Assistant = "assistant";
+    }
+
+    public class ChatResponseFormatType
+    {
+        public string Type { get; set; }
     }
 }
