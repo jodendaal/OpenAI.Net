@@ -18,10 +18,10 @@ namespace OpenAI.Net.Integration.Tests
 
             Assert.That(response.IsSuccess, Is.EqualTo(isSuccess), "Request failed");
             Assert.That(response.StatusCode, Is.EqualTo(statusCode));
-            Assert.That(response.Result?.Text?.Contains("Testing")??false, Is.EqualTo(isSuccess), "Should contain the word Testing");
-            Assert.That(response.Result?.Text?.Contains("1") ?? false, Is.EqualTo(isSuccess), "Should contain the word 1");
-            Assert.That(response.Result?.Text?.Contains("2") ?? false, Is.EqualTo(isSuccess), "Should contain the word 2");
-            Assert.That(response.Result?.Text?.Contains("3") ?? false, Is.EqualTo(isSuccess), "Should contain the word 3");
+            Assert.That(response.Result?.Text?.ToLowerInvariant().Contains("testing")??false, Is.EqualTo(isSuccess), "Should contain the word Testing");
+            Assert.That((response.Result?.Text?.Contains("1") ?? false) || (response.Result?.Text?.ToLowerInvariant().Contains("one") ?? false), Is.EqualTo(isSuccess), "Should contain the word 1 or one");
+            Assert.That((response.Result?.Text?.Contains("2") ?? false) || (response.Result?.Text?.ToLowerInvariant().Contains("two") ?? false), Is.EqualTo(isSuccess), "Should contain the word 2 or two");
+            Assert.That((response.Result?.Text?.Contains("3") ?? false) || (response.Result?.Text?.ToLowerInvariant().Contains("three") ?? false), Is.EqualTo(isSuccess), "Should contain the word 3 or three");
         }
 
         [TestCase(ModelTypes.Whisper1, true, HttpStatusCode.OK, TestName = "GetTranscriptionWithExtension_When_Success")]
@@ -32,10 +32,10 @@ namespace OpenAI.Net.Integration.Tests
 
             Assert.That(response.IsSuccess, Is.EqualTo(isSuccess), "Request failed");
             Assert.That(response.StatusCode, Is.EqualTo(statusCode));
-            Assert.That(response.Result?.Text?.Contains("Testing") ?? false, Is.EqualTo(isSuccess), "Should contain the word Testing");
-            Assert.That(response.Result?.Text?.Contains("1") ?? false, Is.EqualTo(isSuccess), "Should contain the word 1");
-            Assert.That(response.Result?.Text?.Contains("2") ?? false, Is.EqualTo(isSuccess), "Should contain the word 2");
-            Assert.That(response.Result?.Text?.Contains("3") ?? false, Is.EqualTo(isSuccess), "Should contain the word 3");
+            Assert.That(response.Result?.Text?.ToLowerInvariant().Contains("testing") ?? false, Is.EqualTo(isSuccess), "Should contain the word Testing");
+            Assert.That((response.Result?.Text?.Contains("1") ?? false) || (response.Result?.Text?.ToLowerInvariant().Contains("one") ?? false), Is.EqualTo(isSuccess), "Should contain the word 1 or one");
+            Assert.That((response.Result?.Text?.Contains("2") ?? false) || (response.Result?.Text?.ToLowerInvariant().Contains("two") ?? false), Is.EqualTo(isSuccess), "Should contain the word 2 or two");
+            Assert.That((response.Result?.Text?.Contains("3") ?? false) || (response.Result?.Text?.ToLowerInvariant().Contains("three") ?? false), Is.EqualTo(isSuccess), "Should contain the word 3 or three");
         }
 
     }

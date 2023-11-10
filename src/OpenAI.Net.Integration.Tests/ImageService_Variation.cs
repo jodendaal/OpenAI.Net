@@ -31,6 +31,9 @@ namespace OpenAI.Net.Integration.Tests
                 o.N = 1;
                 o.Size = "256x256";
                 o.ResponseFormat = ImageResponseFormat.Base64;
+                o.Style = ImageStyleOptions.Vivid;
+                o.Quality = ImageQualityOptions.HighDefinition;
+                o.Model = ImageModelOptions.Dalle2;
             });
 
 

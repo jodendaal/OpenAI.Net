@@ -20,7 +20,7 @@ namespace OpenAI.Net.Integration.Tests
             Assert.That(response.StatusCode, Is.EqualTo(statusCode));
             Assert.That(response.Result?.Data?.Count() == noOfImages, Is.EqualTo(isSuccess), "Data is not mapped correctly");
             Assert.That(response.Result?.Data?[0].Url?.Contains("https://"), isSuccess ? Is.EqualTo(isSuccess) : Is.EqualTo(null), "Choice text not set");
-            Assert.That(response.ErrorResponse?.Error?.Message?.Contains("is not one of ['256x256', '512x512', '1024x1024']"), isSuccess ? Is.EqualTo(null) :  Is.EqualTo(true),"Error message not returned");
+            Assert.That(response.ErrorResponse?.Error?.Message?.Contains("is not one of ['256x256', '512x512', '1024x1024', '1024x1792', '1792x1024']"), isSuccess ? Is.EqualTo(null) :  Is.EqualTo(true),"Error message not returned");
         }
 
         [TestCase("A cute baby sea otter", 1, true, HttpStatusCode.OK, "256x256", TestName = "GenerateBase64_When_Success")]
@@ -41,7 +41,7 @@ namespace OpenAI.Net.Integration.Tests
 
             Assert.IsNull(response.Result?.Data?[0].Url);
             Assert.That(response.Result?.Data?[0].Base64 != null,Is.EqualTo(isSuccess));
-            Assert.That(response.ErrorResponse?.Error?.Message?.Contains("is not one of ['256x256', '512x512', '1024x1024']"), isSuccess ? Is.EqualTo(null) : Is.EqualTo(true), "Error message not returned");
+            Assert.That(response.ErrorResponse?.Error?.Message?.Contains("is not one of ['256x256', '512x512', '1024x1024', '1024x1792', '1792x1024']"), isSuccess ? Is.EqualTo(null) : Is.EqualTo(true), "Error message not returned");
         }
     }
 }
