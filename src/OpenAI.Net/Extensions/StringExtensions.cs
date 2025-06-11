@@ -6,7 +6,7 @@ namespace OpenAI.Net
     {
         public static IList<string> ToList(this string value) 
         { 
-            return new List<string> { value };  
+            return new string[] { value };  
         }
 
         public static byte[] Base64ToBytes(this string value)

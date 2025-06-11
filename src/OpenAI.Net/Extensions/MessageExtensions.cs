@@ -4,7 +4,7 @@
     {
         public static IList<Message> ToList(this Message value)
         {
-            return new List<Message> { value };
+            return new Message[] { value };
         }
     }
 }
